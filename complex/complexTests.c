@@ -23,10 +23,44 @@ START_TEST(testComplexAdd) {
 
     ck_assert_float_eq(expected.re, actual.re);
     ck_assert_float_eq(expected.im, actual.im);
+} END_TEST
+
+
+
+Suite * complexAddSuite(void) {
+    Suite *suite;
+    TCase *testCase;
+
+    suite = suite_create("Complex Addition");
+    
+    testCase = tcase_create("addition_simple_case");
+    tcase_add_test(testCase, testComplexAdd);
+
+
+    suite_add_tcase(suite, testCase);
+
+    return suite;
+
 }
-END_TEST
+
 
 
 int main() {
+
+    int numFailedTests;
+    Suite *suite;
+    SRunner *suiteRunner;
+    
+    suite = complexAddSuite();
+    suiteRunner = srunner_create(suite);
+
+    srunner_run_all(suiteRunner, CK_NORMAL);
+    numFailedTests = srunner_ntests_failed(suiteRunner);
+    srunner_free(suiteRunner);
+
+    return (numFailedTests == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+
+
     return 0;
 }

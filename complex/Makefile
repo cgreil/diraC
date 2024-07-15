@@ -1,12 +1,16 @@
+CC = gcc
 CFLAGS = -Werror -Wall -Wpedantic -g3
 OFLAGS = -O0 
 LDFLAGS = -lm -lcheck
 
-complexTests: complexTests.c complex.o
-	$(CC) $(CFLAGS) $(OFLAGS) $< $(LDFLAGS) -o complexTests
+complexTests: complexTests.o complex.o
+	$(CC) $(CFLAGS) $(OFLAGS) complexTests.o complex.o $(LDFLAGS) -o complexTests
 
-complex.o: complex.h complex.c
-	$(CC) $(CFLAGS) $(OFLAGS) $< $(LDFLAGS) -c -o complex.o 
+complex.o: complex.c complex.h 
+	$(CC) $(CFLAGS) $(OFLAGS) -c $< $(LDFLAGS) -o $@
+
+complexTests.o: complexTests.c
+	$(CC) $(CFLAGS) $(OFLAGS) -c $< $(LDFLAGS) -o $@
 
 
 clean: 
