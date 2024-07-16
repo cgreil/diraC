@@ -31,7 +31,6 @@ OptComplex power(Complex c, int pow) {
         };
     }
 
-    Complex result = c;
     // create exponentation
     for (int i = 1; i < abs(pow); ++i) {
         c = multiply(c, c);
@@ -55,7 +54,7 @@ Complex add(Complex c1, Complex c2) {
 }
 
 Complex subtract(Complex c1, Complex c2) {
-    Complex result = { c1.re - c2.re, c1.im + c2.im };
+    Complex result = { c1.re - c2.re, c1.im - c2.im };
     return result; 
 }
 

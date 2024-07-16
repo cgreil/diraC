@@ -14,6 +14,6 @@ complexTests.o: complexTests.c
 
 
 clean: 
-	rm *.o
-	rm *.h.gch 
-	rm complexTests
+	rm -rf *.o
+	rm -rf *.h.gch 
+	rm -rf complexTests
