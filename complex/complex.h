@@ -41,7 +41,7 @@ Polar polar(Complex c);
 
 OptComplex power(Complex c, int pow);
 
-Complex root(Complex c, TYPE_FLOAT root);
+Complex root(Complex c);
 
 Complex add(Complex c1, Complex c2);
 

@@ -79,12 +79,12 @@ Suite * complexAddSuite(void) {
 }
 
 /*
- * END OF ADDITION TESTS
- */
+* END OF ADDITION TESTS
+*/
 
 /*
- * START OF SUBTRACTION TESTS
- */ 
+* START OF SUBTRACTION TESTS
+*/ 
 
 START_TEST(testComplexSubtraction) {
 
@@ -138,12 +138,222 @@ Suite *complexSubtractionSuite(void) {
     return suite;
 }
 
+/*
+ * END OF SUBTRACTION TESTS
+ *
+ */
+
+START_TEST (complexMultiplicationTest) {
+
+    Complex z1 = { 4.0, 2.0 };
+    Complex z2 = { 2.0, -5.0};
+
+    Complex expected = { 8.0, -10.0 };
+    Complex actual = multiply(z1, z2);
+
+    ck_assert_complex_eq(expected, actual);
+} END_TEST
+
+START_TEST (complexMultiplicationImaginaryTest) {
+
+    Complex z1 = { 0.0, 1.0 };
+    Complex z2 = { 0.0, 1.0 };
+    
+    Complex expected = { -1.0, 0.0 };
+    Complex actual = multiply(z1, z2);
+
+    ck_assert_complex_eq(expected, actual); 
+} END_TEST
+
+Suite *complexMultiplicationSuite(void) {
+
+    Suite *suite = suite_create("Complex multiplication");
+
+    TCase *testCase1 = tcase_create("multiplicationTestOne");
+    TCase *testCase2 = tcase_create("mulitplicationTestTwo");
+
+    tcase_add_test(testCase1, complexMultiplicationTest);
+    tcase_add_test(testCase2, complexMultiplicationImaginaryTest);
+
+    suite_add_tcase(suite, testCase1);
+    suite_add_tcase(suite, testCase2);
+
+    return suite;
+}
+/*
+ * END OF COMPLEX MULTIPLICATION TESTS
+ */
+
+ /*
+  * START OF COMPLEX DIVISION TESTS
+  */
+
+START_TEST (complexDivisionTest) {
+
+    Complex z1 = { 16.0, 4.0 };
+    Complex z2 = { 2.0, 3.0 };
+
+    Complex expected = { 44/13, -(40/13)};
+    OptComplex actual = divide(z1, z2);
+
+    ck_assert(actual.valid);
+    ck_assert_complex_eq(expected, actual.value);
+} END_TEST
+
+START_TEST (complexDivisonZeroTest) {
+
+    Complex z1 = { 15.0, 2.0 };
+    Complex z2 = { 0.0, 0.0};
+
+    OptComplex actual = divide(z1, z2);
+    Complex expected = { 0.0, 0.0 };
+
+    ck_assert(actual.valid);
+    ck_assert_complex_eq(expected, actual.value);
+} END_TEST
+
+Suite *complexDivisionSuite(void) {
+
+    Suite *suite = suite_create("Complex division");
+
+    TCase *testCase1 = tcase_create("divisionTest");
+    TCase *testCase2 = tcase_create("divisionZeroTest");
+
+    tcase_add_test(testCase1, complexDivisionTest);
+    tcase_add_test(testCase2, complexDivisonZeroTest);
+
+    suite_add_tcase(suite, testCase1);
+    suite_add_tcase(suite, testCase2);
+    
+    return suite;
+}
+
+/*
+ * END OF COMPLEX ROOT TEST
+ */
+
+/*
+ * START OF COMPLEX ROOT TEST
+ */
+
+// TODO: implement root
+/*
+START_TEST(complexRootTest) {
+    
+    Complex z = { 3.0, 4.0 };
+
+    Complex expected = { 2.0, 1.0 };
+    Complex actual = root(z);
+
+    ck_assert_complex_eq(expected, actual);
+} END_TEST
+
+START_TEST(complexRootZeroTest) {
+
+    Complex z = { 0.0, 0.0 };
+
+    Complex expected = { 0.0, 0.0};
+    Complex actual = root(z);
+
+    ck_assert_complex_eq(expected, actual);
+} END_TEST
+
+START_TEST(complexRootImaginaryTest) {
+
+    Complex z = { 0.0, 1.0 };
+
+    Complex expected = { 0.0, 1.0};
+    Complex actual = root(z);
+
+    ck_assert_complex_eq(expected, actual);
+} END_TEST
+
+Suite *complexRootSuite(void) {
+
+    Suite *suite = suite_create("Complex root");
+
+    TCase *testCase1 = tcase_create("complexRootTest");
+    TCase *testCase2 = tcase_create("complexRootZeroTest");
+    TCase *testCase3 = tcase_create("complexRootImaginaryTest");
+
+    tcase_add_test(testCase1, complexRootTest);
+    tcase_add_test(testCase2, complexRootZeroTest);
+    tcase_add_test(testCase3, complexRootImaginaryTest);
+
+    suite_add_tcase(suite, testCase1);
+    suite_add_tcase(suite, testCase2);
+    suite_add_tcase(suite, testCase3);
+
+    return suite;
+}
+*/
+/*
+ * END OF COMPLEX ROOT TESTS
+ */
+
+/*
+ * START OF COMPLEX POWER TESTS
+ */
+
+START_TEST(complexPowerTest) {
+
+    Complex z = { 4.0, 2.0 };
+    int pow = 5;
+
+    Complex expected = { -1216.0, 1312 };
+    OptComplex actual = power(z, pow);
+
+    ck_assert(actual.valid);
+    ck_assert_complex_eq(expected, actual.value);
+} END_TEST
+
+START_TEST(complexPowerZeroTest) {
+
+    Complex z = { 4.0, 2.0 };
+    int pow = 0;
+
+    Complex expected = { 1.0, 0.0 };
+    OptComplex actual = power(z, pow);
+
+    ck_assert(actual.valid);
+    ck_assert_complex_eq(expected, actual.value);
+} END_TEST
+
+START_TEST(complexPowerNegativeTest) {
+
+    Complex z = { 2.0, -3.0 };
+    int pow = -3;
+
+    Complex expected = { -(46/2197), (9/2197) };
+    OptComplex actual = power(z, pow);
+
+    ck_assert(actual.valid);
+    ck_assert_complex_eq(actual.value, expected);
+} END_TEST
+
+Suite *complexPowerSuite(void) {
+
+    Suite *suite = suite_create("Complex power");
+
+    TCase *testCase1 = tcase_create("complexPowerTest");
+    TCase *testCase2 = tcase_create("complexPowerZeroTest");
+    TCase *testCase3 = tcase_create("complexPowerNegativeTest");
+
+    tcase_add_test(testCase1, complexPowerTest);
+    tcase_add_test(testCase2, complexPowerZeroTest);
+    tcase_add_test(testCase3, complexPowerNegativeTest);
+
+    suite_add_tcase(suite, testCase1);
+    suite_add_tcase(suite, testCase2);
+    suite_add_tcase(suite, testCase3);
+
+    return suite;
+}
 
 /*
  * TESTSUITE REGISTRATION
  *
- */
-
+*/
 
 
 int main() {
@@ -151,7 +361,10 @@ int main() {
     // Array of suitePointers - filled by the respective functions
     Suite *testSuites[] = {
         complexAddSuite(),
-        complexSubtractionSuite()
+        complexSubtractionSuite(),
+        complexMultiplicationSuite(),
+        complexDivisionSuite(),
+        complexPowerSuite()
     };
 
     size_t numSuites = sizeof(testSuites) / sizeof(testSuites[0]);
