@@ -15,6 +15,7 @@ TYPE_FLOAT modulus(Complex c) {
 
 Polar polar(Complex c) {
 
+
     Polar result = {
         .r = sqrt(modulus(c)),
         .theta = atan2f(c.im, c.re)
@@ -26,24 +27,25 @@ OptComplex power(Complex c, int pow) {
     
     if (pow == 0) {
         return (OptComplex) { 
-            .value = (Complex){ 0.0, 0.0 },
+            .value = (Complex){ 1.0, 0.0 },
             .valid = true
         };
     }
 
+    Complex temp = c;
     // create exponentation
     for (int i = 1; i < abs(pow); ++i) {
-        c = multiply(c, c);
+        temp = multiply(temp, c);
     }
     // discern cases for positive and negative powers
     if (pow > 0) {
         return (OptComplex) {
-            .value = c,
+            .value = temp,
             .valid = true
         };
     }
     else {
-        OptComplex inverse = divide((Complex) { 1.0, 0.0 }, c);
+        OptComplex inverse = divide((Complex) { 1.0, 0.0 }, temp);
         return inverse; 
     } 
 }
@@ -82,7 +84,7 @@ OptComplex divide(Complex c1, Complex c2) {
 
     TYPE_FLOAT denominator = c2.re * c2.re + c2.im * c2.im;
     TYPE_FLOAT real_part = c1.re * c2.re + c1.im * c2.im;
-    TYPE_FLOAT im_part = c1.im * c2.re + c1.re * c2.im;
+    TYPE_FLOAT im_part = c1.im * c2.re - c1.re * c2.im;
 
     OptComplex result = { 
         .value = (Complex){real_part / denominator, im_part / denominator},
@@ -90,6 +92,7 @@ OptComplex divide(Complex c1, Complex c2) {
     };
     return result;
 }
+
 
 
 

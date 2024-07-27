@@ -9,7 +9,7 @@ complexTests: complexTests.o complex.o
 complex.o: complex.c complex.h 
 	$(CC) $(CFLAGS) $(OFLAGS) -c $< $(LDFLAGS) -o $@
 
-complexTests.o: complexTests.c
+complexTests.o: complexTests.c 
 	$(CC) $(CFLAGS) $(OFLAGS) -c $< $(LDFLAGS) -o $@
 
 

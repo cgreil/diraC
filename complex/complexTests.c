@@ -143,12 +143,16 @@ Suite *complexSubtractionSuite(void) {
  *
  */
 
+ /*
+  * START OF MULTIPLICATION TESTS
+  */
+
 START_TEST (complexMultiplicationTest) {
 
     Complex z1 = { 4.0, 2.0 };
     Complex z2 = { 2.0, -5.0};
 
-    Complex expected = { 8.0, -10.0 };
+    Complex expected = { 18.0, -16.0 };
     Complex actual = multiply(z1, z2);
 
     ck_assert_complex_eq(expected, actual);
@@ -193,7 +197,7 @@ START_TEST (complexDivisionTest) {
     Complex z1 = { 16.0, 4.0 };
     Complex z2 = { 2.0, 3.0 };
 
-    Complex expected = { 44/13, -(40/13)};
+    Complex expected = { 44.0/13.0, -(40.0/13.0)};
     OptComplex actual = divide(z1, z2);
 
     ck_assert(actual.valid);
@@ -208,7 +212,7 @@ START_TEST (complexDivisonZeroTest) {
     OptComplex actual = divide(z1, z2);
     Complex expected = { 0.0, 0.0 };
 
-    ck_assert(actual.valid);
+    ck_assert(!actual.valid);
     ck_assert_complex_eq(expected, actual.value);
 } END_TEST
 
@@ -300,7 +304,7 @@ START_TEST(complexPowerTest) {
     Complex z = { 4.0, 2.0 };
     int pow = 5;
 
-    Complex expected = { -1216.0, 1312 };
+    Complex expected = { -1216.0, 1312.0 };
     OptComplex actual = power(z, pow);
 
     ck_assert(actual.valid);
@@ -324,7 +328,7 @@ START_TEST(complexPowerNegativeTest) {
     Complex z = { 2.0, -3.0 };
     int pow = -3;
 
-    Complex expected = { -(46/2197), (9/2197) };
+    Complex expected = { -(46.0/2197.0), (9.0/2197.0) };
     OptComplex actual = power(z, pow);
 
     ck_assert(actual.valid);
