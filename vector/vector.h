@@ -13,31 +13,36 @@ typedef struct {
     NDArray dataArray;
 } Vector;
 
-Vector vectorZeros(size_t vecSize);
+typedef struct {
+    Vector data;
+    bool isValid;
+}OptVector;
 
-Vector vectorOnes(size_t vecSize);
+Vector vector_Zeros(size_t vecSize);
 
-Vector vectorFromArray(size_t vecSize, Complex *complexArray);
+Vector vector_Ones(size_t vecSize);
 
-Complex vectorGetElement(Vector vector, size_t index);
+Vector vector_fromArray(size_t vecSize, Complex *complexArray);
 
-bool vectorSetElement(Vector vector, size_t index, Complex newElement);
+Complex vector_getElement(Vector vector, size_t index);
 
-Vector vectorAddition(Vector vec1, Vector vec2);
+bool vector_setElement(Vector vector, size_t index, Complex newElement);
 
-Vector vectorInnerProduct(Vector vec1, Vector vec2);
+OptVector vector_addition(Vector vec1, Vector vec2);
 
-void vectorScale(Vector vec1, Complex factor);
+Complex vector_innerProduct(Vector vec1, Vector vec2);
 
-void vectorConjugate(Vector vec);
+void vector_scaleINP(Vector vec1, Complex factor);
 
-void vectorTranspose(Vector vec);
+void vector_conjugateINP(Vector vec);
 
-void vectorAdjoint(Vector vec);
+void vector_transposeINP(Vector vec);
 
-void vectorResize(Vector vec, size_t newLength);
+void vector_adjointINP(Vector vec);
 
-bool vectorIsColumn(Vector vec);
+void vector_resize(Vector vec, size_t newLength);
+
+bool vector_isColumn(Vector vec);
 
 
 
