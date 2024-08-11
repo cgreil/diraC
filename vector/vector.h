@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
