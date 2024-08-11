@@ -3,14 +3,7 @@
 #include <time.h>
 
 #include "complex.h"
-
-/*
- * Test Utils
- */
-
-#define ck_assert_complex_eq(expected, actual) \
-    ck_assert_float_eq((expected).re, (actual).re); \
-    ck_assert_float_eq((expected).im, (actual).im); 
+#include "utils/testutils.h"
 
 /**
  * Testfile containing tests for complex number operations using
@@ -32,7 +25,7 @@ START_TEST(testComplexAdd) {
     Complex expected = {1.0, 1.0};
     Complex actual = add(z1, z2);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 
 }END_TEST
 
@@ -44,7 +37,7 @@ START_TEST(testComplexAddOneNegative) {
     Complex expected = { -2.0, 2.0 };
     Complex actual = add(z1, z2);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 START_TEST(testComplexAddTwoNegatives) {
@@ -55,8 +48,8 @@ START_TEST(testComplexAddTwoNegatives) {
     Complex expected = { -10.8, -12.4 };
     Complex actual = add(z1, z2);
 
-    ck_assert_complex_eq(expected, actual);    
-}
+    ck_assert_complex_eq(expected, actual)
+} END_TEST
 
 Suite * complexAddSuite(void) {
     Suite *suite;
@@ -94,7 +87,7 @@ START_TEST(testComplexSubtraction) {
     Complex expected = { 1.0, 1.0 };
     Complex actual = subtract(z1, z2);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 START_TEST (testComplexSubtractionOneNegative) {
@@ -105,7 +98,7 @@ START_TEST (testComplexSubtractionOneNegative) {
     Complex expected = { 11.0, 10.0 };
     Complex actual = subtract(z1, z2);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 START_TEST (testComplexSubtractionTwoNegatives) {
@@ -116,7 +109,7 @@ START_TEST (testComplexSubtractionTwoNegatives) {
     Complex expected = { 1.9, 6.7 };
     Complex actual = subtract(z1, z2);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 Suite *complexSubtractionSuite(void) {
@@ -155,7 +148,7 @@ START_TEST (complexMultiplicationTest) {
     Complex expected = { 18.0, -16.0 };
     Complex actual = multiply(z1, z2);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 START_TEST (complexMultiplicationImaginaryTest) {
@@ -166,7 +159,7 @@ START_TEST (complexMultiplicationImaginaryTest) {
     Complex expected = { -1.0, 0.0 };
     Complex actual = multiply(z1, z2);
 
-    ck_assert_complex_eq(expected, actual); 
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 Suite *complexMultiplicationSuite(void) {
@@ -201,7 +194,7 @@ START_TEST (complexDivisionTest) {
     OptComplex actual = divide(z1, z2);
 
     ck_assert(actual.valid);
-    ck_assert_complex_eq(expected, actual.value);
+    ck_assert_complex_eq(expected, actual.value)
 } END_TEST
 
 START_TEST (complexDivisonZeroTest) {
@@ -213,7 +206,7 @@ START_TEST (complexDivisonZeroTest) {
     Complex expected = { 0.0, 0.0 };
 
     ck_assert(!actual.valid);
-    ck_assert_complex_eq(expected, actual.value);
+    ck_assert_complex_eq(expected, actual.value)
 } END_TEST
 
 Suite *complexDivisionSuite(void) {
@@ -249,7 +242,7 @@ START_TEST(complexRootTest) {
     Complex expected = { 2.0, 1.0 };
     Complex actual = root(z);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 START_TEST(complexRootZeroTest) {
@@ -259,7 +252,7 @@ START_TEST(complexRootZeroTest) {
     Complex expected = { 0.0, 0.0};
     Complex actual = root(z);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 START_TEST(complexRootImaginaryTest) {
@@ -269,7 +262,7 @@ START_TEST(complexRootImaginaryTest) {
     Complex expected = { 0.0, 1.0};
     Complex actual = root(z);
 
-    ck_assert_complex_eq(expected, actual);
+    ck_assert_complex_eq(expected, actual)
 } END_TEST
 
 Suite *complexRootSuite(void) {
@@ -308,7 +301,7 @@ START_TEST(complexPowerTest) {
     OptComplex actual = power(z, pow);
 
     ck_assert(actual.valid);
-    ck_assert_complex_eq(expected, actual.value);
+    ck_assert_complex_eq(expected, actual.value)
 } END_TEST
 
 START_TEST(complexPowerZeroTest) {
@@ -320,7 +313,7 @@ START_TEST(complexPowerZeroTest) {
     OptComplex actual = power(z, pow);
 
     ck_assert(actual.valid);
-    ck_assert_complex_eq(expected, actual.value);
+    ck_assert_complex_eq(expected, actual.value)
 } END_TEST
 
 START_TEST(complexPowerNegativeTest) {
@@ -332,7 +325,7 @@ START_TEST(complexPowerNegativeTest) {
     OptComplex actual = power(z, pow);
 
     ck_assert(actual.valid);
-    ck_assert_complex_eq(actual.value, expected);
+    ck_assert_complex_eq(actual.value, expected)
 } END_TEST
 
 Suite *complexPowerSuite(void) {
