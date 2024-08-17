@@ -35,7 +35,7 @@ void *dll_getElementAtIndex(DoubleLinkedList dll, size_t index) {
 
     assert(currentNode != NULL);
 
-    // TODO: Should return a copy of the element
+    // TODO: Should return a complex_clone of the element
     return currentNode->element;
 }
 
@@ -52,7 +52,7 @@ void dll_insertElement(DoubleLinkedList dll, void *element, size_t elementSize) 
     // create Node instances
     Node *newNode = malloc(sizeof(Node));
 
-    // copy element into the node
+    // complex_clone element into the node
     void *elementCopy = malloc(elementSize);
     memcpy(elementCopy, element, elementSize);
     newNode->element = elementCopy;

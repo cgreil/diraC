@@ -3,10 +3,13 @@
 #include <time.h>
 
 #include "complex/complex.h"
-#include "ndarray.h"
+#include "ndarray/ndarray.h"
 
 #include "utils/testutils.h"
+#include "utils/dataArena.h"
 
+// Global variable for arena
+static Arena *arena;
 
 START_TEST(testNDArrayClone) {
 
@@ -17,8 +20,8 @@ START_TEST(testNDArrayClone) {
             (Complex) { 9.0, -2.0 }
     };
 
-    NDArray expected = NDArray_create(2, 2, values);
-    NDArray actual = NDArray_clone(expected);
+    NDArray expected = NDArray_create(arena, 2, 2, values);
+    NDArray actual = NDArray_clone(arena, expected);
 
     ck_assert_ndarray_eq(expected, actual)
 } END_TEST
@@ -31,15 +34,19 @@ START_TEST(testNDArrayCloneNoReference) {
         (Complex) { 9.0, -2.0 }
     };
 
-    NDArray original = NDArray_create(2, 2, values);
-    NDArray copy = NDArray_clone(original);
+    NDArray original = NDArray_create(arena, 2, 2, values);
+    NDArray copy = NDArray_clone(arena, original);
     // Alter original
-    NDArray_setElement(original, 0, 0, (Complex) {2.0, 2.0});
+    bool setSuccessful = NDArray_setElement(original, 0, 0, (Complex) {2.0, 2.0});
+    ck_assert(setSuccessful);
+    OptComplex changedNumber = NDArray_getElement(original, 0, 0);
+    ck_assert(changedNumber.valid);
+    ck_assert_complex_eq(changedNumber.value, ((Complex) {2.0, 2.0}));
 
-    // Make sure copy did not change
-    NDArray expected = NDArray_create(2, 2, values);
+    // Make sure complex_clone did not change
+    NDArray expected = NDArray_create(arena, 2, 2, values);
     ck_assert_ndarray_eq(expected, copy);
-}
+} END_TEST
 
 
 Suite* ndArrayCloneSuite(void) {
@@ -76,8 +83,8 @@ START_TEST(testNDArrayResize) {
         (Complex) { 9.0, -2.0 }
     };
 
-    NDArray original = NDArray_create(2, 2, values);
-    NDArray_resize(original, 1, 4);
+    NDArray original = NDArray_create(arena, 2, 2, values);
+    NDArray_resize(arena, original, 1, 4);
 
     ck_assert_int_eq(original.numRows, 1);
     ck_assert_int_eq(original.numColumns, 4);
@@ -103,7 +110,10 @@ Suite *ndArrayResizeSuite(void) {
  */
 
 
-int main() {
+int main(void) {
+
+    // initialize arena variable
+    arena = arena_init();
 
     // Array of suitePointers - filled by the respective functions
     Suite *testSuites[] = {
@@ -129,6 +139,9 @@ int main() {
         fprintf(stdout, "Finished with %d failed tests in %f seconds \n", numFailed, difftime(startTime, endTime));
         srunner_free(suiteRunner);
     }
+
+    // cleanup arena
+    arena_destroy(arena);
 
     return 0;
 }

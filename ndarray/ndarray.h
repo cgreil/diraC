@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #include "complex/complex.h"
-
+#include "utils/dataArena.h"
 
 typedef struct {
     size_t numColumns;
@@ -14,13 +14,13 @@ typedef struct {
     u_int32_t checksum;
 } NDArray;
 
-NDArray NDArray_create(size_t numColumns, size_t numRows, Complex *values);
+NDArray NDArray_create(Arena *arena, size_t numRows, size_t numColumns, Complex *values);
 
-NDArray NDArray_clone(NDArray ndArray);
+NDArray NDArray_clone(Arena *arena, NDArray ndArray);
 
-void NDArray_resize(NDArray ndArray, size_t numRows, size_t numColumns);
+void NDArray_resize(Arena *arena, NDArray ndArray, size_t numRows, size_t numColumns);
 
-Complex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnIndex);
+OptComplex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnIndex);
 
 bool NDArray_setElement(NDArray ndArray, size_t rowIndex, size_t columnIndex, Complex newElement);
 

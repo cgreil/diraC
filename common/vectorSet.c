@@ -96,3 +96,22 @@ bool vectorSet_removeVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
 
     return removedVector;
 }
+
+OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
+
+    if (vectorSet.numVectors == 0 || setIndex >= vectorSet.numVectors) {
+        return (OptVector) {
+            .data = (Vector){},
+            .isValid = false
+        };
+    }
+
+    Vector *vectorRef = (Vector *) dll_getElementAtIndex(vectorSet.vectorList, setIndex);
+    Vector vector;
+    memcpy(&vector, vectorRef, sizeof(Vector));
+
+    return (OptVector){
+        .data = (Vector) vector,
+        .isValid = true
+    };
+}

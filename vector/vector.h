@@ -22,11 +22,11 @@ Vector vector_Zeros(size_t vecSize);
 
 Vector vector_Ones(size_t vecSize);
 
+Vector vector_Copy(Vector vector);
+
 Vector vector_fromArray(size_t vecSize, Complex *complexArray);
 
 Complex vector_getElement(Vector vector, size_t index);
-
-bool vector_setElement(Vector vector, size_t index, Complex newElement);
 
 OptVector vector_addition(Vector vec1, Vector vec2);
 

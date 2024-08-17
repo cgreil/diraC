@@ -93,6 +93,11 @@ OptComplex divide(Complex c1, Complex c2) {
     return result;
 }
 
-
+Complex complex_clone(Complex complex) {
+    return (Complex) {
+        .re = complex.re,
+        .im = complex.im
+    };
+}
 
 

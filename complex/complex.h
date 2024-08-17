@@ -51,8 +51,7 @@ Complex multiply(Complex c1, Complex c2);
 
 OptComplex divide(Complex c1, Complex c2);
 
-
-
+Complex complex_clone(Complex complex);
 
 
 
