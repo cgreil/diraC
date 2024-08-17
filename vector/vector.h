@@ -18,21 +18,21 @@ typedef struct {
     bool isValid;
 }OptVector;
 
-Vector vector_Zeros(size_t vecSize);
+Vector vector_zeros(Arena *arena, size_t vecSize);
 
-Vector vector_Ones(size_t vecSize);
+Vector vector_ones(Arena *arena, size_t vecSize);
 
-Vector vector_Copy(Vector vector);
+Vector vector_clone(Arena *arena, Vector vector);
 
-Vector vector_fromArray(size_t vecSize, Complex *complexArray);
+Vector vector_fromArray(Arena *arena, Complex *complexArray, size_t vecSize);
 
-Complex vector_getElement(Vector vector, size_t index);
+OptComplex vector_getElement(Vector vector, size_t index);
 
-OptVector vector_addition(Vector vec1, Vector vec2);
+OptVector vector_addition(Arena *arena, Vector vec1, Vector vec2);
 
-Complex vector_innerProduct(Vector vec1, Vector vec2);
+OptComplex vector_innerProduct(Vector vec1, Vector vec2);
 
-void vector_scaleINP(Vector vec1, Complex factor);
+void vector_scaleINP(Vector vec, Complex factor);
 
 void vector_conjugateINP(Vector vec);
 
@@ -40,10 +40,9 @@ void vector_transposeINP(Vector vec);
 
 void vector_adjointINP(Vector vec);
 
-void vector_resize(Vector vec, size_t newLength);
+void vector_resize(Arena *arena, Vector vec, size_t newLength);
 
 bool vector_isColumn(Vector vec);
-
 
 
 

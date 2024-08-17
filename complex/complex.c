@@ -35,7 +35,7 @@ OptComplex power(Complex c, int pow) {
     Complex temp = c;
     // create exponentation
     for (int i = 1; i < abs(pow); ++i) {
-        temp = multiply(temp, c);
+        temp = complex_multiplication(temp, c);
     }
     // discern cases for positive and negative powers
     if (pow > 0) {
@@ -50,7 +50,7 @@ OptComplex power(Complex c, int pow) {
     } 
 }
 
-Complex add(Complex c1, Complex c2) {
+Complex complex_addition(Complex c1, Complex c2) {
     Complex result = { c1.re + c2.re, c1.im + c2.im };
     return result;
 }
@@ -60,7 +60,7 @@ Complex subtract(Complex c1, Complex c2) {
     return result; 
 }
 
-Complex multiply(Complex c1, Complex c2) {
+Complex complex_multiplication(Complex c1, Complex c2) {
     // z1 * z2 = (a + ib)(c + id) 
     // = ac + aib + ibc - bd
     Complex result = { c1.re * c2.re - c1.im * c2.im, c1.re * c2.im + c1.im * c2.re };

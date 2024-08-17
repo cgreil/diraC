@@ -21,8 +21,7 @@
                 OptComplex actualVal = NDArray_getElement((actualNDArray), i, j);               \
                 ck_assert(expVal.valid);                                                      \
                 ck_assert(actualVal.valid);                                                                              \
-                ck_assert_complex_eq(expVal.value, actualVal.value)                         \
-                                                                                \
+                ck_assert_complex_eq((expVal.value), (actualVal.value))                         \
             }                                                                   \
     }
 

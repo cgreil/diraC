@@ -77,7 +77,7 @@ OptComplex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnInd
 
     if (rowIndex > ndArray.numRows || columnIndex > ndArray.numColumns) {
         return (OptComplex) {
-            .value = (Complex) {},
+            .value = (Complex) { 0 },
             .valid = false
         };
     }

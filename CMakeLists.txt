@@ -23,6 +23,8 @@ set(
         ndarray/ndarray.c
         vector/vector.h
         vector/vector.c
+        utils/dataArena.h
+        utils/dataArena.c
         vector/vectorTests.c
 )
 

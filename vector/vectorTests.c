@@ -7,12 +7,14 @@
 #include "ndarray/ndarray.h"
 #include "utils/testutils.h"
 
+static Arena *arena;
+
 START_TEST(testVectorZeros) {
 
     size_t vecSize = 8;
-    Vector zeroVector = vector_Zeros(vecSize);
+    Vector zeroVector = vector_zeros(arena, vecSize);
     for (size_t i = 0; i < vecSize; i++) {
-        ck_assert_complex_eq(vector_getElement(zeroVector, i), ((Complex) {0.0, 0.0}))
+        ck_assert_complex_eq(vector_getElement(zeroVector, i).value, ((Complex) {0.0, 0.0}))
     }
 
 } END_TEST
@@ -20,9 +22,9 @@ START_TEST(testVectorZeros) {
 START_TEST(testVectorOnes) {
 
     size_t vecSize = 8;
-    Vector oneVector = vector_Ones(vecSize);
+    Vector oneVector = vector_ones(arena, vecSize);
     for (size_t i = 0; i< vecSize; i++) {
-        ck_assert_complex_eq(vector_getElement(oneVector, i), ((Complex) {1.0, 0.0}))
+        ck_assert_complex_eq(vector_getElement(oneVector, i).value, ((Complex) {1.0, 0.0}))
     }
 } END_TEST
 
@@ -36,10 +38,10 @@ START_TEST(testVectorFromArray) {
         (Complex) {0.0, -9.0}
     };
 
-    Vector vector = vector_fromArray(vecSize, values);
+    Vector vector = vector_fromArray(arena, values, vecSize);
 
     for(size_t i = 0; i < vecSize; i++) {
-        ck_assert_complex_eq(vector_getElement(vector, i), values[i])
+        ck_assert_complex_eq(vector_getElement(vector, i).value, values[i])
     }
 
 } END_TEST
@@ -89,17 +91,17 @@ START_TEST(vectorAdditionTest) {
         (Complex) {7.0, -2.0}
     };
 
-    Vector vector1 = vector_fromArray(vecSize, values1);
-    Vector vector2 = vector_fromArray(vecSize, values2);
+    Vector vector1 = vector_fromArray(arena, values1, vecSize);
+    Vector vector2 = vector_fromArray(arena, values2, vecSize);
 
-    OptVector result = vector_addition(vector1, vector2);
+    OptVector result = vector_addition(arena, vector1, vector2);
     ck_assert(result.isValid);
     Vector resultVector = result.data;
 
     for (size_t i = 0; i < vecSize; i++) {
-        Complex expected = add(values1[i], values2[i]);
+        Complex expected = complex_addition(values1[i], values2[i]);
 
-        ck_assert_complex_eq(expected, vector_getElement(resultVector, i))
+        ck_assert_complex_eq(expected, vector_getElement(resultVector, i).value)
     }
 } END_TEST
 
@@ -119,10 +121,10 @@ START_TEST(vectorAdditionInvalidDimsTest) {
         (Complex) {9.0, 9.0}
     };
 
-    Vector vector1 = vector_fromArray(sizeVec1, data1);
-    Vector vector2 = vector_fromArray(sizeVec2, data2);
+    Vector vector1 = vector_fromArray(arena, data1, sizeVec1);
+    Vector vector2 = vector_fromArray(arena, data2, sizeVec2);
 
-    OptVector result = vector_addition(vector1, vector2);
+    OptVector result = vector_addition(arena, vector1, vector2);
     ck_assert(!result.isValid);
 
 } END_TEST
@@ -138,14 +140,14 @@ START_TEST(vectorScalingTest) {
         (Complex) {-1.0, 4.0}
     };
 
-    Vector vector = vector_fromArray(vecSize, originalValues);
+    Vector vector = vector_fromArray(arena, originalValues, vecSize);
 
     Complex scaledValues[] = {
         (Complex) {6.0, -18.0},
         (Complex) {12.0, 27.0},
         (Complex) {-3.0, 12.0}
     };
-    Vector expected = vector_fromArray(vecSize, scaledValues);
+    Vector expected = vector_fromArray(arena, scaledValues, vecSize);
 
     vector_scaleINP(vector, scaleFactor);
     ck_assert_vector_eq(expected, vector);
@@ -168,11 +170,11 @@ START_TEST(vectorInnerProductTest) {
         (Complex) {1.1, 7.8}
     };
 
-    Vector vector1 = vector_fromArray(vecSize, values1);
-    Vector vector2 = vector_fromArray(vecSize, values2);
+    Vector vector1 = vector_fromArray(arena, values1, vecSize);
+    Vector vector2 = vector_fromArray(arena, values2, vecSize);
 
     Complex expectedValue = {68.5, 131};
-    Complex actualValue = vector_innerProduct(vector1, vector2);
+    Complex actualValue = vector_innerProduct(vector1, vector2).value;
 
     ck_assert_complex_eq(expectedValue, actualValue)
 } END_TEST
@@ -193,8 +195,8 @@ START_TEST(vectorConjugateTest) {
         (Complex) {9.0, 2.9}
     };
 
-    Vector vector = vector_fromArray(vecSize, values);
-    Vector expectedVector = vector_fromArray(vecSize, expectedValues);
+    Vector vector = vector_fromArray(arena, values, vecSize);
+    Vector expectedVector = vector_fromArray(arena, expectedValues, vecSize);
 
     vector_conjugateINP(vector);
 
@@ -213,7 +215,7 @@ START_TEST(vectorTransposeTest) {
         (Complex) {1.1, 7.8}
     };
 
-    Vector vector = vector_fromArray(vecSize, values);
+    Vector vector = vector_fromArray(arena, values, vecSize);
 
     ck_assert_int_eq(vector.dataArray.numRows, vecSize);
     ck_assert_int_eq(vector.dataArray.numColumns, 1);
@@ -239,7 +241,7 @@ START_TEST(vectorAdjointTest) {
         (Complex) {1.1, -7.8}
     };
 
-    Vector vector = vector_fromArray(vecSize, values);
+    Vector vector = vector_fromArray(arena, values, vecSize);
     ck_assert_int_eq(vector.dataArray.numRows, vecSize);
     ck_assert_int_eq(vector.dataArray.numColumns, 1);
 
@@ -247,7 +249,7 @@ START_TEST(vectorAdjointTest) {
     ck_assert_int_eq(vector.dataArray.numRows, 1);
     ck_assert_int_eq(vector.dataArray.numColumns, vecSize);
 
-    Vector expectedVector = vector_fromArray(vecSize, expectedValues);
+    Vector expectedVector = vector_fromArray(arena, expectedValues, vecSize);
 
     ck_assert_vector_eq(expectedVector, vector);
 }END_TEST
@@ -295,6 +297,8 @@ Suite *vectorArithmeticSuite(void) {
 
 int main(void) {
 
+    arena = arena_init();
+
     Suite *testSuites[] = {
         vectorCreationSuite(),
         vectorArithmeticSuite()
@@ -316,10 +320,12 @@ int main(void) {
         time_t endTime = time(NULL);
 
         int numFailed = srunner_ntests_failed(suiteRunner);
-        fprintf(stdout, "Finished with %d failed tests in %f seconds \n", numFailed, difftime(startTime, endTime));
+        fprintf(stdout, "Finished with %d failed tests in %f seconds \n", numFailed, difftime(endTime, startTime));
         srunner_free(suiteRunner);
 
     }
+
+    arena_destroy(arena);
 
     return 0;
 }

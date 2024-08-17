@@ -43,11 +43,11 @@ OptComplex power(Complex c, int pow);
 
 Complex root(Complex c);
 
-Complex add(Complex c1, Complex c2);
+Complex complex_addition(Complex c1, Complex c2);
 
 Complex subtract(Complex c1, Complex c2);
 
-Complex multiply(Complex c1, Complex c2);
+Complex complex_multiplication(Complex c1, Complex c2);
 
 OptComplex divide(Complex c1, Complex c2);
 

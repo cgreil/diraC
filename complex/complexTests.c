@@ -23,7 +23,7 @@ START_TEST(testComplexAdd) {
     Complex z2 = {1.0, 0.0};
 
     Complex expected = {1.0, 1.0};
-    Complex actual = add(z1, z2);
+    Complex actual = complex_addition(z1, z2);
 
     ck_assert_complex_eq(expected, actual)
 
@@ -35,7 +35,7 @@ START_TEST(testComplexAddOneNegative) {
     Complex z2 = { -4.0, -2.0 };
 
     Complex expected = { -2.0, 2.0 };
-    Complex actual = add(z1, z2);
+    Complex actual = complex_addition(z1, z2);
 
     ck_assert_complex_eq(expected, actual)
 } END_TEST
@@ -46,7 +46,7 @@ START_TEST(testComplexAddTwoNegatives) {
     Complex z2 = { -9.6, -4.4 };
 
     Complex expected = { -10.8, -12.4 };
-    Complex actual = add(z1, z2);
+    Complex actual = complex_addition(z1, z2);
 
     ck_assert_complex_eq(expected, actual)
 } END_TEST
@@ -146,7 +146,7 @@ START_TEST (complexMultiplicationTest) {
     Complex z2 = { 2.0, -5.0};
 
     Complex expected = { 18.0, -16.0 };
-    Complex actual = multiply(z1, z2);
+    Complex actual = complex_multiplication(z1, z2);
 
     ck_assert_complex_eq(expected, actual)
 } END_TEST
@@ -157,7 +157,7 @@ START_TEST (complexMultiplicationImaginaryTest) {
     Complex z2 = { 0.0, 1.0 };
     
     Complex expected = { -1.0, 0.0 };
-    Complex actual = multiply(z1, z2);
+    Complex actual = complex_multiplication(z1, z2);
 
     ck_assert_complex_eq(expected, actual)
 } END_TEST
