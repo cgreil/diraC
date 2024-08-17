@@ -1,8 +1,11 @@
 #include <stdlib.h>
-#include <utils/testutils.h>
+#include <check.h>
+#include <stdio.h>
+#include <time.h>
 
-#include "vector.h"
-#include "check.h"
+#include "vector/vector.h"
+#include "ndarray/ndarray.h"
+#include "utils/testutils.h"
 
 START_TEST(testVectorZeros) {
 
@@ -244,7 +247,7 @@ START_TEST(vectorAdjointTest) {
     ck_assert_int_eq(vector.dataArray.numRows, 1);
     ck_assert_int_eq(vector.dataArray.numColumns, vecSize);
 
-    Vector expectedVector = vector(vecSize, expectedValues);
+    Vector expectedVector = vector_fromArray(vecSize, expectedValues);
 
     ck_assert_vector_eq(expectedVector, vector);
 }END_TEST
@@ -267,7 +270,7 @@ Suite *vectorArithmeticSuite(void) {
     tcase_add_test(testcase2, vectorAdditionInvalidDimsTest);
     tcase_add_test(testcase3, vectorScalingTest);
     tcase_add_test(testcase4, vectorInnerProductTest);
-    tcase_add_test(testcas5, vectorConjugateTest);
+    tcase_add_test(testcase5, vectorConjugateTest);
     tcase_add_test(testcase6, vectorTransposeTest);
     tcase_add_test(testcase7, vectorAdjointTest);
 
@@ -285,6 +288,43 @@ Suite *vectorArithmeticSuite(void) {
 /**
  * END OF ARITHMETIC TESTS
  */
+
+/**
+ * TESTSUITE REGISTRATION
+ */
+
+int main(void) {
+
+    Suite *testSuites[] = {
+        vectorCreationSuite(),
+        vectorArithmeticSuite()
+    };
+
+    size_t numSuites = sizeof(testSuites) / sizeof(testSuites[0]);
+
+    SRunner *suiteRunner;
+    for(size_t i = 0; i < numSuites; i++) {
+
+        fprintf(stdout, "Running suite (%zu/%zu) \n", i+1, numSuites);
+
+        Suite *currentSuite = testSuites[i];
+        suiteRunner = srunner_create(currentSuite);
+
+        //Start timing
+        time_t startTime = time(NULL);
+        srunner_run_all(suiteRunner, CK_NORMAL);
+        time_t endTime = time(NULL);
+
+        int numFailed = srunner_ntests_failed(suiteRunner);
+        fprintf(stdout, "Finished with %d failed tests in %f seconds \n", numFailed, difftime(startTime, endTime));
+        srunner_free(suiteRunner);
+
+    }
+
+    return 0;
+}
+
+
 
 
 
