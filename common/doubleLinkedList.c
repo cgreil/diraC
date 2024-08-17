@@ -9,6 +9,7 @@
 // FORWARD DECLARATION
 static Node* dll_getLastNode(DoubleLinkedList dll);
 
+
 DoubleLinkedList dll_create(){
     DoubleLinkedList list;
 
@@ -134,4 +135,6 @@ static Node* dll_getLastNode(DoubleLinkedList dll) {
 
     return current;
 }
+
+
 
