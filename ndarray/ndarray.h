@@ -18,7 +18,7 @@ NDArray NDArray_create(Arena *arena, size_t numRows, size_t numColumns, Complex 
 
 NDArray NDArray_clone(Arena *arena, NDArray ndArray);
 
-void NDArray_resize(Arena *arena, NDArray ndArray, size_t numRows, size_t numColumns);
+NDArray NDArray_resize(Arena *arena, NDArray ndArray, size_t numRows, size_t numColumns);
 
 OptComplex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnIndex);
 

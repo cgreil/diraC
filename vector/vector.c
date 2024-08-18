@@ -143,7 +143,7 @@ OptVector vector_addition(Arena *arena, Vector vec1, Vector vec2) {
         OptComplex complex1 = vector_getElement(vec1, i);
         OptComplex complex2 = vector_getElement(vec2, i);
 
-        if (!complex1.valid || complex2.valid) {
+        if (!complex1.valid || !complex2.valid) {
             return (OptVector ) {
                 .data = (Vector) { 0 },
                 .isValid = false
@@ -177,7 +177,7 @@ OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
         OptComplex complex1 = vector_getElement(vec1, i);
         OptComplex complex2 = vector_getElement(vec2, i);
 
-        if (!complex1.valid || complex2.valid) {
+        if (!complex1.valid || !complex2.valid) {
             return (OptComplex) {
                 .value = (Complex) { 0 },
                 .valid = false
@@ -185,7 +185,9 @@ OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
         }
 
         // sum up all terms
-        complex_addition(result, complex_multiplication(complex1.value, complex2.value));
+        //Complex mult_res = complex_multiplication(complex1.value, complex2.value);
+
+        result = complex_addition(result, complex_multiplication(complex1.value, complex2.value));
     }
 
     return (OptComplex) {
@@ -194,7 +196,7 @@ OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
     };
 }
 
-void vector_scaleINP(Vector vec, Complex factor) {
+Vector vector_scaleINP(Vector vec, Complex factor) {
 
     for (size_t i = 0; i < vec.size; ++i) {
         OptComplex complex = vector_getElement(vec, i);
@@ -202,9 +204,11 @@ void vector_scaleINP(Vector vec, Complex factor) {
         Complex newElement = complex_multiplication(complex.value, factor);
         vector_setElement(vec, i, newElement);
     }
+
+    return vec;
 }
 
-void vector_conjugateINP(Vector vec) {
+Vector vector_conjugateINP(Vector vec) {
 
     for (size_t i = 0; i < vec.size; i++) {
         OptComplex complex = vector_getElement(vec, i);
@@ -216,20 +220,36 @@ void vector_conjugateINP(Vector vec) {
 
         vector_setElement(vec, i, newElement);
     }
+
+    return vec;
 }
 
-void vector_transposeINP(Vector vec) {
-    //TODO
-    return;
+Vector vector_transposeINP(Vector vec) {
+    /**
+     * @param Vector
+     *
+     * @note In the case of a vector, the alignment of values is the same
+     * for column-and rowvectors => only the dimensions of the
+     * underlying ndArray has to be changed, the data may be left alone
+     */
+
+    size_t temp = vec.dataArray.numColumns;
+    vec.dataArray.numColumns = vec.dataArray.numRows;
+    vec.dataArray.numRows = temp;
+
+    return vec;
 }
 
-void vector_adjointINP(Vector vec) {
-    vector_transposeINP(vec);
-    vector_conjugateINP(vec);
+Vector vector_adjointINP(Vector vec) {
+
+    Vector transposedVec = vector_transposeINP(vec);
+    Vector conjugatedVec = vector_conjugateINP(transposedVec);
+
+    return conjugatedVec;
 }
 
-void vector_resize(Arena *arena, Vector vec, size_t newLength) {
-
+Vector vector_resize(Arena *arena, Vector vec, size_t newLength) {
+    return (Vector) { 0 };
 }
 
 bool vector_isColumn(Vector vec) {

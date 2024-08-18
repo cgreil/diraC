@@ -32,15 +32,15 @@ OptVector vector_addition(Arena *arena, Vector vec1, Vector vec2);
 
 OptComplex vector_innerProduct(Vector vec1, Vector vec2);
 
-void vector_scaleINP(Vector vec, Complex factor);
+Vector vector_scaleINP(Vector vec, Complex factor);
 
-void vector_conjugateINP(Vector vec);
+Vector vector_conjugateINP(Vector vec);
 
-void vector_transposeINP(Vector vec);
+Vector vector_transposeINP(Vector vec);
 
-void vector_adjointINP(Vector vec);
+Vector vector_adjointINP(Vector vec);
 
-void vector_resize(Arena *arena, Vector vec, size_t newLength);
+Vector vector_resize(Arena *arena, Vector vec, size_t newLength);
 
 bool vector_isColumn(Vector vec);
 

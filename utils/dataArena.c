@@ -45,6 +45,6 @@ void *arena_alloc(Arena *arena, size_t size) {
     // increment offset by size
     arena->arena_offset += size;
 
-    memset(arena->arena_buffer, 0, size);
+    memset(arena->arena_buffer + arena->arena_offset, 0, size);
     return dataPtr;
 }

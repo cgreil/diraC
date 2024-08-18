@@ -143,14 +143,14 @@ START_TEST(vectorScalingTest) {
     Vector vector = vector_fromArray(arena, originalValues, vecSize);
 
     Complex scaledValues[] = {
-        (Complex) {6.0, -18.0},
+        (Complex) {6.0, -9.0},
         (Complex) {12.0, 27.0},
         (Complex) {-3.0, 12.0}
     };
     Vector expected = vector_fromArray(arena, scaledValues, vecSize);
 
-    vector_scaleINP(vector, scaleFactor);
-    ck_assert_vector_eq(expected, vector);
+    Vector resultVector = vector_scaleINP(vector, scaleFactor);
+    ck_assert_vector_eq(expected, resultVector);
 
 } END_TEST
 
@@ -173,7 +173,7 @@ START_TEST(vectorInnerProductTest) {
     Vector vector1 = vector_fromArray(arena, values1, vecSize);
     Vector vector2 = vector_fromArray(arena, values2, vecSize);
 
-    Complex expectedValue = {68.5, 131};
+    Complex expectedValue = {68.5, 131.0};
     Complex actualValue = vector_innerProduct(vector1, vector2).value;
 
     ck_assert_complex_eq(expectedValue, actualValue)
@@ -198,9 +198,9 @@ START_TEST(vectorConjugateTest) {
     Vector vector = vector_fromArray(arena, values, vecSize);
     Vector expectedVector = vector_fromArray(arena, expectedValues, vecSize);
 
-    vector_conjugateINP(vector);
+    Vector resultVector = vector_conjugateINP(vector);
 
-    ck_assert_vector_eq(expectedVector, vector)
+    ck_assert_vector_eq(expectedVector, resultVector)
 }END_TEST
 
 START_TEST(vectorTransposeTest) {
@@ -220,10 +220,10 @@ START_TEST(vectorTransposeTest) {
     ck_assert_int_eq(vector.dataArray.numRows, vecSize);
     ck_assert_int_eq(vector.dataArray.numColumns, 1);
 
-    vector_transposeINP(vector);
+    Vector resultVector = vector_transposeINP(vector);
 
-    ck_assert_int_eq(vector.dataArray.numRows, 1);
-    ck_assert_int_eq(vector.dataArray.numColumns, vecSize);
+    ck_assert_int_eq(resultVector.dataArray.numRows, 1);
+    ck_assert_int_eq(resultVector.dataArray.numColumns, vecSize);
 } END_TEST
 
 START_TEST(vectorAdjointTest) {
@@ -245,13 +245,13 @@ START_TEST(vectorAdjointTest) {
     ck_assert_int_eq(vector.dataArray.numRows, vecSize);
     ck_assert_int_eq(vector.dataArray.numColumns, 1);
 
-    vector_adjointINP(vector);
-    ck_assert_int_eq(vector.dataArray.numRows, 1);
-    ck_assert_int_eq(vector.dataArray.numColumns, vecSize);
+    Vector resultVector = vector_adjointINP(vector);
+    ck_assert_int_eq(resultVector.dataArray.numRows, 1);
+    ck_assert_int_eq(resultVector.dataArray.numColumns, vecSize);
 
     Vector expectedVector = vector_fromArray(arena, expectedValues, vecSize);
 
-    ck_assert_vector_eq(expectedVector, vector);
+    ck_assert_vector_eq(expectedVector, resultVector);
 }END_TEST
 
 

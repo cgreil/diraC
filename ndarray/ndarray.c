@@ -69,8 +69,8 @@ NDArray NDArray_clone(Arena *arena, NDArray ndArray) {
     };
 }
 
-void NDArray_resize(Arena *arena, NDArray ndArray, size_t numRows, size_t numColumns) {
-    return;
+NDArray NDArray_resize(Arena *arena, NDArray ndArray, size_t numRows, size_t numColumns) {
+    return (NDArray) { 0 };
 }
 
 OptComplex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnIndex) {
