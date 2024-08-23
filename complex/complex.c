@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
-#include "complex.h"
+#include <stdio.h>
+
+#include "complex/complex.h"
+#include "common/string.h"
 
 Complex conjugate(Complex c) {
     Complex result = { c.re, -c.im };
@@ -100,4 +103,14 @@ Complex complex_clone(Complex complex) {
     };
 }
 
+String complex_display(Arena *arena, Complex complex) {
 
+    char displayBuffer[MAX_COMPLEX_DISP_SIZE];
+    int numPrinted = sprintf(displayBuffer, "%.2f + %.2fi", complex.re, complex.im);
+
+    assert(numPrinted > 0);
+
+    String string = string_create(arena, displayBuffer, numPrinted);
+
+    return string;
+}

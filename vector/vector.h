@@ -7,6 +7,7 @@
 
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
+#include "common/string.h"
 
 typedef struct {
     size_t size;
@@ -44,8 +45,7 @@ Vector vector_resize(Arena *arena, Vector vec, size_t newLength);
 
 bool vector_isColumn(Vector vec);
 
-
-
+String vector_display(Arena *arena, Vector vector);
 
 
 

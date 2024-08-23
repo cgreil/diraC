@@ -3,8 +3,10 @@
 
 #include <stdbool.h>
 
-#include "../common/types.h"
+#include "common/types.h"
+#include "common/string.h"
 
+#define MAX_COMPLEX_DISP_SIZE 64
 
 /** 
  * Struct definition for complex data type
@@ -53,6 +55,6 @@ OptComplex divide(Complex c1, Complex c2);
 
 Complex complex_clone(Complex complex);
 
-
+String complex_display(Arena *arena, Complex complex);
 
 #endif

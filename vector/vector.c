@@ -252,6 +252,38 @@ Vector vector_resize(Arena *arena, Vector vec, size_t newLength) {
     return (Vector) { 0 };
 }
 
+String vector_display(Arena *arena, Vector vector) {
+
+    // TODO: replace concatenation with stringbuilder once implemented
+    // Start string
+
+    char vecStart[] = "[";
+    char vecStop[] = "]";
+    char space[] = " ";
+    String vecStartString = string_create(arena, vecStart, sizeof(vecStart));
+    String vecStopString = string_create(arena, vecStop, sizeof(vecStop));
+    String spaceString = string_create(arena, space, sizeof(space));
+
+    String string = string_clone(arena, vecStartString);
+
+    for(size_t i = 0; i < vector.size; i++) {
+
+        OptComplex complex = vector_getElement(vector, i);
+        assert(complex.valid);
+        String numString = complex_display(arena, complex.value);
+        string = string_concat(arena, string, numString);
+
+        // only concat space only in between elements
+        if (i != 0 && i != (vector.size -1)) {
+            string = string_concat(arena, string, spaceString);
+        }
+    }
+
+    string = string_clone(arena, vecStopString);
+
+    return string;
+}
+
 bool vector_isColumn(Vector vec) {
     //assert that the given vector is atleast either column or row vec
     assert((vec.dataArray.numColumns == 1) || (vec.dataArray.numRows == 1));

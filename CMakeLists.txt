@@ -67,6 +67,8 @@ add_executable(LEIBNITZ main.c
         common/doubleLinkedList.c
         utils/dataArena.c
         utils/dataArena.h
+        common/string.c
+        common/string.h
 )
 
 
