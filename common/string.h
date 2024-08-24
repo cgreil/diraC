@@ -16,9 +16,10 @@ typedef struct {
 }String;
 
 typedef struct {
+    int a;
     // TODO: implement StringBuilder
     //https://www.reddit.com/r/C_Programming/comments/13zqjmz/string_builders_in_c/
-};
+}StringBuilder;
 
 String string_clone(Arena *arena, String string);
 

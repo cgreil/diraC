@@ -10,6 +10,8 @@ set(
         COMPLEX_SOURCE_FILES
         complex/complex.h
         complex/complex.c
+        common/string.h
+        common/string.c
         utils/testutils.h
         complex/complexTests.c
         common/vectorSetTests.c
@@ -19,6 +21,8 @@ set(
         VECTOR_SOURCE_FILES
         complex/complex.h
         complex/complex.c
+        common/string.h
+        common/string.c
         ndarray/ndarray.h
         ndarray/ndarray.c
         vector/vector.h
@@ -69,6 +73,8 @@ add_executable(LEIBNITZ main.c
         utils/dataArena.h
         common/string.c
         common/string.h
+        matrix/matrix.h
+        matrix/matrix.c
 )
 
 

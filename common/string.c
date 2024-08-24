@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <malloc.h>
+
 #include "string.h"
 
 String string_create(Arena *arena, char *data, size_t length) {

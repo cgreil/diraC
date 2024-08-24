@@ -2,6 +2,7 @@
 #define COMPLEX_H_
 
 #include <stdbool.h>
+#include <math.h>
 
 #include "common/types.h"
 #include "common/string.h"
@@ -43,8 +44,6 @@ Polar polar(Complex c);
 
 OptComplex power(Complex c, int pow);
 
-Complex root(Complex c);
-
 Complex complex_addition(Complex c1, Complex c2);
 
 Complex subtract(Complex c1, Complex c2);
@@ -54,6 +53,15 @@ Complex complex_multiplication(Complex c1, Complex c2);
 OptComplex divide(Complex c1, Complex c2);
 
 Complex complex_clone(Complex complex);
+
+Complex complex_exp(Complex complex);
+
+Complex complex_sin(Complex complex);
+
+Complex complex_cos(Complex complex);
+
+Complex complex_root(Complex complex);
+
 
 String complex_display(Arena *arena, Complex complex);
 

@@ -6,7 +6,7 @@
 #include <assert.h>
 #include "vector/vector.h"
 #include "ndarray/ndarray.h"
-
+#include "common/string.h"
 /**
  *  FORWARD DECLARATION
  *
@@ -32,7 +32,7 @@ Vector vector_zeros(Arena *arena, size_t vecSize) {
 
     // Temporarily store data in a VLA
     Complex complexValues[vecSize];
-    // put zeros into VLA
+    // put matrix_zeros into VLA
     Complex value = {0.0, 0.0};
     for (size_t i = 0; i < vecSize; i++) {
         complexValues[i] = value;
@@ -64,7 +64,7 @@ Vector vector_ones(Arena *arena, size_t vecSize) {
 
     // Temporarily store data in a VLA
     Complex complexValues[vecSize];
-    // put zeros into VLA
+    // put matrix_zeros into VLA
     Complex value = {1.0, 0.0};
     for (size_t i = 0; i < vecSize; i++) {
         complexValues[i] = value;
