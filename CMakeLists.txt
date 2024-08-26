@@ -57,6 +57,20 @@ set (
         common/vectorSet.c
 )
 
+set (
+        MATRIX_SOURCE_FILES
+        common/doubleLinkedList.h
+        common/doubleLinkedList.c
+        common/vectorSet.h
+        common/vectorSet.c
+        ndarray/ndarray.h
+        ndarray/ndarray.c
+        vector/vector.h
+        vector/vector.c
+        matrix/matrix.h
+        matrix/matrix.c
+        matrix/matrixTests.c
+)
 
 add_executable(LEIBNITZ main.c
         common/types.h
@@ -75,6 +89,8 @@ add_executable(LEIBNITZ main.c
         common/string.h
         matrix/matrix.h
         matrix/matrix.c
+        common/tuple.c
+        common/tuple.h
 )
 
 
@@ -93,12 +109,17 @@ add_executable(${VECTOR_TESTS} ${VECTOR_SOURCE_FILES})
 set(VECTORSET_TESTS "vectorSetTests")
 add_executable(${VECTORSET_TESTS} ${VECTORSET_SOURCE_FILES})
 
+set(MATRIX_TESTS "matrixTests")
+add_executable(${MATRIX_TESTS} ${MATRIX_SOURCE_FILES})
+
 #include Source files
 include_directories(SYSTEM ${SRC_DIR})
 #include directory for check header file
 include_directories("../../libs/check/src")
 #include check and math library
 target_link_libraries(${COMPLEX_TESTS} m check)
+
+target_link_libraries(${MATRIX_TESTS} m check)
 
 target_link_libraries(${VECTOR_TESTS} m check)
 target_link_libraries(${VECTORSET_TESTS} m check)

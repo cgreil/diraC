@@ -7,6 +7,9 @@
 #include "complex/complex.h"
 #include "utils/dataArena.h"
 
+
+#define CRC_POLYNOM 0x12345678
+
 typedef struct {
     size_t numColumns;
     size_t numRows;
@@ -24,6 +27,7 @@ OptComplex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnInd
 
 bool NDArray_setElement(NDArray ndArray, size_t rowIndex, size_t columnIndex, Complex newElement);
 
+void NDArray_crc(NDArray ndArray);
 
 
 #endif

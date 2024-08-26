@@ -155,14 +155,38 @@ Matrix matrixAdd(Arena *arena, Matrix matrix1, Matrix matrix2) {
 
 Matrix matrixMulitply(Arena *arena, Matrix matrix1, Matrix matrix2) {
 
+    /**
+     *
+     * Naive matrix multiplication algorithm
+     */
+
     assert(matrix1.numColumns == matrix2.numRows);
 
-    Matrix matrix = matrix_zeros(arena, matrix1.numRows, matrix2.numColumns);
+    Matrix resultMatrix = matrix_zeros(arena, matrix1.numRows, matrix2.numColumns);
 
+    // iterate over rows of result resultMatrix
+    for (size_t rowIndex = 0; rowIndex < resultMatrix.numRows; rowIndex++) {
+        // iterate over columns of result resultMatrix
+        for (size_t columnIndex = 0; columnIndex < resultMatrix.numColumns; columnIndex++) {
 
+            Complex sum = { 0.0, 0.0 };
+            // inner iteration for summation
+            for (size_t sumIndex = 0; sumIndex < matrix1.numColumns; sumIndex++) {
+                OptComplex factor1 = NDArray_getElement(matrix1.dataArray, rowIndex, sumIndex);
+                OptComplex factor2 = NDArray_getElement(matrix2.dataArray, sumIndex, columnIndex);
 
+                assert(factor1.valid);
+                assert(factor2.valid);
 
-    return (Matrix) { 0 };
+                Complex num = complex_multiplication(factor1.value, factor2.value);
+                complex_addition(sum, num);
+            }
+
+            NDArray_setElement(resultMatrix.dataArray, rowIndex, columnIndex, sum);
+        }
+    }
+
+    return resultMatrix;
 }
 
 // TODO: Eigenvectors, eigenvalues

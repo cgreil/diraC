@@ -102,4 +102,11 @@ bool NDArray_setElement(NDArray ndArray, size_t rowIndex, size_t columnIndex, Co
     return true;
 }
 
+void NDArray_crc(NDArray ndArray) {
 
+    uint32_t crcCode = 0;
+
+
+
+
+}
