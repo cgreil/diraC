@@ -5,12 +5,13 @@
 #include <string.h>
 #include <malloc.h>
 
-#include "string.h"
+#include "common/string.h"
+#include "utils/dataArena.h"
 
 String string_create(Arena *arena, char *data, size_t length) {
 
     size_t dataSize = sizeof(char) * length;
-    char *stringPtr = arena_alloc(arena, dataSize);
+    char *stringPtr = (char *) arena_alloc(arena, dataSize);
     memcpy(stringPtr, data, length);
 
     return (String) {
@@ -21,7 +22,7 @@ String string_create(Arena *arena, char *data, size_t length) {
 
 String string_clone(Arena *arena, String string) {
 
-    char *stringPtr = arena_alloc(arena, string.length);
+    char *stringPtr = (char *) arena_alloc(arena, string.length);
     memcpy(stringPtr, string.data, string.length);
 
     return (String) {

@@ -63,6 +63,12 @@ set (
         common/doubleLinkedList.c
         common/vectorSet.h
         common/vectorSet.c
+        common/string.h
+        common/string.c
+        utils/dataArena.h
+        utils/dataArena.c
+        complex/complex.h
+        complex/complex.c
         ndarray/ndarray.h
         ndarray/ndarray.c
         vector/vector.h

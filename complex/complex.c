@@ -58,7 +58,7 @@ Complex complex_addition(Complex c1, Complex c2) {
     return result;
 }
 
-Complex subtract(Complex c1, Complex c2) {
+Complex complex_subtraction(Complex c1, Complex c2) {
     Complex result = { c1.re - c2.re, c1.im - c2.im };
     return result; 
 }
@@ -96,17 +96,17 @@ OptComplex divide(Complex c1, Complex c2) {
     return result;
 }
 
-Complex complex_clone(Complex complex) {
+Complex complex_clone(Complex c) {
     return (Complex) {
-        .re = complex.re,
-        .im = complex.im
+        .re = c.re,
+        .im = c.im
     };
 }
 
 
-Complex complex_exp(Complex complex) {
+Complex complex_exp(Complex c) {
 
-    // A complex number z can be displayed as
+    // A c number z can be displayed as
     // z = a + ib.
     // One can then use the matrix_identity
     // exp(x + y) = exp(x) * exp(y)
@@ -115,8 +115,8 @@ Complex complex_exp(Complex complex) {
     // euler matrix_identity:
     // exp(ib) = cos(b) + i*sin(b)
 
-    TYPE_FLOAT a = complex.re;
-    TYPE_FLOAT b = complex.im;
+    TYPE_FLOAT a = c.re;
+    TYPE_FLOAT b = c.im;
 
     Complex lhs = (Complex) {
         .re = exp(a),
@@ -131,23 +131,23 @@ Complex complex_exp(Complex complex) {
     return complex_multiplication(lhs, rhs);
 }
 
-Complex complex_sin(Complex complex) {
+Complex complex_sin(Complex c) {
 
     return (Complex) {
-        .re = sin(complex.re) * cosh(complex.im),
-        .im = cos(complex.re) * sinh(complex.im)
+        .re = sin(c.re) * cosh(c.im),
+        .im = cos(c.re) * sinh(c.im)
     };
 }
 
-Complex complex_cos(Complex complex) {
+Complex complex_cos(Complex c) {
 
     return (Complex) {
-        .re = cos(complex.re) * cosh(complex.im),
-        .im = - sin(complex.re) * sinh(complex.im)
+        .re = cos(c.re) * cosh(c.im),
+        .im = - sin(c.re) * sinh(c.im)
     };
 }
 
-Complex complex_root(Complex complex) {
+Complex complex_root(Complex c) {
 
 
 
@@ -158,9 +158,6 @@ Complex complex_ln(Complex complex) {
 
     return (Complex) { 0 };
 
-    Complex complex_ln(Complex complex) {
-
-    return (Complex) { 0 };
 }
 
 

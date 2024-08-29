@@ -10,6 +10,9 @@ static uint32_t calculateCRC(Vector vector) {
     return 0;
 }
 
+//static int compare(Vector vector1, Vector vector2);
+
+
 static bool vectorsEqual (Vector vector1, Vector vector2) {
     if (calculateCRC(vector1) == calculateCRC(vector2)) {
         return true;
@@ -18,8 +21,8 @@ static bool vectorsEqual (Vector vector1, Vector vector2) {
     }
 }
 
-VectorSet vectorSet_createEmptySet() {
-    VectorSet vectorSet = {};
+VectorSet vectorSet_createEmptySet(void) {
+    VectorSet vectorSet = { 0 };
 
     vectorSet.vectorList = dll_create();
     vectorSet.vectorComparison = vectorsEqual;
@@ -59,8 +62,8 @@ bool vectorSet_addVector(VectorSet vectorSet, Vector newVector) {
 
     // TODO: Replace by some iterator-like functionality
     for(size_t setIndex = 0; setIndex < vectorSet.numVectors; setIndex++) {
-        Vector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, setIndex);
-        if (vectorSet.vectorComparison(comparisonVector, newVector) == false) {
+        OptVector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, setIndex);
+        if (vectorSet.vectorComparison(comparisonVector.data, newVector) == false) {
             return false;
         }
     }
@@ -77,8 +80,8 @@ bool vectorSet_removeVector(VectorSet vectorSet, Vector vector) {
 
     //TODO: REPLACE by some iterator-like functionality
     for (size_t setIndex = 0; setIndex < vectorSet.numVectors; setIndex++) {
-        Vector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, setIndex);
-        if (vectorSet.vectorComparison(vector, comparisonVector)) {
+        OptVector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, setIndex);
+        if (vectorSet.vectorComparison(vector, comparisonVector.data)) {
             dll_removeElementAtIndex(vectorSet.vectorList, setIndex);
             removedVector = true;
             vectorSet.numVectors--;
@@ -101,7 +104,7 @@ OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
 
     if (vectorSet.numVectors == 0 || setIndex >= vectorSet.numVectors) {
         return (OptVector) {
-            .data = (Vector){},
+            .data = (Vector){ 0 },
             .isValid = false
         };
     }
@@ -111,7 +114,7 @@ OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
     memcpy(&vector, vectorRef, sizeof(Vector));
 
     return (OptVector){
-        .data = (Vector) vector,
+        .data = vector,
         .isValid = true
     };
 }

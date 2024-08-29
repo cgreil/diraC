@@ -82,6 +82,24 @@ Matrix matrix_identity(Arena *arena, size_t dimension) {
     return matrix;
 }
 
+Matrix matrix_fromArray(Arena *arena, Complex *values, size_t numRows, size_t numColumns) {
+
+    // TODO: Check whether num Rows * numColumns is actually a plausible matrix size
+    Matrix matrix;
+
+    // NDArray creation clones values, so ownership is not moved into the matrix
+    NDArray matrixData = NDArray_create(arena, numRows, numColumns, values);
+
+    matrix = (Matrix) {
+        .numRows = numRows,
+        .numColumns = numColumns,
+        .dataArray = matrixData
+    };
+
+    return matrix;
+}
+
+
 Matrix permutation(Arena *arena, size_t dimension, size_t rowIndex1, size_t rowIndex2) {
 
     /**
@@ -126,15 +144,12 @@ Matrix matrixClone(Arena *arena, Matrix matrix) {
 /**
  * Linear Algebra
  */
-Matrix matrixAdd(Arena *arena, Matrix matrix1, Matrix matrix2) {
+Matrix matrix_addition(Arena *arena, Matrix matrix1, Matrix matrix2) {
 
     assert(matrix1.numRows == matrix2.numRows);
     assert(matrix1.numColumns == matrix2.numColumns);
 
-    Matrix matrix;
-    matrix_zeros(arena, matrix1.numRows, matrix1.numColumns);
-
-    size_t matrixSize = matrix1.numRows * matrix1.numColumns;
+    Matrix matrix = matrix_zeros(arena, matrix1.numRows, matrix1.numColumns);
 
     for (size_t i = 0; i < matrix1.numRows; i++) {
         for (size_t j = 0; j < matrix1.numColumns; j++) {
@@ -153,7 +168,32 @@ Matrix matrixAdd(Arena *arena, Matrix matrix1, Matrix matrix2) {
     return matrix;
 }
 
-Matrix matrixMulitply(Arena *arena, Matrix matrix1, Matrix matrix2) {
+Matrix matrix_subtraction(Arena *arena, Matrix matrix1, Matrix matrix2) {
+
+    assert(matrix1.numRows == matrix2.numRows);
+    assert(matrix1.numColumns == matrix2.numColumns);
+
+    Matrix matrix = matrix_zeros(arena, matrix1.numRows, matrix1.numColumns);
+
+    for (size_t i = 0; i < matrix1.numRows; i++) {
+        for (size_t j = 0; j < matrix1.numColumns; j++) {
+
+            OptComplex num1 = NDArray_getElement(matrix1.dataArray, i, j);
+            OptComplex num2 = NDArray_getElement(matrix2.dataArray, i, j);
+
+            assert(num1.valid);
+            assert(num2.valid);
+
+            Complex result = complex_subtraction(num1.value, num2.value);
+            NDArray_setElement(matrix.dataArray, i, j, result);
+        }
+    }
+
+    return matrix;
+
+}
+
+Matrix matrix_multiplication(Arena *arena, Matrix matrix1, Matrix matrix2) {
 
     /**
      *
@@ -191,34 +231,34 @@ Matrix matrixMulitply(Arena *arena, Matrix matrix1, Matrix matrix2) {
 
 // TODO: Eigenvectors, eigenvalues
 
-void matrixPower_INP(Matrix matrix, unsigned int exponent) {
+void matrix_powerINP(Matrix matrix, unsigned int exponent) {
 
 }
 
-void matrixScale_INP(Matrix matrix, Complex factor) {
+void matrix_scaleINP(Matrix matrix, Complex factor) {
 
 }
 
-void matrixSqrt(Matrix matrix) {
+void matrix_sqrt(Matrix matrix) {
 
 }
 
-void matrixExp(Matrix matrix) {
+void matrix_exp(Matrix matrix) {
 
 }
 
-void matrixSin(Matrix matrix) {
+void matrix_sin(Matrix matrix) {
 
 }
 
-void matrixCos(Matrix matrix) {
+void matrix_cos(Matrix matrix) {
 
 }
 
-void matrixTranspose_INP(Matrix matrix) {
+void matrix_transposeINP(Matrix matrix) {
 
 }
 
-void MatrixInverse_INP(Matrix matrix) {
+void matrix_inverseINP(Matrix matrix) {
 
 }

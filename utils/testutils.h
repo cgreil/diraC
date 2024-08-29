@@ -21,14 +21,23 @@
                 OptComplex actualVal = NDArray_getElement((actualNDArray), i, j);               \
                 ck_assert(expVal.valid);                                                      \
                 ck_assert(actualVal.valid);                                                                              \
-                ck_assert_complex_eq((expVal.value), (actualVal.value))                         \
+                ck_assert_complex_eq((expVal.value), (actualVal.value));                         \
             }                                                                   \
     }
 
-#define ck_assert_vector_eq(expectedVector, actualVector)                                                              \
-    NDArray expectedData = (expectedVector).dataArray;                                                                   \
-    NDArray actualData = (actualVector).dataArray;                                                                       \
-    ck_assert_ndarray_eq(expectedData, actualData)                                                                     \
+#define ck_assert_vector_eq(expectedVector, actualVector)                                                  \
+    NDArray expectedData = (expectedVector).dataArray;                                                     \
+    NDArray actualData = (actualVector).dataArray;                                                         \
+    ck_assert_ndarray_eq(expectedData, actualData)                                                         \
+
+
+#define ck_assert_matrix_eq(expectedMatrix, actualMatrix)   \
+    NDArray expectedData = (expectedMatrix).dataArray;      \
+    NDArray actualData = (actualMatrix).dataArray;          \
+    ck_assert_int_eq((expectedMatrix).numRows, (actualMatrix).numRows); \
+    ck_assert_int_eq((expectedMatrix).numColumns, (actualMatrix).numColumns); \
+    ck_assert_ndarray_eq(expectedData, actualData);                      \
+
 
 #define ck_assert_vectorSet_eq(expectedSet, actualSet)                                                                 \
     ck_assert_uint_eq((expectedSet).numVectors, (actualSet).numVectors);                                                   \

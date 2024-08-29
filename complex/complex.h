@@ -46,23 +46,25 @@ OptComplex power(Complex c, int pow);
 
 Complex complex_addition(Complex c1, Complex c2);
 
-Complex subtract(Complex c1, Complex c2);
+Complex complex_addition(Complex c1, Complex c2);
+
+Complex complex_subtraction(Complex c1, Complex c2);
 
 Complex complex_multiplication(Complex c1, Complex c2);
 
 OptComplex divide(Complex c1, Complex c2);
 
-Complex complex_clone(Complex complex);
+Complex complex_clone(Complex c);
 
-Complex complex_exp(Complex complex);
+Complex complex_exp(Complex c);
 
-Complex complex_sin(Complex complex);
+Complex complex_sin(Complex c);
 
-Complex complex_cos(Complex complex);
+Complex complex_cos(Complex c);
 
-Complex complex_root(Complex complex);
+Complex complex_root(Complex c);
 
 
-String complex_display(Arena *arena, Complex complex);
+String complex_display(Arena *arena, Complex c);
 
 #endif

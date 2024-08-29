@@ -18,7 +18,7 @@ typedef struct {
     bool (*vectorComparison) (Vector, Vector);
 }VectorSet;
 
-static int compare(Vector vector1, Vector vector2);
+
 
 VectorSet vectorSet_createEmptySet();
 

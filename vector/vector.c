@@ -4,6 +4,8 @@
 
 #include <memory.h>
 #include <assert.h>
+
+#include "complex/complex.h"
 #include "vector/vector.h"
 #include "ndarray/ndarray.h"
 #include "common/string.h"
