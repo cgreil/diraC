@@ -198,6 +198,14 @@ OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
     };
 }
 
+Complex vector_norm(Vector vec) {
+
+    OptComplex innerProd = vector_innerProduct(vec, vec);
+    assert(innerProd.valid);
+
+    return innerProd.value;
+}
+
 Vector vector_scaleINP(Vector vec, Complex factor) {
 
     for (size_t i = 0; i < vec.size; ++i) {
@@ -252,6 +260,17 @@ Vector vector_adjointINP(Vector vec) {
 
 Vector vector_resize(Arena *arena, Vector vec, size_t newLength) {
     return (Vector) { 0 };
+}
+
+Vector vector_normalize(Arena *arena, Vector vec) {
+
+    OptComplex normalizationFactor = complex_division(
+        (Complex) {1.0, 0.0},
+        vector_norm(vec)
+    );
+    assert(normalizationFactor.valid);
+
+    return vector_scaleINP(vec, normalizationFactor.value);
 }
 
 String vector_display(Arena *arena, Vector vector) {

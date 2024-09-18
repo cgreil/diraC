@@ -191,7 +191,7 @@ START_TEST (complexDivisionTest) {
     Complex z2 = { 2.0, 3.0 };
 
     Complex expected = { 44.0/13.0, -(40.0/13.0)};
-    OptComplex actual = divide(z1, z2);
+    OptComplex actual = complex_division(z1, z2);
 
     ck_assert(actual.valid);
     ck_assert_complex_eq(expected, actual.value)
@@ -202,7 +202,7 @@ START_TEST (complexDivisonZeroTest) {
     Complex z1 = { 15.0, 2.0 };
     Complex z2 = { 0.0, 0.0};
 
-    OptComplex actual = divide(z1, z2);
+    OptComplex actual = complex_division(z1, z2);
     Complex expected = { 0.0, 0.0 };
 
     ck_assert(!actual.valid);
@@ -298,7 +298,7 @@ START_TEST(complexPowerTest) {
     int pow = 5;
 
     Complex expected = { -1216.0, 1312.0 };
-    OptComplex actual = power(z, pow);
+    OptComplex actual = complex_power(z, pow);
 
     ck_assert(actual.valid);
     ck_assert_complex_eq(expected, actual.value)
@@ -310,7 +310,7 @@ START_TEST(complexPowerZeroTest) {
     int pow = 0;
 
     Complex expected = { 1.0, 0.0 };
-    OptComplex actual = power(z, pow);
+    OptComplex actual = complex_power(z, pow);
 
     ck_assert(actual.valid);
     ck_assert_complex_eq(expected, actual.value)
@@ -322,7 +322,7 @@ START_TEST(complexPowerNegativeTest) {
     int pow = -3;
 
     Complex expected = { -(46.0/2197.0), (9.0/2197.0) };
-    OptComplex actual = power(z, pow);
+    OptComplex actual = complex_power(z, pow);
 
     ck_assert(actual.valid);
     ck_assert_complex_eq(actual.value, expected)
@@ -330,7 +330,7 @@ START_TEST(complexPowerNegativeTest) {
 
 Suite *complexPowerSuite(void) {
 
-    Suite *suite = suite_create("Complex power");
+    Suite *suite = suite_create("Complex complex_power");
 
     TCase *testCase1 = tcase_create("complexPowerTest");
     TCase *testCase2 = tcase_create("complexPowerZeroTest");

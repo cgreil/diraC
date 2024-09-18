@@ -33,6 +33,8 @@ OptVector vector_addition(Arena *arena, Vector vec1, Vector vec2);
 
 OptComplex vector_innerProduct(Vector vec1, Vector vec2);
 
+Complex vector_norm(Vector vec);
+
 Vector vector_scaleINP(Vector vec, Complex factor);
 
 Vector vector_conjugateINP(Vector vec);
@@ -42,6 +44,8 @@ Vector vector_transposeINP(Vector vec);
 Vector vector_adjointINP(Vector vec);
 
 Vector vector_resize(Arena *arena, Vector vec, size_t newLength);
+
+Vector vector_normalize(Arena *arena, Vector vec);
 
 bool vector_isColumn(Vector vec);
 

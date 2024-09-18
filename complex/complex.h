@@ -36,13 +36,13 @@ typedef struct {
 
 
 
-Complex conjugate(Complex c);
+Complex complex_conjugate(Complex c);
 
-TYPE_FLOAT modulus(Complex c);
+TYPE_FLOAT complex_modulus(Complex c);
 
 Polar polar(Complex c);
 
-OptComplex power(Complex c, int pow);
+OptComplex complex_power(Complex c, int pow);
 
 Complex complex_addition(Complex c1, Complex c2);
 
@@ -52,7 +52,7 @@ Complex complex_subtraction(Complex c1, Complex c2);
 
 Complex complex_multiplication(Complex c1, Complex c2);
 
-OptComplex divide(Complex c1, Complex c2);
+OptComplex complex_division(Complex c1, Complex c2);
 
 Complex complex_clone(Complex c);
 

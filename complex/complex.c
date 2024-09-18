@@ -6,12 +6,12 @@
 #include "complex/complex.h"
 #include "common/string.h"
 
-Complex conjugate(Complex c) {
+Complex complex_conjugate(Complex c) {
     Complex result = { c.re, -c.im };
     return result;
 }
 
-TYPE_FLOAT modulus(Complex c) {
+TYPE_FLOAT complex_modulus(Complex c) {
     TYPE_FLOAT temp = c.re * c.re + c.im + c.im;
     return sqrt(temp); 
 }
@@ -20,13 +20,13 @@ Polar polar(Complex c) {
 
 
     Polar result = {
-        .r = sqrt(modulus(c)),
+        .r = sqrt(complex_modulus(c)),
         .theta = atan2f(c.im, c.re)
     };
     return result;
 }
 
-OptComplex power(Complex c, int pow) {
+OptComplex complex_power(Complex c, int pow) {
     
     if (pow == 0) {
         return (OptComplex) { 
@@ -48,7 +48,7 @@ OptComplex power(Complex c, int pow) {
         };
     }
     else {
-        OptComplex inverse = divide((Complex) { 1.0, 0.0 }, temp);
+        OptComplex inverse = complex_division((Complex) {1.0, 0.0}, temp);
         return inverse; 
     } 
 }
@@ -70,7 +70,7 @@ Complex complex_multiplication(Complex c1, Complex c2) {
     return result;
 }
 
-OptComplex divide(Complex c1, Complex c2) {
+OptComplex complex_division(Complex c1, Complex c2) {
 
     if (fabs(c2.re) < 0.00001 && fabs(c2.im) < 0.00001) {
         OptComplex result = {
@@ -149,12 +149,14 @@ Complex complex_cos(Complex c) {
 
 Complex complex_root(Complex c) {
 
-
+    // TODO: implement
 
     return (Complex) { 0 };
 }
 
 Complex complex_ln(Complex complex) {
+
+    // TODO: Implement
 
     return (Complex) { 0 };
 
