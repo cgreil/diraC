@@ -85,7 +85,7 @@ START_TEST(testComplexSubtraction) {
     Complex z2 = { 4.0, 1.0 };
 
     Complex expected = { 1.0, 1.0 };
-    Complex actual = subtract(z1, z2);
+    Complex actual = complex_subtraction(z1, z2);
 
     ck_assert_complex_eq(expected, actual)
 } END_TEST
@@ -96,7 +96,7 @@ START_TEST (testComplexSubtractionOneNegative) {
     Complex z2 = { -3.0, -4.0 };
 
     Complex expected = { 11.0, 10.0 };
-    Complex actual = subtract(z1, z2);
+    Complex actual = complex_subtraction(z1, z2);
 
     ck_assert_complex_eq(expected, actual)
 } END_TEST
@@ -107,7 +107,7 @@ START_TEST (testComplexSubtractionTwoNegatives) {
     Complex z2 = { -7.2, -9.1 };
 
     Complex expected = { 1.9, 6.7 };
-    Complex actual = subtract(z1, z2);
+    Complex actual = complex_subtraction(z1, z2);
 
     ck_assert_complex_eq(expected, actual)
 } END_TEST
@@ -353,7 +353,7 @@ Suite *complexPowerSuite(void) {
 */
 
 
-int main() {
+int main(void) {
 
     // Array of suitePointers - filled by the respective functions
     Suite *testSuites[] = {

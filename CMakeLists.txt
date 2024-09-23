@@ -8,95 +8,71 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR})
 # Complex includes
 set(
         COMPLEX_SOURCE_FILES
-        complex/complex.h
         complex/complex.c
-        common/string.h
         common/string.c
-        utils/testutils.h
         complex/complexTests.c
-        common/vectorSetTests.c
+        vector/vector.c
+        ndarray/ndarray.c
+        utils/dataArena.c
 )
 
 set(
         VECTOR_SOURCE_FILES
-        complex/complex.h
         complex/complex.c
-        common/string.h
         common/string.c
-        ndarray/ndarray.h
-        ndarray/ndarray.c
-        vector/vector.h
         vector/vector.c
-        utils/dataArena.h
         utils/dataArena.c
         vector/vectorTests.c
+        ndarray/ndarray.c
+        utils/testutils.h
 )
 
 set (
         NDARRAY_SOURCE_FILES
-        complex/complex.h
+        common/string.c
         complex/complex.c
-        utils/testutils.h
         ndarray/ndarray.c
         ndarray/ndarray.c
         ndarray/ndArrayTests.c
         utils/dataArena.c
-        utils/dataArena.h
 )
 
 set (
         VECTORSET_SOURCE_FILES
-        common/doubleLinkedList.h
         common/doubleLinkedList.c
-        common/vectorSet.h
+        complex/complex.c
         common/vectorSet.c
+        utils/dataArena.c
         common/vectorSetTests.c
-        common/vectorSetTests.c
-        vector/vector.h
         vector/vector.c
         common/vectorSet.c
+        ndarray/ndarray.c
+        common/string.c
 )
 
 set (
         MATRIX_SOURCE_FILES
-        common/doubleLinkedList.h
         common/doubleLinkedList.c
-        common/vectorSet.h
         common/vectorSet.c
-        common/string.h
         common/string.c
-        utils/dataArena.h
         utils/dataArena.c
-        complex/complex.h
         complex/complex.c
-        ndarray/ndarray.h
         ndarray/ndarray.c
-        vector/vector.h
         vector/vector.c
-        matrix/matrix.h
         matrix/matrix.c
         matrix/matrixTests.c
 )
 
 add_executable(LEIBNITZ main.c
-        common/types.h
         complex/complex.c
         float/float.c
         ndarray/ndarray.c
-        utils/testutils.h
-        vector/vector.h
         vector/vector.c
-        common/vectorSet.h
-        common/doubleLinkedList.h
         common/doubleLinkedList.c
         utils/dataArena.c
-        utils/dataArena.h
         common/string.c
-        common/string.h
-        matrix/matrix.h
         matrix/matrix.c
         common/tuple.c
-        common/tuple.h
 )
 
 

@@ -100,6 +100,10 @@ bool vectorSet_removeVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
     return removedVector;
 }
 
+size_t vectorSet_size(VectorSet vectorSet) {
+    return vectorSet.numVectors;
+}
+
 OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
 
     if (vectorSet.numVectors == 0 || setIndex >= vectorSet.numVectors) {

@@ -32,6 +32,8 @@ bool vectorSet_removeVector(VectorSet vectorSet, Vector vector);
 
 bool vectorSet_removeVectorAtIndex(VectorSet vectorSet, size_t setIndex);
 
+size_t vectorSet_size(VectorSet vectorSet);
+
 OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t index);
 
 
