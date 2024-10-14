@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <utils/dataArena.h>
+#include <memory.h>
 
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
@@ -59,12 +60,14 @@ NDArray NDArray_clone(Arena *arena, NDArray ndArray) {
 
     size_t numElements = ndArray.numRows * ndArray.numColumns;
 
-    Complex *clonedArray = arena_allocate_count(arena, Complex, numElements);
+    Complex *clonedValues = arena_allocate_count(arena, Complex, numElements);
+
+    memcpy(clonedValues, ndArray.values, numElements);
 
     return (NDArray) {
         .numRows = ndArray.numRows,
         .numColumns = ndArray.numColumns,
-        .values = clonedArray,
+        .values = clonedValues,
         .checksum = 0
     };
 }

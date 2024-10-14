@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.28)
 project(LEIBNITZ LANGUAGES C VERSION 0.0.1)
 
 #set(CMAKE_C_STANDARD 10)
+set(CMAKE_BUILD_TYPE Debug)
+
 set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic")
+set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
 
 set(SRC_DIR ${CMAKE_SOURCE_DIR})
 # Complex includes

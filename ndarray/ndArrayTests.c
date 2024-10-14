@@ -9,7 +9,7 @@
 #include "utils/dataArena.h"
 
 // Global variable for arena
-static Arena *arena;
+Arena *arena;
 
 START_TEST(testNDArrayClone) {
 
@@ -118,6 +118,7 @@ int main(void) {
     // Array of suitePointers - filled by the respective functions
     Suite *testSuites[] = {
         ndArrayCloneSuite(),
+        ndArrayResizeSuite()
     };
 
     size_t numSuites = sizeof(testSuites) / sizeof(testSuites[0]);

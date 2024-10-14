@@ -42,9 +42,10 @@ void *arena_alloc(Arena *arena, size_t size) {
     }
     // return pointer to the current (buffer + offset)
     void *dataPtr = (void * ) (arena->arena_buffer + arena->arena_offset);
-    // increment offset by size
-    arena->arena_offset += size;
-
     memset(arena->arena_buffer + arena->arena_offset, 0, size);
+
+    // increment offset by size, so that buffer+offset
+    // again points to next free memory segment
+    arena->arena_offset += size;
     return dataPtr;
 }
