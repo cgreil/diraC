@@ -45,7 +45,6 @@ set (
         utils/dataArena.c
         common/vectorSetTests.c
         vector/vector.c
-        common/vectorSet.c
         ndarray/ndarray.c
         common/string.c
 )
@@ -83,7 +82,6 @@ add_executable(${COMPLEX_TESTS} ${COMPLEX_SOURCE_FILES})
 
 set (NDARRAY_TESTS "ndarrayTests")
 add_executable(${NDARRAY_TESTS} ${NDARRAY_SOURCE_FILES})
-target_link_libraries(${NDARRAY_TESTS} m check)
 
 set (VECTOR_TESTS "vectorTests")
 add_executable(${VECTOR_TESTS} ${VECTOR_SOURCE_FILES})
@@ -100,8 +98,10 @@ include_directories(SYSTEM ${SRC_DIR})
 include_directories("../../libs/check/src")
 #include check and math library
 target_link_libraries(${COMPLEX_TESTS} m check)
-
+target_link_libraries(${NDARRAY_TESTS} m check)
 target_link_libraries(${MATRIX_TESTS} m check)
-
 target_link_libraries(${VECTOR_TESTS} m check)
 target_link_libraries(${VECTORSET_TESTS} m check)
+
+# Include math file for main
+target_link_libraries(${PROJECT_NAME} m)

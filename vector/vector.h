@@ -9,6 +9,8 @@
 #include "ndarray/ndarray.h"
 #include "common/string.h"
 
+struct VectorSet;
+
 typedef struct {
     size_t size;
     NDArray dataArray;
@@ -46,6 +48,8 @@ Vector vector_adjointINP(Vector vec);
 Vector vector_resize(Arena *arena, Vector vec, size_t newLength);
 
 Vector vector_normalize(Arena *arena, Vector vec);
+
+struct VectorSet vector_gramSchmidt();
 
 bool vector_isColumn(Vector vec);
 

@@ -117,7 +117,6 @@ int main(void) {
         vectorSetSuite()
     };
 
-
     size_t numSuites = sizeof(testSuites) / sizeof(testSuites[0]);
 
     SRunner *suiteRunner;

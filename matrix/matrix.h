@@ -17,29 +17,29 @@ typedef struct {
     bool isValid;
 } OptMatrix;
 
-Matrix matrix_zeros(Arena *arena, size_t numRows, size_t numColumns);
+Matrix matrix_zeros(size_t numRows, size_t numColumns);
 
-Matrix matrix_ones(Arena *arena, size_t numRows, size_t numColumns);
+Matrix matrix_ones(size_t numRows, size_t numColumns);
 
-Matrix matrix_identity(Arena *arena, size_t dimension);
+Matrix matrix_fromArray(Complex *values, size_t numRows, size_t numColumns);
 
-Matrix matrix_fromArray(Arena *arena, Complex *values, size_t numRows, size_t numColumns);
+Matrix matrix_identity(size_t dimension);
 
-Matrix permutation(Arena *arena, size_t dimension, size_t rowIndex1, size_t rowIndex2);
+Matrix matrix_permutation(size_t dimension, size_t rowIndex1, size_t rowIndex2);
 
 /**
  * Support
  */
-Matrix matrixClone(Arena *arena, Matrix matrix);
+Matrix matrix_clone(Matrix matrix);
 
 /**
  * Linear Algebra
  */
-Matrix matrix_addition(Arena *arena, Matrix matrix1, Matrix matrix2);
+Matrix matrix_addition(Matrix matrix1, Matrix matrix2);
 
-Matrix matrix_subtraction(Arena *arena, Matrix matrix1, Matrix matrix2);
+Matrix matrix_subtraction(Matrix matrix1, Matrix matrix2);
 
-Matrix matrix_multiplication(Arena *arena, Matrix matrix1, Matrix matrix2);
+Matrix matrix_multiplication(Matrix matrix1, Matrix matrix2);
 
 // TODO: Eigenvectors, eigenvalues
 

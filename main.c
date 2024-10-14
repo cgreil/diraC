@@ -1,6 +1,9 @@
 #include <stdlib.h>
 
+#include "utils/dataArena.h"
 
-int main() {
+Arena *arena;
+
+int main(void) {
     return EXIT_SUCCESS;
 }

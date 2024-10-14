@@ -306,6 +306,8 @@ String vector_display(Arena *arena, Vector vector) {
     return string;
 }
 
+
+
 bool vector_isColumn(Vector vec) {
     //assert that the given vector is atleast either column or row vec
     assert((vec.dataArray.numColumns == 1) || (vec.dataArray.numRows == 1));

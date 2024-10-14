@@ -16,8 +16,7 @@ typedef struct {
     DoubleLinkedList vectorList;
     size_t numVectors;
     bool (*vectorComparison) (Vector, Vector);
-}VectorSet;
-
+} VectorSet;
 
 
 VectorSet vectorSet_createEmptySet();
@@ -35,8 +34,6 @@ bool vectorSet_removeVectorAtIndex(VectorSet vectorSet, size_t setIndex);
 size_t vectorSet_size(VectorSet vectorSet);
 
 OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t index);
-
-
 
 
 

@@ -10,14 +10,14 @@
 #include "matrix/matrix.h"
 
 
-static Arena *arena;
+Arena *arena;
 
 START_TEST(matrixZeroTest) {
 
     size_t numRows = 4;
     size_t numCols = 5;
 
-    Matrix zeroMat = matrix_zeros(arena, numRows, numCols);
+    Matrix zeroMat = matrix_zeros(numRows, numCols);
 
     // manually check values, since matrix creaton witll subesequently be tested using
     // these creation utilities
@@ -41,7 +41,7 @@ START_TEST(matrixOnesTest) {
     size_t numRows = 3;
     size_t numCols = 3;
 
-    Matrix zeroMat = matrix_ones(arena, numRows, numCols);
+    Matrix zeroMat = matrix_ones(numRows, numCols);
 
     // manually check values, since matrix creaton witll subesequently be tested using
     // these creation utilities
@@ -63,7 +63,7 @@ START_TEST(matrixIdentityTest) {
 
     size_t dimension = 4;
 
-    Matrix identity = matrix_identity(arena, dimension);
+    Matrix identity = matrix_identity(dimension);
 
     Complex oneComp = (Complex) { 1.0, 0.0 };
     Complex zeroComp = (Complex) { 0.0, 0.0 };
@@ -137,11 +137,11 @@ START_TEST(matrixAdditionTest) {
         resultValues[i] = complex_addition(matrix1Values[i], matrix2Values[i]);
     }
 
-    Matrix matrix1 = matrix_fromArray(arena, matrix1Values, numRows, numColumns);
-    Matrix matrix2 = matrix_fromArray(arena, matrix2Values, numRows, numColumns);
+    Matrix matrix1 = matrix_fromArray(matrix1Values, numRows, numColumns);
+    Matrix matrix2 = matrix_fromArray(matrix2Values, numRows, numColumns);
 
-    Matrix expectedMatrix = matrix_fromArray(arena, resultValues, numRows, numColumns);
-    Matrix resultMatrix = matrix_addition(arena, matrix1, matrix2);
+    Matrix expectedMatrix = matrix_fromArray(resultValues, numRows, numColumns);
+    Matrix resultMatrix = matrix_addition(matrix1, matrix2);
 
     ck_assert_matrix_eq(expectedMatrix, resultMatrix);
 
@@ -173,11 +173,11 @@ START_TEST(matrixSubtractionTest) {
         resultValues[i] = complex_subtraction(matrix1Values[i], matrix2Values[i]);
     }
 
-    Matrix matrix1 = matrix_fromArray(arena, matrix1Values, numRows, numColumns);
-    Matrix matrix2 = matrix_fromArray(arena, matrix2Values, numRows, numColumns);
+    Matrix matrix1 = matrix_fromArray(matrix1Values, numRows, numColumns);
+    Matrix matrix2 = matrix_fromArray(matrix2Values, numRows, numColumns);
 
-    Matrix expectedMatrix = matrix_fromArray(arena, resultValues, numRows, numColumns);
-    Matrix resultMatrix = matrix_subtraction(arena, matrix1, matrix2);
+    Matrix expectedMatrix = matrix_fromArray(resultValues, numRows, numColumns);
+    Matrix resultMatrix = matrix_subtraction(matrix1, matrix2);
 
     ck_assert_matrix_eq(expectedMatrix, resultMatrix);
 

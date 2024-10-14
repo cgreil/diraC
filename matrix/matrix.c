@@ -3,7 +3,9 @@
 
 #include "matrix/matrix.h"
 
-Matrix matrix_zeros(Arena *arena, size_t numRows, size_t numColumns) {
+extern Arena *arena;
+
+Matrix matrix_zeros(size_t numRows, size_t numColumns) {
 
     Matrix matrix;
     size_t matrixSize = numRows * numColumns;
@@ -27,7 +29,7 @@ Matrix matrix_zeros(Arena *arena, size_t numRows, size_t numColumns) {
     return matrix;
 }
 
-Matrix matrix_ones(Arena *arena, size_t numRows, size_t numColumns) {
+Matrix matrix_ones(size_t numRows, size_t numColumns) {
 
     Matrix matrix;
     size_t matrixSize = numRows * numColumns;
@@ -50,7 +52,7 @@ Matrix matrix_ones(Arena *arena, size_t numRows, size_t numColumns) {
     return matrix;
 }
 
-Matrix matrix_identity(Arena *arena, size_t dimension) {
+Matrix matrix_identity(size_t dimension) {
 
     Matrix matrix;
     size_t matrixSize = dimension * dimension;
@@ -82,7 +84,7 @@ Matrix matrix_identity(Arena *arena, size_t dimension) {
     return matrix;
 }
 
-Matrix matrix_fromArray(Arena *arena, Complex *values, size_t numRows, size_t numColumns) {
+Matrix matrix_fromArray(Complex *values, size_t numRows, size_t numColumns) {
 
     // TODO: Check whether num Rows * numColumns is actually a plausible matrix size
     Matrix matrix;
@@ -100,7 +102,7 @@ Matrix matrix_fromArray(Arena *arena, Complex *values, size_t numRows, size_t nu
 }
 
 
-Matrix permutation(Arena *arena, size_t dimension, size_t rowIndex1, size_t rowIndex2) {
+Matrix matrix_permutation(size_t dimension, size_t rowIndex1, size_t rowIndex2) {
 
     /**
      * @param Arena
@@ -115,7 +117,7 @@ Matrix permutation(Arena *arena, size_t dimension, size_t rowIndex1, size_t rowI
      * A only by having rows rowIndex1 and rowIndex2 swapped
      */
 
-    Matrix matrix = matrix_identity(arena, dimension);
+    Matrix matrix = matrix_identity(dimension);
 
     // Directly set the elements in the ndarray layout
     // In the initial identity element, swapped elements
@@ -132,7 +134,7 @@ Matrix permutation(Arena *arena, size_t dimension, size_t rowIndex1, size_t rowI
 /**
  * Support
  */
-Matrix matrixClone(Arena *arena, Matrix matrix) {
+Matrix matrix_clone(Matrix matrix) {
 
     return (Matrix) {
         .numRows = matrix.numRows,
@@ -144,12 +146,12 @@ Matrix matrixClone(Arena *arena, Matrix matrix) {
 /**
  * Linear Algebra
  */
-Matrix matrix_addition(Arena *arena, Matrix matrix1, Matrix matrix2) {
+Matrix matrix_addition(Matrix matrix1, Matrix matrix2) {
 
     assert(matrix1.numRows == matrix2.numRows);
     assert(matrix1.numColumns == matrix2.numColumns);
 
-    Matrix matrix = matrix_zeros(arena, matrix1.numRows, matrix1.numColumns);
+    Matrix matrix = matrix_zeros(matrix1.numRows, matrix1.numColumns);
 
     for (size_t i = 0; i < matrix1.numRows; i++) {
         for (size_t j = 0; j < matrix1.numColumns; j++) {
@@ -168,12 +170,12 @@ Matrix matrix_addition(Arena *arena, Matrix matrix1, Matrix matrix2) {
     return matrix;
 }
 
-Matrix matrix_subtraction(Arena *arena, Matrix matrix1, Matrix matrix2) {
+Matrix matrix_subtraction(Matrix matrix1, Matrix matrix2) {
 
     assert(matrix1.numRows == matrix2.numRows);
     assert(matrix1.numColumns == matrix2.numColumns);
 
-    Matrix matrix = matrix_zeros(arena, matrix1.numRows, matrix1.numColumns);
+    Matrix matrix = matrix_zeros(matrix1.numRows, matrix1.numColumns);
 
     for (size_t i = 0; i < matrix1.numRows; i++) {
         for (size_t j = 0; j < matrix1.numColumns; j++) {
@@ -193,7 +195,7 @@ Matrix matrix_subtraction(Arena *arena, Matrix matrix1, Matrix matrix2) {
 
 }
 
-Matrix matrix_multiplication(Arena *arena, Matrix matrix1, Matrix matrix2) {
+Matrix matrix_multiplication(Matrix matrix1, Matrix matrix2) {
 
     /**
      *
@@ -202,7 +204,7 @@ Matrix matrix_multiplication(Arena *arena, Matrix matrix1, Matrix matrix2) {
 
     assert(matrix1.numColumns == matrix2.numRows);
 
-    Matrix resultMatrix = matrix_zeros(arena, matrix1.numRows, matrix2.numColumns);
+    Matrix resultMatrix = matrix_zeros(matrix1.numRows, matrix2.numColumns);
 
     // iterate over rows of result resultMatrix
     for (size_t rowIndex = 0; rowIndex < resultMatrix.numRows; rowIndex++) {
