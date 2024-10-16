@@ -15,7 +15,7 @@ Arena* arena_init(void) {
 
     Arena *arena = malloc(sizeof(Arena));
 
-    arena->arena_buffer = malloc(ARENA_DEFAULT_SIZE);
+    arena->arena_buffer = calloc(ARENA_DEFAULT_SIZE, sizeof(unsigned char));
     arena->arena_offset = 0;
     arena->arena_buffer_length = ARENA_DEFAULT_SIZE;
 
@@ -42,7 +42,6 @@ void *arena_alloc(Arena *arena, size_t size) {
     }
     // return pointer to the current (buffer + offset)
     void *dataPtr = (void * ) (arena->arena_buffer + arena->arena_offset);
-    memset(arena->arena_buffer + arena->arena_offset, 0, size);
 
     // increment offset by size, so that buffer+offset
     // again points to next free memory segment

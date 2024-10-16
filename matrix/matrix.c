@@ -61,15 +61,15 @@ Matrix matrix_identity(size_t dimension) {
     Complex zero = { 0.0, 0.0 };
     Complex one = { 1.0, 0.0 };
 
-    for (size_t i = 0; i < matrixSize; i++) {
-
-        // diagonal elements have the property that i is a
-        // multiple of dimension
-        if (i % dimension == 0) {
-            matrixData[i] = one;
-        }
-        else {
-            matrixData[i] = zero;
+    size_t index = 0;
+    for (size_t i = 0; i < dimension; i++) {
+        for (size_t j = 0; j < dimension; j++) {
+            if (i == j) {
+                matrixData[index] = one;
+            } else {
+                matrixData[index] = zero;
+            }
+            index++;
         }
     }
 

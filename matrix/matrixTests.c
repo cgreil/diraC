@@ -182,11 +182,42 @@ START_TEST(matrixSubtractionTest) {
     ck_assert_matrix_eq(expectedMatrix, resultMatrix);
 
 } END_TEST
-/*
+
 START_TEST(matrixMultiplicationTest) {
+    size_t numRows = 2;
+    size_t numColumns = 2;
+
+    Complex matrix1Values[] = {
+        (Complex) { 4.0, 2.0 },
+        (Complex) { 7.0, 0.5 },
+        (Complex) { 9.75, 9.0 },
+        (Complex) { 5.0, 2.25 }
+    };
+
+    Complex matrix2Values[] = {
+        (Complex) { 2.75, 4.5 },
+        (Complex) { 7.0, 2.0 },
+        (Complex) { 4.0, 2.0 },
+        (Complex) { 0.0, 0.5 }
+    };
+
+    Matrix matrix1 = matrix_fromArray(matrix1Values, numRows, numColumns);
+    Matrix matrix2 = matrix_fromArray(matrix2Values, numRows, numColumns);
+
+    Matrix multiplicationResult = matrix_multiplication(matrix1, matrix2);
+
+    Complex matrixData[] = {
+        (Complex) {29.0, 39.5},
+        (Complex) {23.75, 25.5},
+        (Complex) {1.8125, 87.625},
+        (Complex) {49.125, 85.0}
+    };
+
+    Matrix expectedMatrix = matrix_fromArray(matrixData, numRows, numColumns);
+    ck_assert_matrix_eq(expectedMatrix, multiplicationResult)
 
 } END_TEST
-*/
+
 
 Suite *matrixArithmeticSuite(void) {
 
@@ -194,12 +225,15 @@ Suite *matrixArithmeticSuite(void) {
 
     TCase *testcase1 = tcase_create("matrixAdditionTest");
     TCase *testcase2 = tcase_create("matrixSubtractionTest");
+    TCase *testcase3 = tcase_create("matrixMultiplicationTest");
 
     tcase_add_test(testcase1, matrixAdditionTest);
     tcase_add_test(testcase2, matrixSubtractionTest);
+    tcase_add_test(testcase3, matrixMultiplicationTest);
 
     suite_add_tcase(suite, testcase1);
     suite_add_tcase(suite, testcase2);
+    suite_add_tcase(suite, testcase3);
 
     return suite;
 }

@@ -62,7 +62,7 @@ NDArray NDArray_clone(Arena *arena, NDArray ndArray) {
 
     Complex *clonedValues = arena_allocate_count(arena, Complex, numElements);
 
-    memcpy(clonedValues, ndArray.values, numElements);
+    memcpy(clonedValues, ndArray.values, numElements * sizeof(Complex));
 
     return (NDArray) {
         .numRows = ndArray.numRows,
@@ -73,6 +73,16 @@ NDArray NDArray_clone(Arena *arena, NDArray ndArray) {
 }
 
 NDArray NDArray_resize(Arena *arena, NDArray ndArray, size_t numRows, size_t numColumns) {
+
+    assert(ndArray.numColumns * ndArray.numRows == numRows * numColumns);
+
+    if (numRows == ndArray.numRows && numColumns == ndArray.numColumns) {
+        return ndArray;
+    }
+
+    //size_t numElements = ndArray.numRows * ndArray.numColumns;
+    //Complex values[numElements];
+
     return (NDArray) { 0 };
 }
 
