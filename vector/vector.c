@@ -124,8 +124,18 @@ OptComplex vector_getElement(Vector vector, size_t index){
      * index within the supplied vector
      */
 
-    size_t rowIndex = index;
-    size_t columnIndex = 0;
+    size_t rowIndex;
+    size_t columnIndex;
+    // Distinguish between row and column vectors:
+    assert(vector.dataArray.numRows == 1 || vector.dataArray.numColumns == 1);
+    if (vector.dataArray.numRows == 1) {
+        rowIndex = 0;
+        columnIndex = index;
+    } else {
+        columnIndex = 0;
+        rowIndex = index;
+    }
+
     return NDArray_getElement(vector.dataArray, rowIndex, columnIndex);
 }
 
@@ -220,6 +230,7 @@ Vector vector_scaleINP(Vector vec, Complex factor) {
 }
 
 Vector vector_conjugateINP(Vector vec) {
+
 
     for (size_t i = 0; i < vec.size; i++) {
         OptComplex complex = vector_getElement(vec, i);

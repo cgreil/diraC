@@ -244,7 +244,8 @@ int main(void) {
     arena = arena_init();
 
     Suite *testSuites[] = {
-        matrixCreationSuite()
+        matrixCreationSuite(),
+        matrixArithmeticSuite()
     };
 
     size_t numSuites = sizeof(testSuites) / sizeof(testSuites[0]);

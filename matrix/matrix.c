@@ -221,7 +221,7 @@ Matrix matrix_multiplication(Matrix matrix1, Matrix matrix2) {
                 assert(factor2.valid);
 
                 Complex num = complex_multiplication(factor1.value, factor2.value);
-                complex_addition(sum, num);
+                sum = complex_addition(sum, num);
             }
 
             NDArray_setElement(resultMatrix.dataArray, rowIndex, columnIndex, sum);

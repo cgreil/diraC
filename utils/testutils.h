@@ -25,11 +25,11 @@
             }                                                                   \
     }
 
-#define ck_assert_vector_eq(expectedVector, actualVector)                                                  \
-    NDArray expectedData = (expectedVector).dataArray;                                                     \
-    NDArray actualData = (actualVector).dataArray;                                                         \
-    ck_assert_ndarray_eq(expectedData, actualData)                                                         \
-
+#define ck_assert_vector_eq(expectedVector, actualVector) \
+    ck_assert((expectedVector).size == (actualVector).size);                                                      \
+    for (size_t i = 0; i < (expectedVector).size; i++) {  \
+        ck_assert_complex_eq(vector_getElement((expectedVector), i).value, vector_getElement((actualVector), i).value)  \
+    }
 
 #define ck_assert_matrix_eq(expectedMatrix, actualMatrix)   \
     NDArray expectedData = (expectedMatrix).dataArray;      \
