@@ -16,9 +16,10 @@ typedef struct {
 }String;
 
 typedef struct {
-    int a;
-    // TODO: implement StringBuilder
-    //https://www.reddit.com/r/C_Programming/comments/13zqjmz/string_builders_in_c/
+    FILE *stream;
+    char *streamPtr;
+    size_t bufferSize;
+    // https://www.reddit.com/r/C_Programming/comments/13zqjmz/string_builders_in_c/
 }StringBuilder;
 
 String string_clone(Arena *arena, String string);
@@ -28,6 +29,11 @@ String string_create(Arena *arena, char *data, size_t length);
 size_t string_getLength(String string);
 
 String string_concat(Arena *arena, String string1, String string2);
+
+size_t stringBuilder_append(StringBuilder* stringBuilder, String string);
+
+String stringBuilder_build(StringBuilder* stringBuilder);
+
 
 
 #endif //LEIBNITZ_STRING_H

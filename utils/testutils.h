@@ -28,7 +28,6 @@
 #define ck_assert_vectorValues_eq(expectedVector, actualVector)                                                         \
     ck_assert((expectedVector).size == (actualVector).size);                                                            \
     for (size_t _vecIndex = 0; _vecIndex < (expectedVector).size; _vecIndex++) {                                        \
-        printf("Asserting vectors expected, actual with sizes %zu, %zu respectively \n", (expectedVector).size, (actualVector).size);\
         ck_assert_complex_eq(vector_getElement((expectedVector), _vecIndex).value,                                      \
         vector_getElement((actualVector), _vecIndex).value)                                                             \
     }

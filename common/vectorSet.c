@@ -14,11 +14,7 @@ static uint32_t calculateCRC(Vector vector) {
 
 
 static bool vectorsEqual (Vector vector1, Vector vector2) {
-    if (calculateCRC(vector1) == calculateCRC(vector2)) {
-        return true;
-    } else {
-        return false;
-    }
+    return calculateCRC(vector1) == calculateCRC(vector2);
 }
 
 VectorSet vectorSet_createEmptySet(void) {
