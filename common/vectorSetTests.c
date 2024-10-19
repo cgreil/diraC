@@ -29,7 +29,9 @@ START_TEST (createVectorSetTest) {
     ck_assert(vectorSet.numVectors == numVectors);
 
     for (size_t i = 0; i < vectorSet.numVectors; i++) {
-        ck_assert_vector_eq(vectors[i], vectorSet_getVectorAtIndex(vectorSet, i).data);
+        Vector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, i).data;
+
+        ck_assert_vectorValues_eq(vectors[i], comparisonVector);
     }
 
     ck_assert(vectorSet_destroy(vectorSet));

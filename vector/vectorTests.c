@@ -150,7 +150,7 @@ START_TEST(vectorScalingTest) {
     Vector expected = vector_fromArray(arena, scaledValues, vecSize);
 
     Vector resultVector = vector_scaleINP(vector, scaleFactor);
-    ck_assert_vector_eq(expected, resultVector);
+    ck_assert_vectorValues_eq(expected, resultVector);
 
 } END_TEST
 
@@ -200,7 +200,7 @@ START_TEST(vectorConjugateTest) {
 
     Vector resultVector = vector_conjugateINP(vector);
 
-    ck_assert_vector_eq(expectedVector, resultVector)
+    ck_assert_vectorValues_eq(expectedVector, resultVector)
 }END_TEST
 
 START_TEST(vectorTransposeTest) {
@@ -251,7 +251,7 @@ START_TEST(vectorAdjointTest) {
 
     Vector expectedVector = vector_fromArray(arena, expectedValues, vecSize);
 
-    ck_assert_vector_eq(expectedVector, resultVector);
+    ck_assert_vectorValues_eq(expectedVector, resultVector);
 }END_TEST
 
 

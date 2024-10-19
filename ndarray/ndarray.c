@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <utils/dataArena.h>
 #include <memory.h>
+#include <stdio.h>
 
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
@@ -96,6 +97,12 @@ OptComplex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnInd
     }
 
     size_t dataPosition = columnIndex + rowIndex * ndArray.numColumns;
+    // DEBUG Print
+    /*printf("Accessing ndarray with dimensions %zu/%zu: At row %zu and column %zu \n",
+           ndArray.numRows, ndArray.numColumns, rowIndex, columnIndex);
+    Complex value = ndArray.values[dataPosition];
+    printf("Combined index is %zu, leading to value: (%f + %fi) \n", dataPosition, value.re, value.im);
+    */
 
     return (OptComplex) {
         .value = ndArray.values[dataPosition],

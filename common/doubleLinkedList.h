@@ -15,17 +15,19 @@ typedef struct Node_t{
 } Node;
 
 typedef struct{
-    Node *root;
+    Node **root;
     size_t numElements;
 }DoubleLinkedList;
 
-DoubleLinkedList dll_create();
+bool dll_free(DoubleLinkedList* dll);
 
-void *dll_getElementAtIndex(DoubleLinkedList dll, size_t index);
+void *dll_getElementAtIndex(DoubleLinkedList* dll, size_t index);
 
-void dll_insertElement(DoubleLinkedList dll, void *element, size_t elementSize);
+Node *dll_getNodeAtIndex(DoubleLinkedList* dll, size_t index);
 
-bool dll_removeElementAtIndex(DoubleLinkedList dll, size_t index);
+void dll_insertElement(DoubleLinkedList* dll, void *element, size_t elementSize);
+
+bool dll_removeElementAtIndex(DoubleLinkedList* dll, size_t index);
 
 
 

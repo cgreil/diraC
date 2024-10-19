@@ -197,9 +197,6 @@ OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
             };
         }
 
-        // sum up all terms
-        //Complex mult_res = complex_multiplication(complex1.value, complex2.value);
-
         result = complex_addition(result, complex_multiplication(complex1.value, complex2.value));
     }
 

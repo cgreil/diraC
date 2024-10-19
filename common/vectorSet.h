@@ -13,7 +13,7 @@
 #include "common/doubleLinkedList.h"
 
 typedef struct {
-    DoubleLinkedList vectorList;
+    DoubleLinkedList* vectorList;
     size_t numVectors;
     bool (*vectorComparison) (Vector, Vector);
 } VectorSet;
@@ -23,7 +23,7 @@ VectorSet vectorSet_createEmptySet();
 
 VectorSet vectorSet_fromArray(Vector *vectors, size_t numVectors);
 
-bool vectorSet_destroy();
+bool vectorSet_destroy(VectorSet vectorSet);
 
 bool vectorSet_addVector(VectorSet vectorSet, Vector newVector);
 

@@ -24,7 +24,9 @@ static bool vectorsEqual (Vector vector1, Vector vector2) {
 VectorSet vectorSet_createEmptySet(void) {
     VectorSet vectorSet = { 0 };
 
-    vectorSet.vectorList = dll_create();
+    DoubleLinkedList* dll_ptr = calloc(1, sizeof(DoubleLinkedList));
+
+    vectorSet.vectorList = dll_ptr;
     vectorSet.vectorComparison = vectorsEqual;
 
     return vectorSet;
@@ -46,16 +48,23 @@ VectorSet vectorSet_fromArray(Vector *vectors, size_t numVectors){
 bool vectorSet_destroy(VectorSet vectorSet){
 
     size_t numDeleted = 0;
-    for (size_t setIndex = 0; setIndex < vectorSet.numVectors; setIndex++) {
-       if (vectorSet_removeVectorAtIndex(vectorSet, setIndex)) {
+    while (vectorSet.numVectors > 0) {
+        // we can simply keep removing the first entry until all
+        // vectors have been removed
+       if (vectorSet_removeVectorAtIndex(vectorSet, 0)) {
            numDeleted++;
        }
    }
 
+    bool allDeleted = numDeleted == vectorSet.numVectors;
+
+    // free dll struct and afterwards also ptr to it
+    dll_free(vectorSet.vectorList);
+    free(vectorSet.vectorList);
     // invalidate memory
     memset(&vectorSet, 0, sizeof(VectorSet));
 
-    return numDeleted == vectorSet.numVectors;
+    return allDeleted;
 }
 
 bool vectorSet_addVector(VectorSet vectorSet, Vector newVector) {
