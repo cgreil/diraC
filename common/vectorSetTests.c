@@ -26,9 +26,9 @@ START_TEST (createVectorSetTest) {
    size_t numVectors = sizeof(vectors) / sizeof(Vector);
    VectorSet vectorSet = vectorSet_fromArray(vectors, numVectors);
 
-    ck_assert(vectorSet.numVectors == numVectors);
+    ck_assert(vectorSet_size(vectorSet) == numVectors);
 
-    for (size_t i = 0; i < vectorSet.numVectors; i++) {
+    for (size_t i = 0; i < vectorSet_size(vectorSet); i++) {
         Vector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, i).data;
 
         ck_assert_vectorValues_eq(vectors[i], comparisonVector);
@@ -43,7 +43,7 @@ START_TEST (emptyVectorSetTest) {
 
    VectorSet vectorSet = vectorSet_createEmptySet();
 
-   ck_assert_uint_eq(vectorSet.numVectors, 0);
+   ck_assert_uint_eq(vectorSet_size(vectorSet), 0);
 
    // Make sure functions behave as intended on empty vector set
    OptVector vectorResult = vectorSet_getVectorAtIndex(vectorSet, 0);

@@ -28,6 +28,7 @@
 #define ck_assert_vectorValues_eq(expectedVector, actualVector)                                                         \
     ck_assert((expectedVector).size == (actualVector).size);                                                            \
     for (size_t _vecIndex = 0; _vecIndex < (expectedVector).size; _vecIndex++) {                                        \
+        printf("Asserting vectors expected, actual with sizes %zu, %zu respectively \n", (expectedVector).size, (actualVector).size);\
         ck_assert_complex_eq(vector_getElement((expectedVector), _vecIndex).value,                                      \
         vector_getElement((actualVector), _vecIndex).value)                                                             \
     }
@@ -37,7 +38,7 @@
     NDArray actualData = (actualMatrix).dataArray;                                                                      \
     ck_assert_int_eq((expectedMatrix).numRows, (actualMatrix).numRows);                                                 \
     ck_assert_int_eq((expectedMatrix).numColumns, (actualMatrix).numColumns);                                           \
-    ck_assert_ndarray_eq(expectedData, actualData);                                                                     \
+    ck_assert_ndarray_eq(expectedData, actualData)                                                                      \
 
 
 #define ck_assert_vectorSet_eq(expectedSet, actualSet)                                                                  \

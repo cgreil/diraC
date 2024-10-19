@@ -40,15 +40,13 @@ VectorSet vectorSet_fromArray(Vector *vectors, size_t numVectors){
         vectorSet_addVector(vectorSet, vectors[vectorIndex]);
     }
 
-    vectorSet.numVectors = numVectors;
-
     return vectorSet;
 }
 
 bool vectorSet_destroy(VectorSet vectorSet){
 
     size_t numDeleted = 0;
-    while (vectorSet.numVectors > 0) {
+    while (vectorSet_size(vectorSet) > 0) {
         // we can simply keep removing the first entry until all
         // vectors have been removed
        if (vectorSet_removeVectorAtIndex(vectorSet, 0)) {
@@ -56,21 +54,19 @@ bool vectorSet_destroy(VectorSet vectorSet){
        }
    }
 
-    bool allDeleted = numDeleted == vectorSet.numVectors;
-
     // free dll struct and afterwards also ptr to it
     dll_free(vectorSet.vectorList);
     free(vectorSet.vectorList);
     // invalidate memory
     memset(&vectorSet, 0, sizeof(VectorSet));
 
-    return allDeleted;
+    return (vectorSet_size(vectorSet) == 0);
 }
 
 bool vectorSet_addVector(VectorSet vectorSet, Vector newVector) {
 
     // TODO: Replace by some iterator-like functionality
-    for(size_t setIndex = 0; setIndex < vectorSet.numVectors; setIndex++) {
+    for(size_t setIndex = 0; setIndex < vectorSet_size(vectorSet); setIndex++) {
         OptVector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, setIndex);
         if (vectorSet.vectorComparison(comparisonVector.data, newVector) == false) {
             return false;
@@ -88,12 +84,10 @@ bool vectorSet_removeVector(VectorSet vectorSet, Vector vector) {
     bool removedVector = false;
 
     //TODO: REPLACE by some iterator-like functionality
-    for (size_t setIndex = 0; setIndex < vectorSet.numVectors; setIndex++) {
+    for (size_t setIndex = 0; setIndex < vectorSet_size(vectorSet); setIndex++) {
         OptVector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, setIndex);
         if (vectorSet.vectorComparison(vector, comparisonVector.data)) {
-            dll_removeElementAtIndex(vectorSet.vectorList, setIndex);
-            removedVector = true;
-            vectorSet.numVectors--;
+            removedVector = dll_removeElementAtIndex(vectorSet.vectorList, setIndex);
             break;
         }
     }
@@ -104,18 +98,22 @@ bool vectorSet_removeVector(VectorSet vectorSet, Vector vector) {
 bool vectorSet_removeVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
 
     bool removedVector = dll_removeElementAtIndex(vectorSet.vectorList, setIndex);
-    vectorSet.numVectors--;
 
     return removedVector;
 }
 
 size_t vectorSet_size(VectorSet vectorSet) {
-    return vectorSet.numVectors;
+
+    if (vectorSet.vectorList == NULL) {
+        return 0;
+    }
+
+    return vectorSet.vectorList->numElements;
 }
 
 OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
 
-    if (vectorSet.numVectors == 0 || setIndex >= vectorSet.numVectors) {
+    if (vectorSet_size(vectorSet) == 0 || setIndex >= vectorSet_size(vectorSet)) {
         return (OptVector) {
             .data = (Vector){ 0 },
             .isValid = false

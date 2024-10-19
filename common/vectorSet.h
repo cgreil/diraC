@@ -14,7 +14,6 @@
 
 typedef struct {
     DoubleLinkedList* vectorList;
-    size_t numVectors;
     bool (*vectorComparison) (Vector, Vector);
 } VectorSet;
 
