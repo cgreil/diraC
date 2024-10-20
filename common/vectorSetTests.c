@@ -17,10 +17,10 @@ static Arena *arena;
 START_TEST (createVectorSetTest) {
 
    Vector vectors[] = {
-       vector_zeros(arena, 4),
-       vector_zeros(arena, 5),
-       vector_ones(arena, 6),
-       vector_ones(arena, 7),
+       vector_zeros(4),
+       vector_zeros(5),
+       vector_ones(6),
+       vector_ones(7),
    };
 
    size_t numVectors = sizeof(vectors) / sizeof(Vector);
@@ -78,10 +78,10 @@ START_TEST(constructVectorSetTest) {
         }
     };
 
-    Vector vector2 = vector_clone(arena, vector1);
+    Vector vector2 = vector_clone(vector1);
     vector_scaleINP(vector2, (Complex) { .re = 2.0, .im = 0.0 });
 
-    Vector vector3 = vector_clone(arena, vector1);
+    Vector vector3 = vector_clone(vector1);
     vector_scaleINP(vector3, (Complex) { .re = 0.0, .im = 1.0 });
 
     vectorSet_addVector(vectorSet, vector1);

@@ -9,7 +9,9 @@
 #include "common/string.h"
 #include "utils/dataArena.h"
 
-String string_create(Arena *arena, char *data, size_t length) {
+extern Arena* arena;
+
+String string_create(char *data, size_t length) {
 
     size_t dataSize = sizeof(char) * length;
     char *stringPtr = (char *) arena_alloc(arena, dataSize);
@@ -21,7 +23,7 @@ String string_create(Arena *arena, char *data, size_t length) {
     };
 }
 
-String string_clone(Arena *arena, String string) {
+String string_clone(String string) {
 
     char *stringPtr = (char *) arena_alloc(arena, string.length);
     memcpy(stringPtr, string.data, string.length);
@@ -36,12 +38,12 @@ size_t string_getLength(String string) {
     return string.length;
 }
 
-String string_concat(Arena *arena, String string1, String string2) {
+String string_concat(String string1, String string2) {
 
     if (string1.length == 0) {
-        return string_clone(arena, string2);
+        return string_clone(string2);
     } else if (string2.length == 0) {
-        return string_clone(arena, string1);
+        return string_clone(string1);
     }
 
     size_t concatLength = string1.length + string2.length;
@@ -52,7 +54,7 @@ String string_concat(Arena *arena, String string1, String string2) {
     memcpy(stringBuffer, string1.data, string1.length);
     memcpy(concatPtr, string2.data, string2.length);
 
-    String string = string_create(arena, stringBuffer, concatLength);
+    String string = string_create(stringBuffer, concatLength);
 
     free(stringBuffer);
 
@@ -98,10 +100,14 @@ String stringBuilder_build(StringBuilder *stringBuilder) {
         fseek(stringBuilder->stream, 0, SEEK_SET);
     }
 
+    // make sure all buffered chars are written to stream
+    fflush(stringBuilder->stream);
+
     // Finally create string from the buffer
-    String createdString = string_create(arena, stringBuilder->streamPtr, stringBuilder->bufferSize);
+    String createdString = string_create(stringBuilder->streamPtr, stringBuilder->bufferSize);
 
-
-
+    return createdString;
 }
+
+
 

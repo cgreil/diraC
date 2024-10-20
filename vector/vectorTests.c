@@ -12,7 +12,7 @@ static Arena *arena;
 START_TEST(testVectorZeros) {
 
     size_t vecSize = 8;
-    Vector zeroVector = vector_zeros(arena, vecSize);
+    Vector zeroVector = vector_zeros(vecSize);
     for (size_t i = 0; i < vecSize; i++) {
         ck_assert_complex_eq(vector_getElement(zeroVector, i).value, ((Complex) {0.0, 0.0}))
     }
@@ -22,7 +22,7 @@ START_TEST(testVectorZeros) {
 START_TEST(testVectorOnes) {
 
     size_t vecSize = 8;
-    Vector oneVector = vector_ones(arena, vecSize);
+    Vector oneVector = vector_ones(vecSize);
     for (size_t i = 0; i< vecSize; i++) {
         ck_assert_complex_eq(vector_getElement(oneVector, i).value, ((Complex) {1.0, 0.0}))
     }
@@ -38,7 +38,7 @@ START_TEST(testVectorFromArray) {
         (Complex) {0.0, -9.0}
     };
 
-    Vector vector = vector_fromArray(arena, values, vecSize);
+    Vector vector = vector_fromArray(values, vecSize);
 
     for(size_t i = 0; i < vecSize; i++) {
         ck_assert_complex_eq(vector_getElement(vector, i).value, values[i])
@@ -91,10 +91,10 @@ START_TEST(vectorAdditionTest) {
         (Complex) {7.0, -2.0}
     };
 
-    Vector vector1 = vector_fromArray(arena, values1, vecSize);
-    Vector vector2 = vector_fromArray(arena, values2, vecSize);
+    Vector vector1 = vector_fromArray(values1, vecSize);
+    Vector vector2 = vector_fromArray(values2, vecSize);
 
-    OptVector result = vector_addition(arena, vector1, vector2);
+    OptVector result = vector_addition(vector1, vector2);
     ck_assert(result.isValid);
     Vector resultVector = result.data;
 
@@ -121,10 +121,10 @@ START_TEST(vectorAdditionInvalidDimsTest) {
         (Complex) {9.0, 9.0}
     };
 
-    Vector vector1 = vector_fromArray(arena, data1, sizeVec1);
-    Vector vector2 = vector_fromArray(arena, data2, sizeVec2);
+    Vector vector1 = vector_fromArray(data1, sizeVec1);
+    Vector vector2 = vector_fromArray(data2, sizeVec2);
 
-    OptVector result = vector_addition(arena, vector1, vector2);
+    OptVector result = vector_addition(vector1, vector2);
     ck_assert(!result.isValid);
 
 } END_TEST
@@ -140,14 +140,14 @@ START_TEST(vectorScalingTest) {
         (Complex) {-1.0, 4.0}
     };
 
-    Vector vector = vector_fromArray(arena, originalValues, vecSize);
+    Vector vector = vector_fromArray(originalValues, vecSize);
 
     Complex scaledValues[] = {
         (Complex) {6.0, -9.0},
         (Complex) {12.0, 27.0},
         (Complex) {-3.0, 12.0}
     };
-    Vector expected = vector_fromArray(arena, scaledValues, vecSize);
+    Vector expected = vector_fromArray(scaledValues, vecSize);
 
     Vector resultVector = vector_scaleINP(vector, scaleFactor);
     ck_assert_vectorValues_eq(expected, resultVector);
@@ -170,8 +170,8 @@ START_TEST(vectorInnerProductTest) {
         (Complex) {1.1, 7.8}
     };
 
-    Vector vector1 = vector_fromArray(arena, values1, vecSize);
-    Vector vector2 = vector_fromArray(arena, values2, vecSize);
+    Vector vector1 = vector_fromArray(values1, vecSize);
+    Vector vector2 = vector_fromArray(values2, vecSize);
 
     Complex expectedValue = {68.5, 131.0};
     Complex actualValue = vector_innerProduct(vector1, vector2).value;
@@ -195,8 +195,8 @@ START_TEST(vectorConjugateTest) {
         (Complex) {9.0, 2.9}
     };
 
-    Vector vector = vector_fromArray(arena, values, vecSize);
-    Vector expectedVector = vector_fromArray(arena, expectedValues, vecSize);
+    Vector vector = vector_fromArray(values, vecSize);
+    Vector expectedVector = vector_fromArray(expectedValues, vecSize);
 
     Vector resultVector = vector_conjugateINP(vector);
 
@@ -215,7 +215,7 @@ START_TEST(vectorTransposeTest) {
         (Complex) {1.1, 7.8}
     };
 
-    Vector vector = vector_fromArray(arena, values, vecSize);
+    Vector vector = vector_fromArray(values, vecSize);
 
     ck_assert_int_eq(vector.dataArray.numRows, vecSize);
     ck_assert_int_eq(vector.dataArray.numColumns, 1);
@@ -241,7 +241,7 @@ START_TEST(vectorAdjointTest) {
         (Complex) {1.1, -7.8}
     };
 
-    Vector vector = vector_fromArray(arena, values, vecSize);
+    Vector vector = vector_fromArray(values, vecSize);
     ck_assert_int_eq(vector.dataArray.numRows, vecSize);
     ck_assert_int_eq(vector.dataArray.numColumns, 1);
 
@@ -249,7 +249,7 @@ START_TEST(vectorAdjointTest) {
     ck_assert_int_eq(resultVector.dataArray.numRows, 1);
     ck_assert_int_eq(resultVector.dataArray.numColumns, vecSize);
 
-    Vector expectedVector = vector_fromArray(arena, expectedValues, vecSize);
+    Vector expectedVector = vector_fromArray(expectedValues, vecSize);
 
     ck_assert_vectorValues_eq(expectedVector, resultVector);
 }END_TEST

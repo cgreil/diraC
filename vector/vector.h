@@ -21,17 +21,17 @@ typedef struct {
     bool isValid;
 }OptVector;
 
-Vector vector_zeros(Arena *arena, size_t vecSize);
+Vector vector_zeros(size_t vecSize);
 
-Vector vector_ones(Arena *arena, size_t vecSize);
+Vector vector_ones(size_t vecSize);
 
-Vector vector_clone(Arena *arena, Vector vector);
+Vector vector_clone(Vector vector);
 
-Vector vector_fromArray(Arena *arena, Complex *complexArray, size_t vecSize);
+Vector vector_fromArray(Complex *complexArray, size_t vecSize);
 
 OptComplex vector_getElement(Vector vector, size_t index);
 
-OptVector vector_addition(Arena *arena, Vector vec1, Vector vec2);
+OptVector vector_addition(Vector vec1, Vector vec2);
 
 OptComplex vector_innerProduct(Vector vec1, Vector vec2);
 
@@ -47,13 +47,13 @@ Vector vector_adjointINP(Vector vec);
 
 Vector vector_resize(Arena *arena, Vector vec, size_t newLength);
 
-Vector vector_normalize(Arena *arena, Vector vec);
+Vector vector_normalize(Vector vec);
 
 struct VectorSet vector_gramSchmidt();
 
 bool vector_isColumn(Vector vec);
 
-String vector_display(Arena *arena, Vector vector);
+String vector_display(Vector vector);
 
 
 

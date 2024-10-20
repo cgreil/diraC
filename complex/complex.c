@@ -170,7 +170,7 @@ String complex_display(Arena *arena, Complex complex) {
 
     assert(numPrinted > 0);
 
-    String string = string_create(arena, displayBuffer, numPrinted);
+    String string = string_create(displayBuffer, numPrinted);
 
     return string;
 }

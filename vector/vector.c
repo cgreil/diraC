@@ -4,6 +4,7 @@
 
 #include <memory.h>
 #include <assert.h>
+#include <stdio.h>
 
 #include "complex/complex.h"
 #include "vector/vector.h"
@@ -14,11 +15,13 @@
  *  FORWARD DECLARATION
  *
  */
+extern Arena* arena;
+
 
 static bool vector_setElement(Vector vec, size_t index, Complex newElement);
 
 
-Vector vector_zeros(Arena *arena, size_t vecSize) {
+Vector vector_zeros(size_t vecSize) {
     /**
      * @param arena
      * @param vecSize
@@ -50,7 +53,7 @@ Vector vector_zeros(Arena *arena, size_t vecSize) {
     return vector;
 }
 
-Vector vector_ones(Arena *arena, size_t vecSize) {
+Vector vector_ones(size_t vecSize) {
     /**
     * @param arena
     * @param vecSize
@@ -82,7 +85,7 @@ Vector vector_ones(Arena *arena, size_t vecSize) {
     return vector;
 }
 
-Vector vector_clone(Arena *arena, Vector vector) {
+Vector vector_clone(Vector vector) {
 
     return (Vector) {
         .dataArray = NDArray_clone(arena, vector.dataArray),
@@ -90,7 +93,7 @@ Vector vector_clone(Arena *arena, Vector vector) {
     };
 }
 
-Vector vector_fromArray(Arena *arena, Complex *complexArray, size_t vecSize) {
+Vector vector_fromArray(Complex *complexArray, size_t vecSize) {
 
     /**
      * @param arena
@@ -139,7 +142,7 @@ OptComplex vector_getElement(Vector vector, size_t index){
     return NDArray_getElement(vector.dataArray, rowIndex, columnIndex);
 }
 
-OptVector vector_addition(Arena *arena, Vector vec1, Vector vec2) {
+OptVector vector_addition(Vector vec1, Vector vec2) {
 
     if (vec1.size != vec2.size) {
         return (OptVector) {
@@ -166,7 +169,7 @@ OptVector vector_addition(Arena *arena, Vector vec1, Vector vec2) {
         result[i] = complex_addition(complex1.value, complex2.value);
     }
 
-    Vector vector = vector_fromArray(arena, result, vecSize);
+    Vector vector = vector_fromArray(result, vecSize);
 
     return (OptVector) {
         .data = vector,
@@ -268,10 +271,11 @@ Vector vector_adjointINP(Vector vec) {
 }
 
 Vector vector_resize(Arena *arena, Vector vec, size_t newLength) {
+    fprintf(stderr, "Vcetor resize not yet implemented \n");
     return (Vector) { 0 };
 }
 
-Vector vector_normalize(Arena *arena, Vector vec) {
+Vector vector_normalize(Vector vec) {
 
     OptComplex normalizationFactor = complex_division(
         (Complex) {1.0, 0.0},
@@ -282,7 +286,7 @@ Vector vector_normalize(Arena *arena, Vector vec) {
     return vector_scaleINP(vec, normalizationFactor.value);
 }
 
-String vector_display(Arena *arena, Vector vector) {
+String vector_display(Vector vector) {
 
     // TODO: replace concatenation with stringbuilder once implemented
     // Start string
@@ -290,26 +294,26 @@ String vector_display(Arena *arena, Vector vector) {
     char vecStart[] = "[";
     char vecStop[] = "]";
     char space[] = " ";
-    String vecStartString = string_create(arena, vecStart, sizeof(vecStart));
-    String vecStopString = string_create(arena, vecStop, sizeof(vecStop));
-    String spaceString = string_create(arena, space, sizeof(space));
+    String vecStartString = string_create(vecStart, sizeof(vecStart));
+    String vecStopString = string_create(vecStop, sizeof(vecStop));
+    String spaceString = string_create(space, sizeof(space));
 
-    String string = string_clone(arena, vecStartString);
+    String string = string_clone(vecStartString);
 
     for(size_t i = 0; i < vector.size; i++) {
 
         OptComplex complex = vector_getElement(vector, i);
         assert(complex.valid);
         String numString = complex_display(arena, complex.value);
-        string = string_concat(arena, string, numString);
+        string = string_concat(string, numString);
 
         // only concat space only in between elements
         if (i != 0 && i != (vector.size -1)) {
-            string = string_concat(arena, string, spaceString);
+            string = string_concat(string, spaceString);
         }
     }
 
-    string = string_clone(arena, vecStopString);
+    string = string_clone(vecStopString);
 
     return string;
 }
