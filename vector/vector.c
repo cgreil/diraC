@@ -286,39 +286,6 @@ Vector vector_normalize(Vector vec) {
     return vector_scaleINP(vec, normalizationFactor.value);
 }
 
-String vector_display(Vector vector) {
-
-    // TODO: replace concatenation with stringbuilder once implemented
-    // Start string
-
-    char vecStart[] = "[";
-    char vecStop[] = "]";
-    char space[] = " ";
-    String vecStartString = string_create(vecStart, sizeof(vecStart));
-    String vecStopString = string_create(vecStop, sizeof(vecStop));
-    String spaceString = string_create(space, sizeof(space));
-
-    String string = string_clone(vecStartString);
-
-    for(size_t i = 0; i < vector.size; i++) {
-
-        OptComplex complex = vector_getElement(vector, i);
-        assert(complex.valid);
-        String numString = complex_display(arena, complex.value);
-        string = string_concat(string, numString);
-
-        // only concat space only in between elements
-        if (i != 0 && i != (vector.size -1)) {
-            string = string_concat(string, spaceString);
-        }
-    }
-
-    string = string_clone(vecStopString);
-
-    return string;
-}
-
-
 
 bool vector_isColumn(Vector vec) {
     //assert that the given vector is atleast either column or row vec
@@ -331,6 +298,7 @@ bool vector_isColumn(Vector vec) {
         return false;
     }
 }
+
 
 static bool vector_setElement(Vector vec, size_t index, Complex newElement) {
 

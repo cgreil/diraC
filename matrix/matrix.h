@@ -32,6 +32,8 @@ Matrix matrix_permutation(size_t dimension, size_t rowIndex1, size_t rowIndex2);
  */
 Matrix matrix_clone(Matrix matrix);
 
+Complex matrix_getElement(Matrix matrix, size_t rowIndex, size_t columnIndex);
+
 /**
  * Linear Algebra
  */

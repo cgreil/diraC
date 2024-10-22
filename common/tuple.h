@@ -5,6 +5,7 @@
 #ifndef LEIBNITZ_TUPLE_H
 #define LEIBNITZ_TUPLE_H
 
+#include <stdlib.h>
 #include <complex/complex.h>
 
 typedef struct {

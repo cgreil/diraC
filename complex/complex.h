@@ -5,7 +5,6 @@
 #include <math.h>
 
 #include "common/types.h"
-#include "common/string.h"
 
 #define MAX_COMPLEX_DISP_SIZE 64
 
@@ -64,7 +63,5 @@ Complex complex_cos(Complex c);
 
 Complex complex_root(Complex c);
 
-
-String complex_display(Arena *arena, Complex c);
 
 #endif

@@ -71,6 +71,7 @@ add_executable(LEIBNITZ main.c
         ndarray/ndarray.c
         vector/vector.c
         common/doubleLinkedList.c
+        common/vectorSet.c
         utils/dataArena.c
         common/string.c
         matrix/matrix.c

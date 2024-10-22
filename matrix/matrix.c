@@ -143,6 +143,11 @@ Matrix matrix_clone(Matrix matrix) {
     };
 }
 
+Complex matrix_getElement(Matrix matrix, size_t rowIndex, size_t columnIndex) {
+    size_t valueIndex = columnIndex * matrix.numRows + rowIndex;
+    return matrix.dataArray.values[valueIndex];
+}
+
 /**
  * Linear Algebra
  */

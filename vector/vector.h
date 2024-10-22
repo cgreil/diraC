@@ -7,7 +7,6 @@
 
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
-#include "common/string.h"
 
 struct VectorSet;
 
@@ -52,8 +51,6 @@ Vector vector_normalize(Vector vec);
 struct VectorSet vector_gramSchmidt();
 
 bool vector_isColumn(Vector vec);
-
-String vector_display(Vector vector);
 
 
 
