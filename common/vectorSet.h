@@ -34,10 +34,6 @@ size_t vectorSet_size(VectorSet vectorSet);
 
 OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t index);
 
-
-
-
-
-
+VectorSet vectorSet_gramSchmidt(VectorSet vectorSet);
 
 #endif //LEIBNITZ_VECTORSET_H

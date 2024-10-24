@@ -6,11 +6,8 @@
 #include <malloc.h>
 #include <assert.h>
 
+#include "utils/dataArena.h"
 #include "common/string.h"
-// include headers of forwards defined objects
-#include "complex/complex.h"
-#include "matrix/matrix.h"
-#include "vector/vector.h"
 
 
 

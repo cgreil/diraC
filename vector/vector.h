@@ -8,7 +8,6 @@
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
 
-struct VectorSet;
 
 typedef struct {
     size_t size;
@@ -47,8 +46,6 @@ Vector vector_adjointINP(Vector vec);
 Vector vector_resize(Arena *arena, Vector vec, size_t newLength);
 
 Vector vector_normalize(Vector vec);
-
-struct VectorSet vector_gramSchmidt();
 
 bool vector_isColumn(Vector vec);
 

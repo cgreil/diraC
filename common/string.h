@@ -9,6 +9,11 @@
 #include <stdio.h>
 
 #include "utils/dataArena.h"
+#include "common/string.h"
+#include "complex/complex.h"
+#include "matrix/matrix.h"
+#include "vector/vector.h"
+#include "common/vectorSet.h"
 
 
 typedef struct {
@@ -23,13 +28,6 @@ typedef struct {
     size_t floatAccuracy;
     // https://www.reddit.com/r/C_Programming/comments/13zqjmz/string_builders_in_c/
 }StringBuilder;
-
-// forward define needed structures in header to avoid cyclic dependency
-// actual include is done in .c file
-typedef struct Vector Vector;
-typedef struct VectorSet VectorSet;
-typedef struct Matrix Matrix;
-typedef struct Complex Complex;
 
 String string_clone(String string);
 
