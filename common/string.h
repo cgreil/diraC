@@ -5,6 +5,7 @@
 #ifndef LEIBNITZ_STRING_H
 #define LEIBNITZ_STRING_H
 
+
 #include <stddef.h>
 #include <stdio.h>
 
@@ -33,9 +34,15 @@ String string_clone(String string);
 
 String string_create(char *data, size_t length);
 
+String string_fromStream(FILE* stream, size_t length);
+
 size_t string_getLength(String string);
 
 String string_concat(String string1, String string2);
+
+StringBuilder* stringBuilder_create();
+
+void stringBuilder_destroy(StringBuilder *stringBuilder);
 
 size_t stringBuilder_appendString(StringBuilder* stringBuilder, String string);
 

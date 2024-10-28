@@ -5,11 +5,10 @@
 #include <string.h>
 #include <malloc.h>
 #include <assert.h>
+#include <errno.h>
 
 #include "utils/dataArena.h"
 #include "common/string.h"
-
-
 
 #define COMPLEX_NUM_STRING_BUFSIZE 16
 
@@ -24,6 +23,36 @@ String string_create(char *data, size_t length) {
     return (String) {
         .data = stringPtr,
         .length = length
+    };
+}
+
+String string_fromStream(FILE *stream, size_t length) {
+
+    if (stream == NULL || length == 0) {
+        return (String) { 0 };
+    }
+
+    size_t dataSize = sizeof(char) * length;
+    char *stringPtr = (char *) arena_alloc(arena, dataSize);
+
+    // set stream ptr to start of file
+    fseek(stream, 0L, SEEK_SET);
+    // Get access to filestream
+    size_t numRead = fread(stringPtr, sizeof(char), length, stream);
+
+    // check if end of readable filestream was hit before reading <length> values
+    if (feof(stream)) {
+        fprintf(stderr, "Encountered EOF before reading end of stream \n");
+    }
+    // check if error occurred during read
+    else if (ferror(stream)) {
+        fprintf(stderr, "Error happened while reading stream \n");
+    }
+    clearerr(stream);
+
+    return (String) {
+        .data = stringPtr,
+        .length = numRead
     };
 }
 
@@ -65,6 +94,19 @@ String string_concat(String string1, String string2) {
     return string;
 }
 
+StringBuilder* stringBuilder_create(void) {
+
+    StringBuilder* stringBuilder = calloc(1, sizeof(StringBuilder));
+    stringBuilder->streamPtr = "";
+    stringBuilder->floatAccuracy = 4;
+
+    return stringBuilder;
+}
+
+void stringBuilder_destroy(StringBuilder* stringBuilder) {
+    free(stringBuilder);
+}
+
 size_t stringBuilder_appendCharArray(StringBuilder* stringBuilder, const char *charArray, size_t arraySize) {
 
     if (!stringBuilder) {
@@ -72,8 +114,11 @@ size_t stringBuilder_appendCharArray(StringBuilder* stringBuilder, const char *c
     }
     // check whether stream is open yet,
     // ftell will return negative for the case where stream is closed
-    if (ftell(stringBuilder->stream) < 0) {
+    if (stringBuilder->stream == NULL) { //|| ftell(stringBuilder->stream) < 0) {
         FILE *stream = open_memstream(&(stringBuilder->streamPtr), &(stringBuilder->bufferSize));
+        if (stream == NULL) {
+            fprintf(stderr, "Could not open memstream \n");
+        }
         stringBuilder->stream = stream;
     }
 
@@ -82,6 +127,7 @@ size_t stringBuilder_appendCharArray(StringBuilder* stringBuilder, const char *c
     if (writtenChars < arraySize) {
         fprintf(stderr, "String Builder extended size of stream. \n");
     }
+    stringBuilder->bufferSize += writtenChars;
 
     return writtenChars;
 }
@@ -97,16 +143,23 @@ String stringBuilder_build(StringBuilder *stringBuilder) {
     if (currentOffset < 0) {
         // negative return value indicates that stream is not open
         open_memstream(&(stringBuilder->streamPtr), &(stringBuilder->bufferSize));
-    } else if (currentOffset > 0) {
-        // if offset is positive, set back to start
-        fseek(stringBuilder->stream, 0, SEEK_SET);
     }
 
     // make sure all buffered chars are written to stream
-    fflush(stringBuilder->stream);
+    int flushRet = fflush(stringBuilder->stream);
+    if (flushRet == EOF) {
+        if (errno == EBADF) {
+            fprintf(stderr, "Could not flush stream as it is not open for writing \n");
+            return (String) { 0 };
+        }
+        else {
+            fprintf(stderr, "Could not flush stream due to unknown reason \n");
+            return (String) { 0 };
+        }
+    }
 
     // Finally create string from the buffer
-    String createdString = string_create(stringBuilder->streamPtr, stringBuilder->bufferSize);
+    String createdString = string_fromStream(stringBuilder->stream, stringBuilder->bufferSize);
 
     return createdString;
 }
