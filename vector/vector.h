@@ -31,6 +31,8 @@ OptComplex vector_getElement(Vector vector, size_t index);
 
 OptVector vector_addition(Vector vec1, Vector vec2);
 
+OptVector vector_subtraction(Vector vec1, Vector vec2);
+
 OptComplex vector_innerProduct(Vector vec1, Vector vec2);
 
 Complex vector_norm(Vector vec);

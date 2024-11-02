@@ -177,6 +177,41 @@ OptVector vector_addition(Vector vec1, Vector vec2) {
     };
 }
 
+OptVector vector_subtraction(const Vector vec1, const Vector vec2) {
+
+    if (vec1.size != vec2.size) {
+        return (OptVector) {
+            .data = (Vector){ 0 },
+            .isValid = false
+        };
+    }
+
+    size_t vecSize = vec1.size;
+    Complex result[vecSize];
+
+    for (size_t i = 0; i < vecSize; i++) {
+        OptComplex complex1 = vector_getElement(vec1, i);
+        OptComplex complex2 = vector_getElement(vec2, i);
+
+        if (!complex1.valid || !complex2.valid) {
+            return (OptVector) {
+                .data = (Vector) { 0 },
+                .isValid = false
+            };
+        }
+
+        result[i] = complex_subtraction(complex1.value, complex2.value);
+    }
+
+    Vector vector = vector_fromArray(result, vecSize);
+
+    return (OptVector) {
+        .data = vector,
+        .isValid = true
+    };
+
+}
+
 OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
 
     if (vec1.size != vec2.size) {

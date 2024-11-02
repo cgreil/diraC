@@ -14,7 +14,23 @@ static uint32_t calculateCRC(Vector vector) {
 
 
 static bool vectorsEqual (Vector vector1, Vector vector2) {
-    return calculateCRC(vector1) == calculateCRC(vector2);
+    // TODO: Implement CRC
+    //return calculateCRC(vector1) == calculateCRC(vector2);
+
+    // For now, iterate over elements for comparison
+    if (vector1.size != vector2.size) {
+        return false;
+    }
+
+    for (size_t i = 0; i < vector1.size; i++) {
+        OptComplex complex1 = vector_getElement(vector1, i);
+        OptComplex complex2 = vector_getElement(vector2, i);
+
+        if (!complex_nearlyEqual(complex1.value, complex2.value)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 VectorSet vectorSet_createEmptySet(void) {
@@ -138,20 +154,30 @@ VectorSet vectorSet_gramSchmidt(VectorSet vectorSet) {
     for (int vecIndex = 0; vecIndex < vectorSet_size(vectorSet); vecIndex++) {
 
         // iterate over all vectors from initial set
-        Vector initialVector = vectorSet_getVectorAtIndex(vectorSet, vecIndex).data;
+        Vector vector = vectorSet_getVectorAtIndex(vectorSet, vecIndex).data;
 
         // calculate projection on all vectors in onbSet and subtract this projection
         for (int onbIndex = 0; onbIndex < vectorSet_size(onbSet); onbIndex++) {
             Vector onbVec = vectorSet_getVectorAtIndex(vectorSet, onbIndex).data;
-            OptComplex projection = vector_innerProduct(initialVector, onbVec);
+            Complex projection = vector_innerProduct(vector, onbVec).value;
+            Vector projectedVector = vector_scaleINP(onbVec, projection);
 
-
+            // is projection nonzero?
+            if (vector_isZeroVector(projectedVector)) {
+                continue;
+            }
+            vector = vector_subtraction(vector, projectedVector).data;
         }
         // check if vector is 0-vector (i.e. initial vector was linearCombination of onbSet-vecs
-
+        // if yes, proceed with next vector
+        if (vector_isZeroVector(vector)) {
+            continue;
+        }
         // normalize remaining vector
-
+        Vector normalizedVec = vector_normalize(vector);
         // add to onbSet
+        vectorSet_addVector(onbSet, normalizedVec);
     }
 
+    return onbSet;
 }
