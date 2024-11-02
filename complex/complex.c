@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
+#include <float.h>
 
 #include "complex/complex.h"
 #include "common/string.h"
@@ -16,12 +17,46 @@ TYPE_FLOAT complex_modulus(Complex c) {
     return sqrt(temp); 
 }
 
+bool complex_nearlyEqual(Complex c1, Complex c2) {
+
+    // adapted from https://floating-point-gui.de/errors/comparison/:
+    TYPE_FLOAT absRealC1 = fabs(c1.re);
+    TYPE_FLOAT absImC1 = fabs(c1.im);
+
+    TYPE_FLOAT absRealC2 = fabs(c2.re);
+    TYPE_FLOAT absImC2 = fabs(c2.im);
+
+    TYPE_FLOAT realDiff = fabs(c1.re - c2.re);
+    TYPE_FLOAT imDiff = fabs(c1.im - c2.im);
+
+    if (c1.re == c2.re && c1.im == c2.im) {
+        // for case INFINITY, NAN or the rare case of identical floating point representations
+        return true;
+    }
+
+    bool realEquality = false;
+    bool imEquality = false;
+    // compare real parts equality
+    if (c1.re == 0 || c2.re == 0 || absRealC1 + absRealC2 < DBL_MIN) {
+        realEquality = realDiff < DBL_MIN;
+    } else {
+        realEquality = (realDiff / fmin(absRealC1 + absRealC2, DBL_MAX)) < EPSILON;
+    }
+    // compare imaginary parts equality
+    if (c1.im == 0 || c2.im == 0 || absImC1 + absImC2 < DBL_MIN) {
+        imEquality = imDiff < DBL_MIN;
+    } else {
+        imEquality = (imDiff / fmin(absImC1 + absImC2, DBL_MAX)) < EPSILON;
+    }
+    return realEquality && imEquality;
+}
+
 Polar polar(Complex c) {
 
 
     Polar result = {
         .r = sqrt(complex_modulus(c)),
-        .theta = atan2f(c.im, c.re)
+        .theta = atan2(c.im, c.re)
     };
     return result;
 }

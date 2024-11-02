@@ -299,6 +299,30 @@ bool vector_isColumn(Vector vec) {
     }
 }
 
+bool vector_equal(Vector vec1, Vector vec2) {
+
+    if (vec1.size != vec2.size || vector_isColumn(vec1) != vector_isColumn(vec2)) {
+        return false;
+    }
+
+    for (size_t vecIndex = 0; vecIndex < vec1.size; vecIndex++) {
+        Complex c1 = vector_getElement(vec1, vecIndex).value;
+        Complex c2 = vector_getElement(vec2, vecIndex).value;
+        if (!complex_nearlyEqual(c1, c2)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool vector_isZeroVector(Vector vec) {
+
+    Vector zeroVec = vector_zeros(vec.size);
+
+    return vector_equal(vec, zeroVec);
+}
+
 
 static bool vector_setElement(Vector vec, size_t index, Complex newElement) {
 

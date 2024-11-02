@@ -47,6 +47,10 @@ Vector vector_resize(Arena *arena, Vector vec, size_t newLength);
 
 Vector vector_normalize(Vector vec);
 
+bool vector_equal(Vector vec1, Vector vec2);
+
+bool vector_isZeroVector(Vector vec);
+
 bool vector_isColumn(Vector vec);
 
 

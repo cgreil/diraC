@@ -2,17 +2,17 @@
 // Created by christoph on 16.08.24.
 //
 
-#include <check.h>
+#include "check.h"
 #include <stdio.h>
 #include <time.h>
 
 #include "vector/vector.h"
-#include "common/vectorSet.h"
+#include "vectorSet.h"
 #include "utils/testutils.h"
 #include "utils/dataArena.h"
 #include "ndarray/ndarray.h"
 
-static Arena *arena;
+Arena *arena;
 
 START_TEST (createVectorSetTest) {
 

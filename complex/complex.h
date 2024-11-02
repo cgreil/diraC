@@ -8,6 +8,8 @@
 
 #define MAX_COMPLEX_DISP_SIZE 64
 
+#define EPSILON 0.000001
+
 /** 
  * Struct definition for complex data type
  * @member re ... real value of complex number
@@ -62,6 +64,8 @@ Complex complex_sin(Complex c);
 Complex complex_cos(Complex c);
 
 Complex complex_root(Complex c);
+
+bool complex_nearlyEqual(Complex c1, Complex c2);
 
 
 #endif

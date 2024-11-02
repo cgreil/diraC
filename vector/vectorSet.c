@@ -4,7 +4,7 @@
 
 #include <string.h>
 #include "common/doubleLinkedList.h"
-#include "common/vectorSet.h"
+#include "vectorSet.h"
 
 static uint32_t calculateCRC(Vector vector) {
     return 0;
@@ -124,4 +124,34 @@ OptVector vectorSet_getVectorAtIndex(VectorSet vectorSet, size_t setIndex) {
         .data = vector,
         .isValid = true
     };
+}
+
+VectorSet vectorSet_gramSchmidt(VectorSet vectorSet) {
+
+    if (vectorSet_size(vectorSet) == 0) {
+        return (VectorSet) { 0 };
+    }
+
+    VectorSet onbSet = vectorSet_createEmptySet();
+
+
+    for (int vecIndex = 0; vecIndex < vectorSet_size(vectorSet); vecIndex++) {
+
+        // iterate over all vectors from initial set
+        Vector initialVector = vectorSet_getVectorAtIndex(vectorSet, vecIndex).data;
+
+        // calculate projection on all vectors in onbSet and subtract this projection
+        for (int onbIndex = 0; onbIndex < vectorSet_size(onbSet); onbIndex++) {
+            Vector onbVec = vectorSet_getVectorAtIndex(vectorSet, onbIndex).data;
+            OptComplex projection = vector_innerProduct(initialVector, onbVec);
+
+
+        }
+        // check if vector is 0-vector (i.e. initial vector was linearCombination of onbSet-vecs
+
+        // normalize remaining vector
+
+        // add to onbSet
+    }
+
 }
