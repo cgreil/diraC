@@ -9,7 +9,14 @@
 #include "ndarray/ndarray.h"
 #include "utils/dataArena.h"
 
-NDArray NDArray_create(Arena *arena, size_t numRows, size_t numColumns, Complex *values) {
+extern Arena* arena;
+
+size_t NDArray_index(size_t numArrayRows, size_t rowIndex, size_t columnIndex) {
+    // helper function to calculate index of an element with given row and column indices
+    return rowIndex + numArrayRows * columnIndex;
+}
+
+NDArray NDArray_create(size_t numRows, size_t numColumns, Complex *values) {
 
     /**
      * NDArray_create takes
@@ -43,7 +50,7 @@ NDArray NDArray_create(Arena *arena, size_t numRows, size_t numColumns, Complex 
         size_t rowPos = dataIndex / numColumns;
         size_t colPos = dataIndex % numColumns;
 
-        size_t outputIndex = rowPos + numRows * colPos;
+        size_t outputIndex = NDArray_index(numRows, rowPos, colPos);
         ndArrayData[outputIndex] = complex_clone(values[dataIndex]);
     }
 
@@ -57,7 +64,7 @@ NDArray NDArray_create(Arena *arena, size_t numRows, size_t numColumns, Complex 
     };
 }
 
-NDArray NDArray_clone(Arena *arena, NDArray ndArray) {
+NDArray NDArray_clone(NDArray ndArray) {
 
     size_t numElements = ndArray.numRows * ndArray.numColumns;
 
@@ -73,7 +80,7 @@ NDArray NDArray_clone(Arena *arena, NDArray ndArray) {
     };
 }
 
-NDArray NDArray_resize(Arena *arena, NDArray ndArray, size_t numRows, size_t numColumns) {
+NDArray NDArray_resize(NDArray ndArray, size_t numRows, size_t numColumns) {
 
     assert(ndArray.numColumns * ndArray.numRows == numRows * numColumns);
 
@@ -110,13 +117,62 @@ OptComplex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnInd
     };
 }
 
+RefSlice NDArray_getRefSlice(NDArray ndArray,
+                             size_t numIndices,
+                             size_t rowIndices[static numIndices],
+                             size_t columnIndices[static numIndices]) {
+
+    if (ndArray.values == NULL || ndArray.numColumns == 0 || ndArray.numRows == 0 ||
+        numIndices == 0) {
+        return (RefSlice) {0 };
+    }
+
+    // Allocate pointer vector in arena
+    Complex **refPtr = arena_alloc(arena, (numIndices * sizeof(Complex *)));
+
+    for (size_t i = 0; i < numIndices; i++) {
+        size_t elementIndex = NDArray_index(ndArray.numRows, rowIndices[i], columnIndices[i]);
+        refPtr[i] = &(ndArray.values[elementIndex]);
+    }
+
+    return (RefSlice) {
+        .sliceRefs = refPtr,
+        .sliceLength = numIndices
+    };
+}
+
+Slice NDArray_getSlice(NDArray ndArray,
+                       size_t numIndices,
+                       size_t rowIndices[static numIndices],
+                       size_t columnIndices[static numIndices]) {
+
+   if (ndArray.values == NULL || ndArray.numColumns == 0 || ndArray.numRows == 0 ||
+                numIndices == 0) {
+            return (Slice) {0 };
+        }
+
+    // Allocate pointer vector in arena
+    Complex *valuePtr = arena_alloc(arena, (numIndices * sizeof(Complex)));
+
+    for (size_t i = 0; i < numIndices; i++) {
+        size_t elementIndex = NDArray_index(ndArray.numRows, rowIndices[i], columnIndices[i]);
+        valuePtr[i] = (ndArray.values[elementIndex]);
+    }
+
+    return (Slice) {
+        .sliceValues = valuePtr,
+        .sliceLength = numIndices
+    };
+}
+
+
 bool NDArray_setElement(NDArray ndArray, size_t rowIndex, size_t columnIndex, Complex newElement) {
 
     if (rowIndex > ndArray.numRows || columnIndex > ndArray.numColumns) {
         return false;
     }
 
-    size_t dataPosition = columnIndex + rowIndex * ndArray.numColumns;
+    size_t dataPosition = NDArray_index(ndArray.numRows, rowIndex, columnIndex);
     ndArray.values[dataPosition] = newElement;
 
     return true;
@@ -128,6 +184,4 @@ void NDArray_crc(NDArray ndArray) {
 
 
     return;
-
-
 }

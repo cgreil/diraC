@@ -43,7 +43,7 @@ Vector vector_zeros(size_t vecSize) {
     for (size_t i = 0; i < vecSize; i++) {
         complexValues[i] = value;
     }
-    NDArray ndArray = NDArray_create(arena, numRows, numColumns, complexValues);
+    NDArray ndArray = NDArray_create(numRows, numColumns, complexValues);
 
     vector = (Vector) {
         .dataArray = ndArray,
@@ -75,7 +75,7 @@ Vector vector_ones(size_t vecSize) {
     for (size_t i = 0; i < vecSize; i++) {
         complexValues[i] = value;
     }
-    NDArray ndArray = NDArray_create(arena, numRows, numColumns, complexValues);
+    NDArray ndArray = NDArray_create(numRows, numColumns, complexValues);
 
     vector = (Vector) {
         .dataArray = ndArray,
@@ -88,7 +88,7 @@ Vector vector_ones(size_t vecSize) {
 Vector vector_clone(Vector vector) {
 
     return (Vector) {
-        .dataArray = NDArray_clone(arena, vector.dataArray),
+        .dataArray = NDArray_clone(vector.dataArray),
         .size = vector.size
     };
 }
@@ -107,7 +107,7 @@ Vector vector_fromArray(Complex *complexArray, size_t vecSize) {
     size_t numRows = vecSize;
     size_t numColumns = 1;
 
-    NDArray ndArray = NDArray_create(arena, numRows, numColumns, complexArray);
+    NDArray ndArray = NDArray_create(numRows, numColumns, complexArray);
 
     return (Vector) {
         .dataArray = ndArray,
@@ -305,9 +305,24 @@ Vector vector_adjointINP(Vector vec) {
     return conjugatedVec;
 }
 
-Vector vector_resize(Arena *arena, Vector vec, size_t newLength) {
-    fprintf(stderr, "Vcetor resize not yet implemented \n");
-    return (Vector) { 0 };
+Vector vector_resize(Vector vec, size_t newLength) {
+
+    /**
+     *  @note Function to resize a vector to the given newLength
+     *  If newLength > currentLength, pad new Values with zeros
+     *  If newLength < currentLength, excessive values will be removed
+     */
+
+    Complex *vecData = vec.dataArray.values;
+
+    Vector newVector = vector_fromArray(vecData, newLength);
+
+    // Pad with 0 if neccessary
+    if (vec.size < newLength) {
+        memset((newVector.dataArray.values + vec.size), 0, newLength - vec.size);
+    }
+
+    return newVector;
 }
 
 Vector vector_normalize(Vector vec) {

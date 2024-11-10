@@ -14,7 +14,7 @@
 #include "complex/complex.h"
 #include "matrix/matrix.h"
 #include "vector/vector.h"
-#include "common/vectorSet.h"
+#include "vector/vectorSet.h"
 
 
 typedef struct {

@@ -44,9 +44,9 @@ set (
         VECTORSET_SOURCE_FILES
         common/doubleLinkedList.c
         complex/complex.c
-        common/vectorSet.c
+        vector/vectorSet.c
         utils/dataArena.c
-        common/vectorSetTests.c
+        vector/vectorSetTests.c
         vector/vector.c
         ndarray/ndarray.c
         common/string.c
@@ -55,7 +55,7 @@ set (
 set (
         MATRIX_SOURCE_FILES
         common/doubleLinkedList.c
-        common/vectorSet.c
+        vector/vectorSet.c
         common/string.c
         utils/dataArena.c
         complex/complex.c
@@ -71,11 +71,13 @@ add_executable(LEIBNITZ main.c
         ndarray/ndarray.c
         vector/vector.c
         common/doubleLinkedList.c
-        common/vectorSet.c
+        vector/vectorSet.c
         utils/dataArena.c
         common/string.c
         matrix/matrix.c
-        common/tuple.c
+        complex/tuple.c
+        logging/Logger.h
+        logging/Logger.c
 )
 
 

@@ -45,7 +45,7 @@ Vector vector_transposeINP(Vector vec);
 
 Vector vector_adjointINP(Vector vec);
 
-Vector vector_resize(Arena *arena, Vector vec, size_t newLength);
+Vector vector_resize(Vector vec, size_t newLength);
 
 Vector vector_normalize(Vector vec);
 

@@ -49,7 +49,7 @@ START_TEST (emptyVectorSetTest) {
    OptVector vectorResult = vectorSet_getVectorAtIndex(vectorSet, 0);
    ck_assert(!vectorResult.isValid);
    // by default, all elements of Vector should be 0
-   ck_assert_ndarray_eq(vectorResult.data.dataArray, NDArray_create(0, 0, 0, NULL))
+   ck_assert_ndarray_eq(vectorResult.data.dataArray, NDArray_create(0, 0, NULL))
 
    bool removalResult = vectorSet_removeVectorAtIndex(vectorSet, 0);
    ck_assert(!removalResult);

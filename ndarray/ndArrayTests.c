@@ -20,8 +20,8 @@ START_TEST(testNDArrayClone) {
             (Complex) { 9.0, -2.0 }
     };
 
-    NDArray expected = NDArray_create(arena, 2, 2, values);
-    NDArray actual = NDArray_clone(arena, expected);
+    NDArray expected = NDArray_create(2, 2, values);
+    NDArray actual = NDArray_clone(expected);
 
     ck_assert_ndarray_eq(expected, actual)
 } END_TEST
@@ -34,8 +34,8 @@ START_TEST(testNDArrayCloneNoReference) {
         (Complex) { 9.0, -2.0 }
     };
 
-    NDArray original = NDArray_create(arena, 2, 2, values);
-    NDArray copy = NDArray_clone(arena, original);
+    NDArray original = NDArray_create(2, 2, values);
+    NDArray copy = NDArray_clone(original);
     // Alter original
     bool setSuccessful = NDArray_setElement(original, 0, 0, (Complex) {2.0, 2.0});
     ck_assert(setSuccessful);
@@ -44,7 +44,7 @@ START_TEST(testNDArrayCloneNoReference) {
     ck_assert_complex_eq(changedNumber.value, ((Complex) {2.0, 2.0}));
 
     // Make sure complex_clone did not change
-    NDArray expected = NDArray_create(arena, 2, 2, values);
+    NDArray expected = NDArray_create(2, 2, values);
     ck_assert_ndarray_eq(expected, copy);
 } END_TEST
 
@@ -83,8 +83,8 @@ START_TEST(testNDArrayResize) {
         (Complex) { 9.0, -2.0 }
     };
 
-    NDArray original = NDArray_create(arena, 2, 2, values);
-    NDArray_resize(arena, original, 1, 4);
+    NDArray original = NDArray_create(2, 2, values);
+    NDArray_resize(original, 1, 4);
 
     ck_assert_int_eq(original.numRows, 1);
     ck_assert_int_eq(original.numColumns, 4);
