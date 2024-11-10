@@ -7,7 +7,7 @@
 #include <time.h>
 
 #include "vector/vector.h"
-#include "vectorSet.h"
+#include "vectorCollection.h"
 #include "utils/testutils.h"
 #include "utils/dataArena.h"
 #include "ndarray/ndarray.h"
@@ -24,34 +24,34 @@ START_TEST (createVectorSetTest) {
    };
 
    size_t numVectors = sizeof(vectors) / sizeof(Vector);
-   VectorSet vectorSet = vectorSet_fromArray(vectors, numVectors);
+   VectorCollection vectorSet = vectorCollection_fromArray(vectors, numVectors, Set);
 
-    ck_assert(vectorSet_size(vectorSet) == numVectors);
+    ck_assert(vectorCollection_size(vectorSet) == numVectors);
 
-    for (size_t i = 0; i < vectorSet_size(vectorSet); i++) {
-        Vector comparisonVector = vectorSet_getVectorAtIndex(vectorSet, i).data;
+    for (size_t i = 0; i < vectorCollection_size(vectorSet); i++) {
+        Vector comparisonVector = vectorCollection_getVectorAtIndex(vectorSet, i).data;
 
         ck_assert_vectorValues_eq(vectors[i], comparisonVector);
     }
 
-    ck_assert(vectorSet_destroy(vectorSet));
+    ck_assert(vectorCollection_destroy(vectorSet));
 
 } END_TEST
 
 
 START_TEST (emptyVectorSetTest) {
 
-   VectorSet vectorSet = vectorSet_createEmptySet();
+   VectorCollection vectorSet = vectorCollection_createEmpty(Set);
 
-   ck_assert_uint_eq(vectorSet_size(vectorSet), 0);
+   ck_assert_uint_eq(vectorCollection_size(vectorSet), 0);
 
    // Make sure functions behave as intended on empty vector set
-   OptVector vectorResult = vectorSet_getVectorAtIndex(vectorSet, 0);
+   OptVector vectorResult = vectorCollection_getVectorAtIndex(vectorSet, 0);
    ck_assert(!vectorResult.isValid);
    // by default, all elements of Vector should be 0
    ck_assert_ndarray_eq(vectorResult.data.dataArray, NDArray_create(0, 0, NULL))
 
-   bool removalResult = vectorSet_removeVectorAtIndex(vectorSet, 0);
+   bool removalResult = vectorCollection_removeVectorAtIndex(vectorSet, 0);
    ck_assert(!removalResult);
 
 } END_TEST
@@ -59,7 +59,7 @@ START_TEST (emptyVectorSetTest) {
 
 START_TEST(constructVectorSetTest) {
 
-    VectorSet vectorSet = vectorSet_createEmptySet();
+    VectorCollection vectorSet = vectorCollection_createEmpty(Set);
     size_t numValues = 4;
     size_t numRows = 1;
 
@@ -84,11 +84,11 @@ START_TEST(constructVectorSetTest) {
     Vector vector3 = vector_clone(vector1);
     vector_scaleINP(vector3, (Complex) { .re = 0.0, .im = 1.0 });
 
-    vectorSet_addVector(vectorSet, vector1);
-    vectorSet_addVector(vectorSet, vector2);
-    vectorSet_addVector(vectorSet, vector3);
+    vectorCollection_addVector(vectorSet, vector1);
+    vectorCollection_addVector(vectorSet, vector2);
+    vectorCollection_addVector(vectorSet, vector3);
 
-    ck_assert(vectorSet_size(vectorSet) == 3);
+    ck_assert(vectorCollection_size(vectorSet) == 3);
 } END_TEST
 
 Suite *vectorSetSuite(void) {
