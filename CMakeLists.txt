@@ -11,12 +11,15 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR})
 # Complex includes
 set(
         COMPLEX_SOURCE_FILES
+        utils/dataArena.c
         complex/complex.c
         common/string.c
-        complex/complexTests.c
         vector/vector.c
+        vector/vectorCollection.c
+        common/doubleLinkedList.c
+        matrix/matrix.c
         ndarray/ndarray.c
-        utils/dataArena.c
+        complex/complexTests.c
 )
 
 set(
@@ -24,6 +27,9 @@ set(
         complex/complex.c
         common/string.c
         vector/vector.c
+        vector/vectorCollection.c
+        common/doubleLinkedList.c
+        matrix/matrix.c
         utils/dataArena.c
         vector/vectorTests.c
         ndarray/ndarray.c
@@ -35,18 +41,22 @@ set (
         common/string.c
         complex/complex.c
         ndarray/ndarray.c
-        ndarray/ndarray.c
+        vector/vector.c
+        vector/vectorCollection.c
+        common/doubleLinkedList.c
+        matrix/matrix.c
         ndarray/ndArrayTests.c
         utils/dataArena.c
 )
 
 set (
-        VECTORSET_SOURCE_FILES
+        VECTORCOLLECTION_SOURCE_FILES
+        matrix/matrix.c
         common/doubleLinkedList.c
         complex/complex.c
-        vector/vectorSet.c
+        vector/vectorCollection.c
         utils/dataArena.c
-        vector/vectorSetTests.c
+        vector/vectorCollectionTests.c
         vector/vector.c
         ndarray/ndarray.c
         common/string.c
@@ -54,14 +64,14 @@ set (
 
 set (
         MATRIX_SOURCE_FILES
+        matrix/matrix.c
         common/doubleLinkedList.c
-        vector/vectorSet.c
+        vector/vectorCollection.c
         common/string.c
         utils/dataArena.c
         complex/complex.c
         ndarray/ndarray.c
         vector/vector.c
-        matrix/matrix.c
         matrix/matrixTests.c
 )
 
@@ -71,7 +81,7 @@ add_executable(LEIBNITZ main.c
         ndarray/ndarray.c
         vector/vector.c
         common/doubleLinkedList.c
-        vector/vectorSet.c
+        vector/vectorCollection.c
         utils/dataArena.c
         common/string.c
         matrix/matrix.c
@@ -92,8 +102,8 @@ add_executable(${NDARRAY_TESTS} ${NDARRAY_SOURCE_FILES})
 set (VECTOR_TESTS "vectorTests")
 add_executable(${VECTOR_TESTS} ${VECTOR_SOURCE_FILES})
 
-set(VECTORSET_TESTS "vectorSetTests")
-add_executable(${VECTORSET_TESTS} ${VECTORSET_SOURCE_FILES})
+set(VECTORCOLLECTION_TESTS "vectorCollectionTests")
+add_executable(${VECTORCOLLECTION_TESTS} ${VECTORCOLLECTION_SOURCE_FILES})
 
 set(MATRIX_TESTS "matrixTests")
 add_executable(${MATRIX_TESTS} ${MATRIX_SOURCE_FILES})
@@ -107,7 +117,7 @@ target_link_libraries(${COMPLEX_TESTS} m check)
 target_link_libraries(${NDARRAY_TESTS} m check)
 target_link_libraries(${MATRIX_TESTS} m check)
 target_link_libraries(${VECTOR_TESTS} m check)
-target_link_libraries(${VECTORSET_TESTS} m check)
+target_link_libraries(${VECTORCOLLECTION_TESTS} m check)
 
 # Include math file for main
 target_link_libraries(${PROJECT_NAME} m)

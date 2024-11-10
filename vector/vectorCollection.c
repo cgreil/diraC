@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <assert.h>
+
 #include "common/doubleLinkedList.h"
 #include "vectorCollection.h"
 
@@ -13,8 +14,7 @@ static uint32_t calculateCRC(Vector vector) {
 }
 */
 
-//static int compare(Vector vector1, Vector vector2);
-
+// static int compare(Vector vector1, Vector vector2);
 
 static bool vectorsEqual (Vector vector1, Vector vector2) {
     // TODO: Implement CRC
@@ -99,7 +99,6 @@ bool vectorCollection_addVector(VectorCollection vectorCollection, Vector newVec
             // Not yet implemented
             break;
     }
-
     return false;
 }
 
@@ -107,10 +106,10 @@ bool vectorCollection_removeVector(VectorCollection vectorCollection, Vector vec
 
     bool removedVector = false;
 
-    for (size_t setIndex = 0; setIndex < vectorCollection_size(vectorCollection); setIndex++) {
-        OptVector comparisonVector = vectorCollection_getVectorAtIndex(vectorCollection, setIndex);
+    for (size_t collectionIndex = 0; collectionIndex < vectorCollection_size(vectorCollection); collectionIndex++) {
+        OptVector comparisonVector = vectorCollection_getVectorAtIndex(vectorCollection, collectionIndex);
         if (vectorsEqual(vector, comparisonVector.data)) {
-            removedVector = dll_removeElementAtIndex(vectorCollection.vectors, setIndex);
+            removedVector = dll_removeElementAtIndex(vectorCollection.vectors, collectionIndex);
             break;
         }
     }
@@ -118,9 +117,9 @@ bool vectorCollection_removeVector(VectorCollection vectorCollection, Vector vec
     return removedVector;
 }
 
-bool vectorCollection_removeVectorAtIndex(VectorCollection vectorCollection, size_t setIndex) {
+bool vectorCollection_removeVectorAtIndex(VectorCollection vectorCollection, size_t index) {
 
-    bool removedVector = dll_removeElementAtIndex(vectorCollection.vectors, setIndex);
+    bool removedVector = dll_removeElementAtIndex(vectorCollection.vectors, index);
 
     return removedVector;
 }
@@ -158,11 +157,11 @@ VectorCollection vectorCollection_gramSchmidt(VectorCollection vectorCollection)
         return (VectorCollection) {0 };
     }
 
-    VectorCollection onbSet = vectorCollection_createEmpty(Set);
+    VectorCollection onbSet = vectorCollection_createEmpty(List);
 
     for (int vecIndex = 0; vecIndex < vectorCollection_size(vectorCollection); vecIndex++) {
 
-        // iterate over all vectors from initial set
+        // iterate over all vectors from initial collection
         Vector vector = vectorCollection_getVectorAtIndex(vectorCollection, vecIndex).data;
 
         // calculate projection on all vectors in onbSet and subtract this projection

@@ -13,6 +13,8 @@
  *
  */
 
+Arena* arena;
+
 /*
  * START OF ADDITION TESTS
  */
@@ -355,6 +357,8 @@ Suite *complexPowerSuite(void) {
 
 int main(void) {
 
+    arena = arena_init();
+
     // Array of suitePointers - filled by the respective functions
     Suite *testSuites[] = {
         complexAddSuite(),
@@ -383,6 +387,9 @@ int main(void) {
         fprintf(stdout, "Finished with %d failed tests in %f seconds \n", numFailed, difftime(startTime, endTime));
         srunner_free(suiteRunner);
     }
+
+
+    arena_destroy(arena);
 
     return 0;
 }

@@ -10,12 +10,9 @@
 #include <stdio.h>
 
 #include "utils/dataArena.h"
-#include "common/string.h"
 #include "complex/complex.h"
-#include "matrix/matrix.h"
 #include "vector/vector.h"
-#include "vector/vectorSet.h"
-
+#include "matrix/matrix.h"
 
 typedef struct {
     char *data;
@@ -56,7 +53,7 @@ size_t stringBuilder_appendMatrix(StringBuilder* stringBuilder, Matrix matrix);
 
 size_t stringBuilder_appendComplex(StringBuilder* stringBuilder, Complex complex);
 
-size_t stringBuilder_appendVectorSet(StringBuilder* stringBuilder, VectorSet vectorSet);
+size_t stringBuilder_appendVectorSet(StringBuilder* stringBuilder, VectorCollection vectorSet);
 
 void stringBuilder_setFloatPrecision(StringBuilder* stringBuilder, size_t floatAccuracy);
 

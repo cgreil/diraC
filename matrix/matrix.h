@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <vector/vector.h>
-#include <vector/vectorSet.h>
+#include <vector/vectorCollection.h>
 
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
@@ -11,7 +11,7 @@
 typedef struct {
     size_t numRows;
     size_t numColumns;
-    NDArray dataArray;  
+    NDArray ndArray;
 } Matrix;
 
 typedef struct {
@@ -33,11 +33,11 @@ Matrix matrix_zeros(size_t numRows, size_t numColumns);
 
 Matrix matrix_ones(size_t numRows, size_t numColumns);
 
-Matrix matrix_fromArray(Complex *values, size_t numRows, size_t numColumns);
+Matrix matrix_fromRowArray(Complex *values, size_t numRows, size_t numColumns);
 
-Matrix matrix_fromColumnVectorSet(VectorSet vectorSet);
+Matrix matrix_fromColumnVectorSet(VectorCollection vectorSet);
 
-Matrix matrix_fromRowVectorSet(VectorSet vectorSet);
+Matrix matrix_fromRowVectorSet(VectorCollection vectorSet);
 
 Matrix matrix_identity(size_t dimension);
 
@@ -65,6 +65,18 @@ Matrix matrix_addition(Matrix matrix1, Matrix matrix2);
 Matrix matrix_subtraction(Matrix matrix1, Matrix matrix2);
 
 Matrix matrix_multiplication(Matrix matrix1, Matrix matrix2);
+
+bool matrix_isUpperTriangular(Matrix matrix);
+
+bool matrix_isDiagonal(Matrix matrix);
+
+bool matrix_isSquare(Matrix matrix);
+
+bool matrix_isNormal(Matrix matrix);
+
+bool matrix_isHermitian(Matrix matrix);
+
+bool matrix_isUnitary(Matrix matrix);
 
 // TODO: Eigenvectors, eigenvalues
 

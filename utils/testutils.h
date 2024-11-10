@@ -33,8 +33,8 @@
     }
 
 #define ck_assert_matrix_eq(expectedMatrix, actualMatrix)                                                               \
-    NDArray expectedData = (expectedMatrix).dataArray;                                                                  \
-    NDArray actualData = (actualMatrix).dataArray;                                                                      \
+    NDArray expectedData = (expectedMatrix).ndArray;                                                                  \
+    NDArray actualData = (actualMatrix).ndArray;                                                                      \
     ck_assert_int_eq((expectedMatrix).numRows, (actualMatrix).numRows);                                                 \
     ck_assert_int_eq((expectedMatrix).numColumns, (actualMatrix).numColumns);                                           \
     ck_assert_ndarray_eq(expectedData, actualData)                                                                      \

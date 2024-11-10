@@ -27,7 +27,7 @@ START_TEST(matrixZeroTest) {
     for (size_t i = 0; i < numRows; i++) {
         for (size_t j = 0; j < numCols; j++) {
 
-            OptComplex actual = NDArray_getElement(zeroMat.dataArray, i, j);
+            OptComplex actual = NDArray_getElement(zeroMat.ndArray, i, j);
             // Compare to zero
             ck_assert_complex_eq(zeroComp, actual.value);
         }
@@ -51,7 +51,7 @@ START_TEST(matrixOnesTest) {
     for (size_t i = 0; i < numRows; i++) {
         for (size_t j = 0; j < numCols; j++) {
 
-            OptComplex actual = NDArray_getElement(zeroMat.dataArray, i, j);
+            OptComplex actual = NDArray_getElement(zeroMat.ndArray, i, j);
             // Compare to zero
             ck_assert_complex_eq(oneComp, actual.value);
         }
@@ -72,9 +72,9 @@ START_TEST(matrixIdentityTest) {
         for (size_t j = 0; j < identity.numColumns; j++) {
 
             if (i == j) {
-                ck_assert_complex_eq(oneComp, NDArray_getElement(identity.dataArray, i, j).value);
+                ck_assert_complex_eq(oneComp, NDArray_getElement(identity.ndArray, i, j).value);
             } else {
-                ck_assert_complex_eq(zeroComp, NDArray_getElement(identity.dataArray, i, j).value);
+                ck_assert_complex_eq(zeroComp, NDArray_getElement(identity.ndArray, i, j).value);
             }
         }
     }
@@ -137,10 +137,10 @@ START_TEST(matrixAdditionTest) {
         resultValues[i] = complex_addition(matrix1Values[i], matrix2Values[i]);
     }
 
-    Matrix matrix1 = matrix_fromArray(matrix1Values, numRows, numColumns);
-    Matrix matrix2 = matrix_fromArray(matrix2Values, numRows, numColumns);
+    Matrix matrix1 = matrix_fromRowArray(matrix1Values, numRows, numColumns);
+    Matrix matrix2 = matrix_fromRowArray(matrix2Values, numRows, numColumns);
 
-    Matrix expectedMatrix = matrix_fromArray(resultValues, numRows, numColumns);
+    Matrix expectedMatrix = matrix_fromRowArray(resultValues, numRows, numColumns);
     Matrix resultMatrix = matrix_addition(matrix1, matrix2);
 
     ck_assert_matrix_eq(expectedMatrix, resultMatrix);
@@ -173,10 +173,10 @@ START_TEST(matrixSubtractionTest) {
         resultValues[i] = complex_subtraction(matrix1Values[i], matrix2Values[i]);
     }
 
-    Matrix matrix1 = matrix_fromArray(matrix1Values, numRows, numColumns);
-    Matrix matrix2 = matrix_fromArray(matrix2Values, numRows, numColumns);
+    Matrix matrix1 = matrix_fromRowArray(matrix1Values, numRows, numColumns);
+    Matrix matrix2 = matrix_fromRowArray(matrix2Values, numRows, numColumns);
 
-    Matrix expectedMatrix = matrix_fromArray(resultValues, numRows, numColumns);
+    Matrix expectedMatrix = matrix_fromRowArray(resultValues, numRows, numColumns);
     Matrix resultMatrix = matrix_subtraction(matrix1, matrix2);
 
     ck_assert_matrix_eq(expectedMatrix, resultMatrix);
@@ -201,8 +201,8 @@ START_TEST(matrixMultiplicationTest) {
         (Complex) { 0.0, 0.5 }
     };
 
-    Matrix matrix1 = matrix_fromArray(matrix1Values, numRows, numColumns);
-    Matrix matrix2 = matrix_fromArray(matrix2Values, numRows, numColumns);
+    Matrix matrix1 = matrix_fromRowArray(matrix1Values, numRows, numColumns);
+    Matrix matrix2 = matrix_fromRowArray(matrix2Values, numRows, numColumns);
 
     Matrix multiplicationResult = matrix_multiplication(matrix1, matrix2);
 
@@ -213,7 +213,7 @@ START_TEST(matrixMultiplicationTest) {
         (Complex) {49.125, 85.0}
     };
 
-    Matrix expectedMatrix = matrix_fromArray(matrixData, numRows, numColumns);
+    Matrix expectedMatrix = matrix_fromRowArray(matrixData, numRows, numColumns);
     ck_assert_matrix_eq(expectedMatrix, multiplicationResult)
 
 } END_TEST

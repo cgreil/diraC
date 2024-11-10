@@ -34,7 +34,7 @@ bool vectorCollection_addVector(VectorCollection vectorCollection, Vector newVec
 
 bool vectorCollection_removeVector(VectorCollection vectorCollection, Vector vector);
 
-bool vectorCollection_removeVectorAtIndex(VectorCollection vectorCollection, size_t setIndex);
+bool vectorCollection_removeVectorAtIndex(VectorCollection vectorCollection, size_t index);
 
 size_t vectorCollection_size(VectorCollection vectorSet);
 

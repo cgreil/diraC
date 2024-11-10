@@ -7,7 +7,7 @@
 #include "ndarray/ndarray.h"
 #include "utils/testutils.h"
 
-static Arena *arena;
+Arena *arena;
 
 START_TEST(testVectorZeros) {
 

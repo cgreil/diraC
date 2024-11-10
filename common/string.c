@@ -7,7 +7,6 @@
 #include <assert.h>
 #include <errno.h>
 
-#include "utils/dataArena.h"
 #include "common/string.h"
 
 #define COMPLEX_NUM_STRING_BUFSIZE 16
@@ -245,7 +244,7 @@ size_t stringBuilder_appendMatrix(StringBuilder* stringBuilder, const Matrix mat
 }
 
 
-size_t stringBuilder_appendVectorSet(StringBuilder* stringBuilder, const VectorSet vectorSet) {
+size_t stringBuilder_appendVectorSet(StringBuilder* stringBuilder, const VectorCollection vectorSet) {
 
     size_t numWritten = 0;
     const char braceStart[1] = "{";
@@ -257,9 +256,9 @@ size_t stringBuilder_appendVectorSet(StringBuilder* stringBuilder, const VectorS
     // where each vector element is started and ended by brackets
 
     numWritten += stringBuilder_appendCharArray(stringBuilder, braceStart, sizeof(braceStart));
-    size_t setSize = vectorSet_size(vectorSet);
+    size_t setSize = vectorCollection_size(vectorSet);
     for (size_t vectorIndex = 0; vectorIndex < setSize; vectorIndex++) {
-        const Vector vector = vectorSet_getVectorAtIndex(vectorSet, vectorIndex).data;
+        const Vector vector = vectorCollection_getVectorAtIndex(vectorSet, vectorIndex).data;
         numWritten += stringBuilder_appendVector(stringBuilder, vector);
 
         if (vectorIndex < setSize - 1) {

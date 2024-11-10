@@ -13,29 +13,29 @@ int main(void) {
     arena = arena_init();
 
     // identity matrix
-    Matrix sigma_0 = matrix_fromArray(
+    Matrix sigma_0 = matrix_fromRowArray(
         (Complex[]) {
-        (Complex) {1.0, 0.0},
-        (Complex) {0.0, 0.0},
-        (Complex) {0.0, 0.0},
-        (Complex) {1.0, 0.0}},
+            (Complex) {1.0, 0.0},
+            (Complex) {0.0, 0.0},
+            (Complex) {0.0, 0.0},
+            (Complex) {1.0, 0.0}},
         2,
         2
-        );
+    );
 
     // pauli x gate
-    Matrix sigma_1 = matrix_fromArray(
+    Matrix sigma_1 = matrix_fromRowArray(
         (Complex[]) {
-        (Complex) {0.0, 0.0},
-        (Complex) {1.0, 0.0},
-        (Complex) {1.0, 0.0},
-        (Complex) {0.0, 0.0}},
+            (Complex) {0.0, 0.0},
+            (Complex) {1.0, 0.0},
+            (Complex) {1.0, 0.0},
+            (Complex) {0.0, 0.0}},
         2,
         2
-        );
+    );
 
     // pauli y gate
-    Matrix sigma_2 = matrix_fromArray(
+    Matrix sigma_2 = matrix_fromRowArray(
         (Complex[]) {
             (Complex) {0.0, 0.0},
             (Complex) {0.0, -1.0},
@@ -46,7 +46,7 @@ int main(void) {
     );
 
     // pauli z gate
-    Matrix sigma_3 = matrix_fromArray(
+    Matrix sigma_3 = matrix_fromRowArray(
         (Complex[]) {
             (Complex) {1.0, 0.0},
             (Complex) {0.0, 0.0},
@@ -79,7 +79,7 @@ int main(void) {
     stringBuilder_appendCharArray(stringBuilder, "\n", 1);
 
     String string = stringBuilder_build(stringBuilder);
-    // Use fwrite over fprintf to print beyond zero bytes
+    // Use fwrite over fprintf to print beyond zero (null terminator) bytes
     fwrite(string.data, sizeof(char), string.length, stdout);
 
 

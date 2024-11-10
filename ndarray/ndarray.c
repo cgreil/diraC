@@ -103,7 +103,7 @@ OptComplex NDArray_getElement(NDArray ndArray, size_t rowIndex, size_t columnInd
         };
     }
 
-    size_t dataPosition = columnIndex + rowIndex * ndArray.numColumns;
+    size_t dataPosition = NDArray_index(ndArray.numRows, rowIndex, columnIndex);
     // DEBUG Print
     /*printf("Accessing ndarray with dimensions %zu/%zu: At row %zu and column %zu \n",
            ndArray.numRows, ndArray.numColumns, rowIndex, columnIndex);
