@@ -38,13 +38,13 @@ bool complex_nearlyEqual(Complex c1, Complex c2) {
     bool imEquality = false;
     // compare real parts equality
     if (c1.re == 0 || c2.re == 0 || absRealC1 + absRealC2 < DBL_MIN) {
-        realEquality = realDiff < DBL_MIN;
+        realEquality = realDiff < EPSILON;
     } else {
         realEquality = (realDiff / fmin(absRealC1 + absRealC2, DBL_MAX)) < EPSILON;
     }
     // compare imaginary parts equality
     if (c1.im == 0 || c2.im == 0 || absImC1 + absImC2 < DBL_MIN) {
-        imEquality = imDiff < DBL_MIN;
+        imEquality = imDiff < EPSILON;
     } else {
         imEquality = (imDiff / fmin(absImC1 + absImC2, DBL_MAX)) < EPSILON;
     }

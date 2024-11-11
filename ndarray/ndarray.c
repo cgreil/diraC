@@ -148,7 +148,7 @@ Slice NDArray_getSlice(NDArray ndArray,
 
    if (ndArray.values == NULL || ndArray.numColumns == 0 || ndArray.numRows == 0 ||
                 numIndices == 0) {
-            return (Slice) {0 };
+            return (Slice) { 0 };
         }
 
     // Allocate pointer vector in arena

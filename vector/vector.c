@@ -235,7 +235,7 @@ OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
             };
         }
 
-        result = complex_addition(result, complex_multiplication(complex1.value, complex2.value));
+        result = complex_addition(result, complex_multiplication(complex1.value, complex_conjugate(complex2.value)));
     }
 
     return (OptComplex) {
@@ -246,10 +246,22 @@ OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
 
 Complex vector_norm(Vector vec) {
 
+    /**
+     * Returns a norm of the given vector
+     * as induced by the inner product
+     * ||v|| = sqrt(<v,v>)
+     *
+     */
+
     OptComplex innerProd = vector_innerProduct(vec, vec);
     assert(innerProd.valid);
 
-    return innerProd.value;
+    Complex norm = (Complex) {
+        .re = sqrt(innerProd.value.re),
+        .im = sqrt(innerProd.value.im)
+    };
+
+    return norm;
 }
 
 Vector vector_scaleINP(Vector vec, Complex factor) {
@@ -319,7 +331,8 @@ Vector vector_resize(Vector vec, size_t newLength) {
 
     // Pad with 0 if neccessary
     if (vec.size < newLength) {
-        memset((newVector.dataArray.values + vec.size), 0, newLength - vec.size);
+        // memset with 0 since after creation, vector will be filled with garbage data
+        memset((newVector.dataArray.values + vec.size), 0, (newLength - vec.size) * sizeof(Complex));
     }
 
     return newVector;
