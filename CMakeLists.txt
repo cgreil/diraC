@@ -70,6 +70,7 @@ set (
         common/string.c
         utils/dataArena.c
         complex/complex.c
+        complex/tuple.c
         ndarray/ndarray.c
         vector/vector.c
         matrix/matrixTests.c

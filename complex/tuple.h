@@ -11,7 +11,9 @@
 typedef struct {
     Complex *data;
     size_t numElements;
-}ComplexTuple;
+} ComplexTuple;
+
+ComplexTuple complexTuple_new(size_t numElements);
 
 
 

@@ -507,6 +507,26 @@ bool matrix_isZero(Matrix matrix) {
 
 // TODO: Eigenvectors, eigenvalues
 
+ComplexTuple matrix_eigvalsQR(Matrix matrix) {
+
+    Matrix iterationMatrix = matrix_clone(matrix);
+    const size_t maximumIterations = 1000;
+
+    size_t iterationIndex = 0;
+    while(!matrix_isUpperTriangular(iterationMatrix) && iterationIndex < maximumIterations) {
+        QRResult qrMatrices = matrix_QRDecomposition(iterationMatrix);
+        // Calculate RQ to form next iteration
+        iterationMatrix = matrix_multiplication(qrMatrices.matrix2, qrMatrices.matrix1);
+        iterationIndex++;
+    }
+
+    ComplexTuple eigvals = complexTuple_new(matrix.numRows);
+    for (size_t i = 0; i < matrix.numRows; i++) {
+        eigvals.data[i] = matrix_getElement(iterationMatrix, i, i);
+    }
+    return eigvals;
+}
+
 
 void matrix_powerINP(Matrix matrix, unsigned int exponent) {
 

@@ -5,6 +5,7 @@
 #include <vector/vector.h>
 #include <vector/vectorCollection.h>
 
+#include "complex/tuple.h"
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
 
@@ -97,6 +98,8 @@ bool matrix_isEqual(Matrix matrix1, Matrix matrix2);
 bool matrix_isZero(Matrix matrix);
 
 // TODO: Eigenvectors, eigenvalues
+
+ComplexTuple matrix_eigvalsQR(Matrix matrix);
 
 void matrix_powerINP(Matrix matrix, unsigned int exponent);
 
