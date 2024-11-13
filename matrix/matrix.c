@@ -103,10 +103,10 @@ Matrix matrix_fromRowArray(Complex *values, size_t numRows, size_t numColumns) {
     return matrix;
 }
 
-Matrix matrix_fromColumnVectorSet(VectorCollection vectorSet) {
+Matrix matrix_fromColumnVectors(VectorCollection vectorCollection) {
 
     // TODO: has to become VectorList
-    if (vectorSet.vectors == NULL || vectorCollection_size(vectorSet) == 0) {
+    if (vectorCollection.vectors == NULL || vectorCollection_size(vectorCollection) == 0) {
         return (Matrix) { 0 };
     }
 
@@ -114,17 +114,17 @@ Matrix matrix_fromColumnVectorSet(VectorCollection vectorSet) {
     // the vector max size has to be determined and smaller vectors have to
     // be padded with 0s
     size_t numRows = 0;
-    for(size_t setIndex = 0; setIndex < vectorCollection_size(vectorSet); setIndex++) {
-        size_t vecSize = vectorCollection_getVectorAtIndex(vectorSet, setIndex).data.size;
+    for(size_t setIndex = 0; setIndex < vectorCollection_size(vectorCollection); setIndex++) {
+        size_t vecSize = vectorCollection_getVectorAtIndex(vectorCollection, setIndex).data.size;
         if (vecSize > numRows) {
             numRows = vecSize;
         }
     }
 
-    Matrix resultMatrix = matrix_zeros(numRows, vectorCollection_size(vectorSet));
+    Matrix resultMatrix = matrix_zeros(numRows, vectorCollection_size(vectorCollection));
 
-    for (size_t setIndex = 0; setIndex < vectorCollection_size(vectorSet); setIndex++) {
-        Vector vector = vectorCollection_getVectorAtIndex(vectorSet, setIndex).data;
+    for (size_t setIndex = 0; setIndex < vectorCollection_size(vectorCollection); setIndex++) {
+        Vector vector = vectorCollection_getVectorAtIndex(vectorCollection, setIndex).data;
 
         if (vector.size < numRows) {
             // Resize vector
@@ -137,16 +137,15 @@ Matrix matrix_fromColumnVectorSet(VectorCollection vectorSet) {
     return resultMatrix;
 }
 
-Matrix matrix_fromRowVectorSet(VectorCollection vectorSet) {
+Matrix matrix_fromRowVectors(VectorCollection vectorCollection) {
 
-    // TODO: Has to become VectorList
-    // TODO: Implement
+    //TODO: Implement
 
     return (Matrix) { 0 };
 }
 
 
-Matrix matrix_permutation(size_t dimension, size_t rowIndex1, size_t rowIndex2) {
+Matrix matrix_permutation(size_t dimension, size_t index1, size_t index2) {
 
     /**
      * @param Arena
@@ -158,7 +157,11 @@ Matrix matrix_permutation(size_t dimension, size_t rowIndex1, size_t rowIndex2) 
      *
      * @note Creates and returns a dimension x dimension permutation matrix P
      * where for any matrix A, PA == A*, where A* differs from
-     * A only by having rows rowIndex1 and rowIndex2 swapped
+     * A only by having rows index1 and index2 swapped
+     *
+     * And for any matrix A, AP = A', where A' differs from A only by having
+     * columns index1 and index2 swapped
+     *
      */
 
     Matrix matrix = matrix_identity(dimension);
@@ -166,11 +169,11 @@ Matrix matrix_permutation(size_t dimension, size_t rowIndex1, size_t rowIndex2) 
     // Directly set the elements in the ndarray layout
     // In the initial identity element, swapped elements
 
-    NDArray_setElement(matrix.ndArray, rowIndex1, rowIndex1, (Complex) {0.0, 0.0 });
-    NDArray_setElement(matrix.ndArray, rowIndex1, rowIndex2, (Complex) {1.0, 0.0 });
+    NDArray_setElement(matrix.ndArray, index1, index1, (Complex) {0.0, 0.0 });
+    NDArray_setElement(matrix.ndArray, index1, index2, (Complex) {1.0, 0.0 });
 
-    NDArray_setElement(matrix.ndArray, rowIndex2, rowIndex2, (Complex) {0.0, 0.0 });
-    NDArray_setElement(matrix.ndArray, rowIndex2, rowIndex1, (Complex) {1.0, 0.0 });
+    NDArray_setElement(matrix.ndArray, index2, index2, (Complex) {0.0, 0.0 });
+    NDArray_setElement(matrix.ndArray, index2, index1, (Complex) {1.0, 0.0 });
 
     return matrix;
 }
@@ -356,7 +359,154 @@ Matrix matrix_multiplication(Matrix matrix1, Matrix matrix2) {
     return resultMatrix;
 }
 
+
+Matrix matrix_transpose(Matrix matrix) {
+
+    if (matrix.numRows == 0 || matrix.numColumns == 0) {
+        return (Matrix) { 0 };
+    }
+
+    Matrix resultMatrix = matrix_zeros(matrix.numRows, matrix.numRows);
+
+    for (size_t rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
+        for (size_t columnIndex = 0; columnIndex < matrix.numColumns; columnIndex++) {
+            matrix_setElement(resultMatrix, rowIndex, columnIndex, matrix_getElement(matrix, columnIndex, rowIndex));
+        }
+    }
+
+    return resultMatrix;
+}
+
+Matrix matrix_conjugate(Matrix matrix) {
+
+    Matrix resultMatrix = matrix_zeros(matrix.numRows, matrix.numColumns);
+    for (size_t rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
+        for (size_t colIndex = 0; colIndex < matrix.numColumns; colIndex++) {
+            Complex conjugatedValue = complex_conjugate(matrix_getElement(matrix, rowIndex, colIndex));
+            matrix_setElement(resultMatrix, rowIndex, colIndex, conjugatedValue);
+        }
+    }
+    return resultMatrix;
+}
+
+Matrix matrix_adjoint(Matrix matrix) {
+    return matrix_transpose(matrix_conjugate(matrix));
+}
+
+Complex matrix_trace(Matrix matrix) {
+
+    if (matrix.numRows != matrix.numColumns) {
+        return (Complex) { 0 };
+    }
+    Complex sum = (Complex) {0.0, 0.0};
+    for (size_t i = 0; i < matrix.numRows; i++) {
+        complex_addition(sum, matrix_getElement(matrix, i, i));
+    }
+    return sum;
+}
+
+bool matrix_isDiagonal(Matrix matrix) {
+
+    if (matrix.numRows != matrix.numColumns) {
+        return false;
+    } else if (matrix.numRows == 1) {
+        // Implicitly, this also means that numColumns == 1
+        return true;
+    }
+
+    // Iterate check all off-diagonal elements
+    for (int rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
+        for (size_t colIndex = 0; colIndex < rowIndex - 1; colIndex++) {
+            Complex lowerTriangValue = matrix_getElement(matrix, rowIndex, colIndex);
+            Complex upperTriangValue = matrix_getElement(matrix, colIndex, rowIndex);
+            if (!complex_nearlyEqual(lowerTriangValue, (Complex) { 0.0, 0.0}) ||
+            !complex_nearlyEqual(upperTriangValue, (Complex){0.0, 0.0})) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool matrix_isSquare(Matrix matrix) {
+    return matrix.numRows == matrix.numColumns;
+}
+
+bool matrix_isUpperTriangular(Matrix matrix) {
+
+    if (matrix.numRows != matrix.numColumns) {
+        return false;
+    } else if (matrix.numRows == 1) {
+        // Implicity, this also means that numColumns == 1
+        return true;
+    }
+
+    for (int rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
+        for (int colIndex = 0; colIndex < rowIndex - 1; colIndex++) {
+            Complex lowerTriangValue = matrix_getElement(matrix, rowIndex, colIndex);
+            if (!complex_nearlyEqual(lowerTriangValue, (Complex) { 0.0, 0.0})){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool matrix_isNormal(Matrix matrix) {
+
+    Matrix adjointMatrix = matrix_adjoint(matrix);
+
+    Matrix leftMultiplied = matrix_multiplication(adjointMatrix, matrix);
+    Matrix rightMultiplied = matrix_multiplication(matrix, adjointMatrix);
+
+    return matrix_isEqual(leftMultiplied, rightMultiplied);
+}
+
+bool matrix_isHermitian(Matrix matrix) {
+
+    Matrix adjointMatrix = matrix_adjoint(matrix);
+
+    return matrix_isEqual(matrix, adjointMatrix);
+}
+
+bool matrix_isUnitary(Matrix matrix) {
+
+    Matrix adjointMatrix = matrix_adjoint(matrix);
+
+    Matrix product = matrix_multiplication(matrix, adjointMatrix);
+    Matrix identity = matrix_identity(matrix.numRows);
+
+    return matrix_isEqual(identity, product);
+}
+
+
+bool matrix_isEqual(Matrix matrix1, Matrix matrix2) {
+
+    if (matrix1.numRows != matrix2.numRows || matrix1.numColumns != matrix2.numColumns) {
+        return false;
+    }
+
+    for (size_t rowIndex = 0; rowIndex < matrix1.numRows; rowIndex++) {
+       for (size_t colIndex = 0; colIndex < matrix2.numColumns; colIndex++) {
+           Complex mat1Value = matrix_getElement(matrix1, rowIndex, colIndex);
+           Complex mat2Value = matrix_getElement(matrix2, rowIndex, colIndex);
+           if (!complex_nearlyEqual(mat1Value, mat2Value)) {
+               return false;
+           }
+       }
+    }
+    return true;
+}
+
+bool matrix_isZero(Matrix matrix) {
+    Matrix zeroMatrix = matrix_zeros(matrix.numRows, matrix.numColumns);
+
+    return matrix_isEqual(matrix, zeroMatrix);
+}
+
+
 // TODO: Eigenvectors, eigenvalues
+
 
 void matrix_powerINP(Matrix matrix, unsigned int exponent) {
 
@@ -435,7 +585,7 @@ QRResult matrix_QRDecomposition(Matrix matrix) {
         }
     }
 
-    Matrix qMatrix = matrix_fromColumnVectorSet(qMatrixColumns);
+    Matrix qMatrix = matrix_fromColumnVectors(qMatrixColumns);
 
     return (QRResult) {
         .matrix1 = qMatrix,

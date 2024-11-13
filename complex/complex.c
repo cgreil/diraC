@@ -53,7 +53,6 @@ bool complex_nearlyEqual(Complex c1, Complex c2) {
 
 Polar polar(Complex c) {
 
-
     Polar result = {
         .r = sqrt(complex_modulus(c)),
         .theta = atan2(c.im, c.re)

@@ -218,6 +218,92 @@ START_TEST(matrixMultiplicationTest) {
 
 } END_TEST
 
+START_TEST(matrixFromColumnSetTest) {
+
+    Vector vectorArray[] = {
+        vector_fromArray((Complex[]) {
+            (Complex) {1.0, 2.0},
+            (Complex) {4.0, 4.0},
+            (Complex) {2.0, 3.0}
+            },
+            3
+        ),
+        vector_fromArray((Complex[]) {
+            (Complex) {4.0, 2.0},
+            (Complex) {7.0, 3.0},
+            (Complex) {9.9, 9.9}
+            },
+            3
+        )
+    };
+
+    VectorCollection vectorList = vectorCollection_fromArray(vectorArray, sizeof(vectorArray) / sizeof(vectorArray[0]), List);
+
+    Matrix matrix = matrix_fromColumnVectors(vectorList);
+
+    for (size_t rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
+        for (size_t colIndex = 0; colIndex < matrix.numColumns; colIndex++) {
+            Complex matrixValue = matrix_getElement(matrix, rowIndex, colIndex);
+            Complex comparisonValue = vector_getElement(vectorArray[colIndex], rowIndex).value;
+            ck_assert_complex_eq(matrixValue, comparisonValue);
+        }
+    }
+} END_TEST
+
+START_TEST(matrix_FromColumnSetEmptyTest) {
+
+    VectorCollection vectorList = vectorCollection_createEmpty(List);
+    Marix matrix = matrix_fromColumnVectors(vectorList);
+
+    Matrix nullMatrix = (Matrix) { 0 };
+
+    ck_assert_matrix_eq(nullMatrix, matrix);
+} END_TEST
+
+START_TEST(matrix_transposeTest) {
+
+    Complex rowArray[] = {
+        (Complex) {0.0, 0.0},
+        (Complex) {1.0, 1.0},
+        (Complex) {-1.0, -1.0},
+        (Complex) {0.0, 0.0}
+    };
+
+    Matrix matrix = matrix_fromRowArray(
+        rowArray,
+        2,
+        2
+    );
+
+    ck_assert_complex_eq(matrix_getElement(matrix, 0, 0), rowArray[0]);
+    ck_assert_complex_eq(matrix_getElement(matrix, 0, 1), rowArray[2]);
+    ck_assert_complex_eq(matrix_getElement(matrix, 1, 0), rowArray[1]);
+    ck_assert_complex_eq(matrix_getElement(matrix, 1, 1), rowArray[3]);
+
+} END_TEST
+
+START_TEST(matrixRowPermutationTest) {
+
+    Matrix originalMatrix = matrix_fromRowArray(
+        (Complex[]) {
+            (Complex) {0.0, 0.0},
+            (Complex) {1.0, 1.0},
+            (Complex) {-1.0, -1.0},
+            (Complex) {0.0, 0.0}
+        },
+        2,
+        2
+    );
+
+    Matrix permutationMatrix = matrix_permutation(2, 0, 1);
+
+    Matrix permutedMatrix = matrix_multiplication(permutationMatrix, originalMatrix);
+
+    ck_assert_matrix_eq(matrix_transpose(originalMatrix), permutedMatrix);
+
+} END_TEST
+
+
 
 Suite *matrixArithmeticSuite(void) {
 

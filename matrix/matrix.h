@@ -35,13 +35,13 @@ Matrix matrix_ones(size_t numRows, size_t numColumns);
 
 Matrix matrix_fromRowArray(Complex *values, size_t numRows, size_t numColumns);
 
-Matrix matrix_fromColumnVectorSet(VectorCollection vectorSet);
+Matrix matrix_fromColumnVectors(VectorCollection vectorCollection);
 
-Matrix matrix_fromRowVectorSet(VectorCollection vectorSet);
+Matrix matrix_fromRowVectors(VectorCollection vectorCollection);
 
 Matrix matrix_identity(size_t dimension);
 
-Matrix matrix_permutation(size_t dimension, size_t rowIndex1, size_t rowIndex2);
+Matrix matrix_permutation(size_t dimension, size_t index1, size_t index2);
 
 /**
  * Support
@@ -66,7 +66,21 @@ Matrix matrix_subtraction(Matrix matrix1, Matrix matrix2);
 
 Matrix matrix_multiplication(Matrix matrix1, Matrix matrix2);
 
+Matrix matrix_transpose(Matrix matrix);
+
+Matrix matrix_conjugate(Matrix matrix);
+
+Matrix matrix_adjoint(Matrix matrix);
+
+Matrix matrix_diagonalize(Matrix matrix);
+
+Complex matrix_determinant(Matrix matrix);
+
+Complex matrix_trace(Matrix matrix);
+
 bool matrix_isUpperTriangular(Matrix matrix);
+
+bool matrix_isDiagonalizeable(Matrix matrix);
 
 bool matrix_isDiagonal(Matrix matrix);
 
@@ -77,6 +91,10 @@ bool matrix_isNormal(Matrix matrix);
 bool matrix_isHermitian(Matrix matrix);
 
 bool matrix_isUnitary(Matrix matrix);
+
+bool matrix_isEqual(Matrix matrix1, Matrix matrix2);
+
+bool matrix_isZero(Matrix matrix);
 
 // TODO: Eigenvectors, eigenvalues
 
