@@ -253,7 +253,7 @@ START_TEST(matrixFromColumnSetTest) {
 START_TEST(matrix_FromColumnSetEmptyTest) {
 
     VectorCollection vectorList = vectorCollection_createEmpty(List);
-    Marix matrix = matrix_fromColumnVectors(vectorList);
+    Matrix matrix = matrix_fromColumnVectors(vectorList);
 
     Matrix nullMatrix = (Matrix) { 0 };
 

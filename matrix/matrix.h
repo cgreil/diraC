@@ -28,6 +28,7 @@ typedef struct {
 } MatrixTuple;
 
 typedef MatrixTuple QRResult;
+typedef MatrixTuple LUResult;
 
 
 Matrix matrix_zeros(size_t numRows, size_t numColumns);
@@ -75,6 +76,8 @@ Matrix matrix_adjoint(Matrix matrix);
 
 Matrix matrix_diagonalize(Matrix matrix);
 
+Matrix matrix_kron(Matrix matrix1, Matrix matrix2);
+
 Complex matrix_determinant(Matrix matrix);
 
 Complex matrix_trace(Matrix matrix);
@@ -118,6 +121,8 @@ void matrix_transposeINP(Matrix matrix);
 void matrix_inverseINP(Matrix matrix);
 
 QRResult matrix_QRDecomposition(Matrix matrix);
+
+LUResult matrix_LUDecomposition(Matrix matrix);
 
 
 

@@ -89,6 +89,8 @@ add_executable(LEIBNITZ main.c
         complex/tuple.c
         logging/Logger.h
         logging/Logger.c
+        qureg/qureg.c
+        qureg/qureg_gates.c
 )
 
 

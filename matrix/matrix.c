@@ -393,6 +393,41 @@ Matrix matrix_adjoint(Matrix matrix) {
     return matrix_transpose(matrix_conjugate(matrix));
 }
 
+Complex matrix_determinant(Matrix matrix) {
+    return (Complex) { 0.0, 0.0 };
+}
+
+Matrix matrix_kron(Matrix matrix1, Matrix matrix2) {
+
+    if (matrix1.numRows == 0 || matrix1.numColumns == 0 ||
+        matrix2.numRows == 0 || matrix2.numColumns == 0) {
+        return (Matrix) { 0 };
+    }
+
+    size_t rowDim = matrix1.numRows * matrix2.numRows;
+    size_t colDim = matrix2.numColumns * matrix2.numColumns;
+
+    // prepare VLA to store rows
+    Complex values[rowDim * colDim];
+    size_t valueIndex = 0;
+    for (size_t m1RowIndex = 0; m1RowIndex < matrix1.numRows; m1RowIndex++) {
+        for (size_t m2RowIndex = 0; m2RowIndex < matrix2.numRows; m2RowIndex++) {
+            for (size_t m1ColIndex = 0; m1ColIndex < matrix1.numColumns; m1ColIndex++) {
+                for (size_t m2ColIndex = 0; m2ColIndex < matrix2.numColumns; m2ColIndex++) {
+                    // For a kronecker product P = kron(A,B),
+                    // P[m1RowIndex*m2RowIndex][m1ColIndex*m2ColIndex] = A[m1RowIndex][m1ColIndex] * B[m2RowIndex][m2ColIndex]
+                    values[valueIndex] = complex_multiplication(matrix_getElement(matrix1, m1RowIndex, m1ColIndex),
+                                                                matrix_getElement(matrix2, m2RowIndex, m2ColIndex));
+                    valueIndex++;
+                }
+            }
+        }
+    }
+
+    Matrix kroneckerProduct = matrix_fromRowArray(values, rowDim, colDim);
+    return kroneckerProduct;
+}
+
 Complex matrix_trace(Matrix matrix) {
 
     if (matrix.numRows != matrix.numColumns) {
@@ -611,4 +646,50 @@ QRResult matrix_QRDecomposition(Matrix matrix) {
         .matrix1 = qMatrix,
         .matrix2 = rMatrix
     };
+}
+
+LUResult matrix_LUDecomposition(Matrix matrix) {
+
+    if (matrix.numRows != matrix.numColumns) {
+        return (LUResult) { 0 };
+    }
+
+    Matrix lMatrix = matrix_identity(matrix.numRows);
+    Matrix uMatrix = matrix_zeros(matrix.numRows, matrix.numColumns);
+
+
+
+    for (size_t i = 0; i < matrix.numRows; i++) {
+
+        // Calculating U Matrix entries
+        for (size_t j = i; j < matrix.numColumns; j++) {
+            Complex sum = (Complex) {0.0, 0.0};
+            for (size_t k = 0; k < i - 1; k++) {
+                Complex lComponent = matrix_getElement(lMatrix, i, k);
+                Complex uComponent = matrix_getElement(uMatrix, k, j);
+                sum = complex_addition(sum, complex_multiplication(lComponent, uComponent));
+            }
+            Complex newElement = complex_subtraction(matrix_getElement(matrix, i, j), sum);
+            matrix_setElement(uMatrix, i, j, newElement);
+        }
+
+        // Calculating L amtrix entries
+        for (size_t j = i + 1; j < matrix.numColumns; j++) {
+            Complex sum = (Complex) {0.0, 0.0};
+            for (size_t k = 0; k < i - 1; k++) {
+                Complex lComponent = matrix_getElement(lMatrix, j, k);
+                Complex uComponent = matrix_getElement(uMatrix, k, i);
+                sum = complex_addition(sum, complex_multiplication(lComponent, uComponent));
+            }
+            Complex uQuotient = matrix_getElement(uMatrix, i, j);
+            Complex newElement = complex_division(complex_subtraction(matrix_getElement(matrix, j, i), sum), uQuotient).value;
+            matrix_setElement(lMatrix, j, i, newElement);
+        }
+    }
+
+    return (LUResult) {
+        .matrix1 = lMatrix,
+        .matrix2 = uMatrix
+    };
+
 }

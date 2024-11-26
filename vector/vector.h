@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <matrix/matrix.h>
 
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
@@ -29,6 +30,8 @@ Vector vector_fromArray(Complex *complexArray, size_t vecSize);
 
 OptComplex vector_getElement(Vector vector, size_t index);
 
+bool vector_setElement(Vector vector, size_t index, Complex newElement);
+
 OptVector vector_addition(Vector vec1, Vector vec2);
 
 OptVector vector_subtraction(Vector vec1, Vector vec2);
@@ -48,6 +51,8 @@ Vector vector_adjointINP(Vector vec);
 Vector vector_resize(Vector vec, size_t newLength);
 
 Vector vector_normalize(Vector vec);
+
+Vector vector_matrixMultiplication(Vector vector, Matrix matrix);
 
 bool vector_equal(Vector vec1, Vector vec2);
 

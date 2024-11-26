@@ -11,14 +11,13 @@
 #include "ndarray/ndarray.h"
 #include "common/string.h"
 
+#include "matrix/matrix.h"
+
 /**
  *  FORWARD DECLARATION
  *
  */
 extern Arena* arena;
-
-
-static bool vector_setElement(Vector vec, size_t index, Complex newElement);
 
 
 Vector vector_zeros(size_t vecSize) {
@@ -350,6 +349,24 @@ Vector vector_normalize(Vector vec) {
 }
 
 
+Vector vector_matrixMultiplication(Vector vector, Matrix matrix) {
+
+    if (vector.size != matrix.numColumns) {
+        return (Vector) { 0 };
+    }
+
+    Complex values[matrix.numRows];
+
+    for (size_t i = 0; i < matrix.numRows; i++) {
+        Vector rowSlice = matrix_getRowAtIndex(matrix, i).data;
+        values[i] = vector_innerProduct(rowSlice, vector);
+    }
+
+    Vector vec = vector_fromArray(values, matrix.numRows);
+    return vec;
+}
+
+
 bool vector_isColumn(Vector vec) {
     //assert that the given vector is atleast either column or row vec
     assert((vec.dataArray.numColumns == 1) || (vec.dataArray.numRows == 1));
@@ -387,7 +404,7 @@ bool vector_isZeroVector(Vector vec) {
 }
 
 
-static bool vector_setElement(Vector vec, size_t index, Complex newElement) {
+bool vector_setElement(Vector vec, size_t index, Complex newElement) {
 
     if (index >= vec.size) {
         return false;
