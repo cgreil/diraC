@@ -35,7 +35,11 @@ bool qureg_applyT(QuantumRegister qureg, size_t target);
 
 bool qureg_applyS(QuantumRegister qureg, size_t target);
 
+bool qureg_applySWAP(QuantumRegister qureg, size_t target1, size_t target2);
+
 bool qureg_applyCNOT(QuantumRegister qureg, size_t control, size_t target);
+
+bool qureg_applyCZ(QuantumRegister qureg, size_t control, size_t target);
 
 bool qureg_applyRX(QuantumRegister qureg, size_t target, double phi);
 
