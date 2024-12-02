@@ -10,7 +10,8 @@
 #include "common/string.h"
 #include "vector/vectorCollection.h"
 
-#define COMPLEX_NUM_STRING_BUFSIZE 16
+// 16 chars for digits, 1 for sign, 1 for complex i
+#define COMPLEX_NUM_STRING_BUFSIZE 18
 
 extern Arena* arena;
 
