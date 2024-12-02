@@ -6,6 +6,7 @@
 #include "utils/dataArena.h"
 
 #include "vector/vector.h"
+#include "vector/vectorCollection.h"
 #include "ndarray/ndarray.h"
 #include "matrix/matrix.h"
 
@@ -250,7 +251,7 @@ START_TEST(matrixFromColumnSetTest) {
     }
 } END_TEST
 
-START_TEST(matrix_FromColumnSetEmptyTest) {
+START_TEST(matrixFromColumnSetEmptyTest) {
 
     VectorCollection vectorList = vectorCollection_createEmpty(List);
     Matrix matrix = matrix_fromColumnVectors(vectorList);
@@ -260,7 +261,7 @@ START_TEST(matrix_FromColumnSetEmptyTest) {
     ck_assert_matrix_eq(nullMatrix, matrix);
 } END_TEST
 
-START_TEST(matrix_transposeTest) {
+START_TEST(matrixTransposeTest) {
 
     Complex rowArray[] = {
         (Complex) {0.0, 0.0},
@@ -312,14 +313,26 @@ Suite *matrixArithmeticSuite(void) {
     TCase *testcase1 = tcase_create("matrixAdditionTest");
     TCase *testcase2 = tcase_create("matrixSubtractionTest");
     TCase *testcase3 = tcase_create("matrixMultiplicationTest");
+    TCase *testcase4 = tcase_create("matrixFromColumnSetTest");
+    TCase *testcase5 = tcase_create("matrixFromColumnSetEmptyTest");
+    TCase *testcase6 = tcase_create("matrixTransposeTest");
+    TCase *testcase7 = tcase_create("matrixRowPermutationTest");
 
     tcase_add_test(testcase1, matrixAdditionTest);
     tcase_add_test(testcase2, matrixSubtractionTest);
     tcase_add_test(testcase3, matrixMultiplicationTest);
+    tcase_add_test(testcase4, matrixFromColumnSetTest);
+    tcase_add_test(testcase5, matrixFromColumnSetEmptyTest);
+    tcase_add_test(testcase6, matrixTransposeTest);
+    tcase_add_test(testcase7, matrixRowPermutationTest);
 
     suite_add_tcase(suite, testcase1);
     suite_add_tcase(suite, testcase2);
     suite_add_tcase(suite, testcase3);
+    suite_add_tcase(suite, testcase4);
+    suite_add_tcase(suite, testcase5);
+    suite_add_tcase(suite, testcase6);
+    suite_add_tcase(suite, testcase7);
 
     return suite;
 }

@@ -76,6 +76,23 @@ set (
         matrix/matrixTests.c
 )
 
+set (
+        QUREG_SOURCE_FILES
+        matrix/matrix.c
+        common/doubleLinkedList.c
+        vector/vectorCollection.c
+        common/string.c
+        utils/dataArena.c
+        complex/complex.c
+        complex/tuple.c
+        ndarray/ndarray.c
+        vector/vector.c
+        qureg/qureg.c
+        qureg/qureg_gates.c
+        qureg/quregTests.c
+)
+
+
 add_executable(LEIBNITZ main.c
         complex/complex.c
         float/float.c
@@ -111,6 +128,9 @@ add_executable(${VECTORCOLLECTION_TESTS} ${VECTORCOLLECTION_SOURCE_FILES})
 set(MATRIX_TESTS "matrixTests")
 add_executable(${MATRIX_TESTS} ${MATRIX_SOURCE_FILES})
 
+set (QUREG_TESTS "quregTests")
+add_executable(${QUREG_TESTS} ${QUREG_SOURCE_FILES})
+
 #include Source files
 include_directories(SYSTEM ${SRC_DIR})
 #include directory for check header file
@@ -121,6 +141,8 @@ target_link_libraries(${NDARRAY_TESTS} m check)
 target_link_libraries(${MATRIX_TESTS} m check)
 target_link_libraries(${VECTOR_TESTS} m check)
 target_link_libraries(${VECTORCOLLECTION_TESTS} m check)
+target_link_libraries(${QUREG_TESTS} m check)
+
 
 # Include math file for main
 target_link_libraries(${PROJECT_NAME} m)
