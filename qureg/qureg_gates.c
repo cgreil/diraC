@@ -4,7 +4,7 @@
 
 bool qureg_applyPauliX(QuantumRegister qureg, size_t target) {
 
-    static Complex pauliXArr[] = {
+    Complex pauliXArr[] = {
         (Complex) {0.0, 0.0}, (Complex) {1.0, 0.0},
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}
     };
@@ -15,7 +15,7 @@ bool qureg_applyPauliX(QuantumRegister qureg, size_t target) {
 
 bool qureg_applyPauliY(QuantumRegister qureg, size_t target) {
 
-    static Complex pauliYArr[] = {
+    Complex pauliYArr[] = {
         (Complex) {0.0, 0.0}, (Complex) {0.0, -1.0},
         (Complex) {0.0, 1.0}, (Complex) {0.0, 0.0}
     };
@@ -26,7 +26,7 @@ bool qureg_applyPauliY(QuantumRegister qureg, size_t target) {
 
 bool qureg_applyPauliZ(QuantumRegister qureg, size_t target) {
 
-    static Complex pauliZArr[] = {
+    Complex pauliZArr[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
         (Complex) {0.0, 0.0}, (Complex) {-1.0, 0.0}
     };
@@ -62,7 +62,7 @@ bool qureg_applyT(QuantumRegister qureg, size_t target) {
 
 bool qureg_applyS(QuantumRegister qureg, size_t target) {
 
-    static Complex sGateArray[] = {
+    Complex sGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
         (Complex) {0.0, 0.0}, (Complex) {0.0, 1.0}
     };
@@ -163,7 +163,6 @@ bool qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, Matrix gateD
      * - Use Gate identities to create gates that can be optimized
      * - Use gate identities to rely on efficient Clifford gates as much as possible
      */
-    size_t numAmplitudes = 2 << qureg.numQubits;
 
     Matrix transformationMatrix = matrix_zeros(2, 2);
     Matrix idMatrix = matrix_identity(2);
@@ -197,8 +196,6 @@ bool qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t targ
         fprintf(stdout, "Nonadjacent multiqubit gates are not yet supported");
         return false;
     }
-
-    size_t numAmplitudes = 2 << qureg.numQubits;
 
     Matrix transformationMatrix = matrix_zeros(2, 2);
     Matrix idMatrix = matrix_identity(2);

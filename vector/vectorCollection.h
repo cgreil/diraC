@@ -18,7 +18,7 @@ typedef enum {
     Set
 }CollectionType;
 
-typedef struct {
+typedef struct VectorCollection {
     DoubleLinkedList* vectors;
     CollectionType collectionType;
 } VectorCollection;

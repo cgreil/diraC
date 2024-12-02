@@ -8,6 +8,7 @@
 #include <errno.h>
 
 #include "common/string.h"
+#include "vector/vectorCollection.h"
 
 #define COMPLEX_NUM_STRING_BUFSIZE 16
 

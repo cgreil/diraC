@@ -359,7 +359,7 @@ Vector vector_matrixMultiplication(Vector vector, Matrix matrix) {
 
     for (size_t i = 0; i < matrix.numRows; i++) {
         Vector rowSlice = matrix_getRowAtIndex(matrix, i).data;
-        values[i] = vector_innerProduct(rowSlice, vector);
+        values[i] = vector_innerProduct(rowSlice, vector).value;
     }
 
     Vector vec = vector_fromArray(values, matrix.numRows);

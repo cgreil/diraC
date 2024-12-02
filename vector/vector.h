@@ -4,21 +4,22 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <matrix/matrix.h>
 
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
 
+typedef struct Matrix Matrix;
 
-typedef struct {
+typedef struct Vector {
     size_t size;
     NDArray dataArray;
 } Vector;
 
-typedef struct {
+typedef struct OptVector {
     Vector data;
     bool isValid;
 }OptVector;
+
 
 Vector vector_zeros(size_t vecSize);
 

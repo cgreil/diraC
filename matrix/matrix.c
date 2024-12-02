@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <assert.h>
-#include <vector/vectorCollection.h>
 #include <memory.h>
 
 #include "matrix/matrix.h"
+#include "vector/vector.h"
+#include "vector/vectorCollection.h"
+
 
 extern Arena* arena;
 

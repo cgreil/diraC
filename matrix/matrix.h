@@ -2,20 +2,24 @@
 #define MATRIX_H_
 
 #include <stdlib.h>
-#include <vector/vector.h>
-#include <vector/vectorCollection.h>
 
 #include "complex/tuple.h"
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
 
-typedef struct {
+
+typedef struct Vector Vector;
+typedef struct OptVector OptVector;
+typedef struct VectorCollection VectorCollection;
+
+
+typedef struct Matrix {
     size_t numRows;
     size_t numColumns;
     NDArray ndArray;
 } Matrix;
 
-typedef struct {
+typedef struct OptMatrix {
     Matrix matrix;
     bool isValid;
 } OptMatrix;
