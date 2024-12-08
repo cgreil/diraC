@@ -395,6 +395,10 @@ Matrix matrix_adjoint(Matrix matrix) {
     return matrix_transpose(matrix_conjugate(matrix));
 }
 
+Matrix matrix_diagonalize(Matrix matrix) {
+    return (Matrix) { 0 };
+}
+
 Complex matrix_determinant(Matrix matrix) {
     return (Complex) { 0.0, 0.0 };
 }

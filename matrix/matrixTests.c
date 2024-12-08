@@ -112,9 +112,9 @@ START_TEST(matrixFromColumnVectorsTest) {
     ck_assert_int_eq(matrix.numColumns, numColumns);
 
     for (size_t rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
-        for (size_t columnIndex = 0; columnIndx < matrix.numColumns; columnIndex++) {
+        for (size_t columnIndex = 0; columnIndex < matrix.numColumns; columnIndex++) {
             Complex actualElement = matrix_getElement(matrix, rowIndex, columnIndex);
-            Complex expectedElement = vector_getElement(vecArray[columnIndex], rowIndex);
+            Complex expectedElement = vector_getElement(vecArray[columnIndex], rowIndex).value;
             ck_assert_complex_eq(expectedElement, actualElement);
         }
     }
@@ -395,9 +395,9 @@ START_TEST(matrixDiagonalizeTest) {
 
     ck_assert(!matrix_isDiagonal(matrix));
 
-    Matrix diagonalMat = matrix_diagonalize(matrix);
+    Matrix diagonalMatrix = matrix_diagonalize(matrix);
 
-    ck_assert(matrix_isDiagonal(matrix));
+    ck_assert(matrix_isDiagonal(diagonalMatrix));
 } END_TEST
 
 
@@ -430,7 +430,7 @@ START_TEST(matrixNotDiagonalizeableTest) {
 
     ck_assert(!matrix_isDiagonal(matrix));
 
-    Matrix diagMatrix = matrix_diagonalize(matrix);
+    //Matrix diagMatrix = matrix_diagonalize(matrix);
 
     // TODO: How to actually verify this ... use OptMatrix?
 
@@ -475,7 +475,7 @@ START_TEST(matrixKronTest) {
 
 } END_TEST
 
-// TODO: test kronecker product of non-symmetric matrices
+// TODO: test kronecker product of non-square matrices
 
 START_TEST(matrixDeterminantTest) {
 
@@ -490,7 +490,206 @@ START_TEST(matrixDeterminantTest) {
 
 } END_TEST
 
-//TODO: Test return value of determinant for non-symmetric matrices
+//TODO: Test return value of determinant for non-square matrices
+
+START_TEST(matrixTraceTest) {
+
+    Complex values[] = {
+        (Complex) {1.0, 1.0}, (Complex) {2.0, 8.0}, (Complex) {4.0, -8.0},
+        (Complex) {-3.0, 0.0}, (Complex) {-3.3, -2.0}, (Complex) {0.0, 0.0},
+        (Complex) {4.0, 4.0}, (Complex) {-1.0, 0.0}, (Complex) {8.0, 2.0}
+    };
+    Matrix matrix = matrix_fromRowArray(values, 3, 3);
+
+    Complex expectedValue = (Complex) {7.7, -1.0};
+    Complex actualValue = matrix_trace(matrix);
+
+    ck_assert_complex_eq(expectedValue, actualValue);
+} END_TEST
+
+// TODO: Test for non-square matrix
+
+
+START_TEST(matrixIsUpperTriangularPositiveTest) {
+
+    Complex values[] = {
+        (Complex) {1.0, 1.0}, (Complex) {2.0, 8.0}, (Complex) {4.0, -8.0},
+        (Complex) {0.0, 0.0}, (Complex) {-3.3, -2.0}, (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0}, (Complex) {-0.0, 0.0}, (Complex) {0.0, 2.0}
+    };
+    Matrix upperMatrix = matrix_fromRowArray(values, 3, 3);
+
+    ck_assert(matrix_isUpperTriangular(upperMatrix));
+
+} END_TEST
+
+START_TEST(matrixIsUpperTriangularNegativeTest) {
+
+    Complex values[] = {
+        (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
+        (Complex) {0.0, -2.0}, (Complex) {8.0, 9.999}
+    };
+    Matrix matrix = matrix_fromRowArray(values, 2, 2);
+
+    ck_assert(!matrix_isUpperTriangular(matrix));
+} END_TEST
+
+// TODO: ISDiagonalizeable Test
+
+START_TEST(matrixIsDiagonalPositiveTest) {
+
+    Complex values[] = {
+        (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}
+    };
+    Matrix matrix = matrix_fromRowArray(values, 2, 2);
+
+    ck_assert(matrix_isDiagonal(matrix));
+} END_TEST
+
+START_TEST(matrixIsDiagonalNegativeTest) {
+
+    Complex values[] = {
+        (Complex) {1.0, 3.0}, (Complex) {9.0, 0.0001},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}
+    };
+    Matrix matrix = matrix_fromRowArray(values, 2, 2);
+
+    ck_assert(!matrix_isDiagonal(matrix));
+} END_TEST
+
+START_TEST(matrixIsSquarePositiveTest) {
+
+    Complex values[] = {
+        (Complex) {1.0, 3.0}, (Complex) {9.0, 0.0001}, (Complex) {0.0, 8.0},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}, (Complex) {2.0, 3.0},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}, (Complex) {2.0, 3.0},
+    };
+    Matrix matrix = matrix_fromRowArray(values, 3, 3);
+
+    ck_assert(matrix_isSquare(matrix));
+} END_TEST
+
+START_TEST(matrixIsSquareNegativeTest) {
+
+    Complex values[] = {
+        (Complex) {1.0, 3.0}, (Complex) {9.0, 0.0001}, (Complex) {0.0, 8.0},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}, (Complex) {2.0, 3.0},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}, (Complex) {2.0, 3.0},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}, (Complex) {2.0, 3.0},
+    };
+    Matrix matrix = matrix_fromRowArray(values, 4, 3);
+
+    ck_assert(!matrix_isSquare(matrix));
+} END_TEST
+
+START_TEST(matrixIsNormalPositiveTest) {
+
+    Matrix matrix = matrix_identity(2);
+    matrix_setElement(matrix, 1, 1, (Complex) {1.0, 1.0});
+    matrix_setElement(matrix, 1, 1, (Complex) {1.0, 1.0});
+
+    ck_assert(matrix_isNormal(matrix));
+} END_TEST
+
+
+START_TEST(matrixIsNormalNegativeTest) {
+
+    /**
+     * Use non-normal matrix
+     * | 0 1 |
+     * | 0 0 |
+     * as example
+     */
+
+    Matrix matrix = matrix_identity(2);
+    matrix_setElement(matrix, 1, 1, (Complex) {0, 0});
+
+    ck_assert(!matrix_isNormal(matrix));
+} END_TEST
+
+START_TEST(matrixIsHermitianPositiveTest) {
+
+    Matrix matrix = matrix_identity(2);
+    matrix_setElement(matrix, 0, 0, (Complex) {2.0, 2.0});
+    matrix_setElement(matrix, 1, 1, (Complex) {3.0, 3.0});
+
+    ck_assert(matrix_isHermitian(matrix));
+} END_TEST
+
+START_TEST(matrixIsHermitianNegativeTest) {
+
+    Matrix matrix = matrix_identity(3);
+    matrix_setElement(matrix, 2, 1, (Complex) {2.0, -5.0});
+
+    ck_assert(!matrix_isHermitian(matrix));
+} END_TEST
+
+START_TEST(matrixIsUnitaryPositiveTest) {
+
+    Matrix matrix = matrix_identity(3);
+
+    ck_assert(matrix_isUnitary(matrix));
+} END_TEST
+
+START_TEST(matrixIsUnitaryNegativeTest) {
+
+    Matrix matrix = matrix_identity(3);
+    matrix_setElement(matrix, 1, 2, (Complex) {0.0, 2.0});
+
+    ck_assert(!matrix_isUnitary(matrix));
+} END_TEST
+
+START_TEST(matrixIsEqualPositiveTest) {
+
+    Complex values[] = {
+        (Complex) {1.0, 3.0}, (Complex) {9.0, 0.0001},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}
+    };
+    Matrix matrix1 = matrix_fromRowArray(values, 2, 2);
+
+    Vector rowVec1 = vector_fromArray(&values[0], 2);
+    Vector rowVec2 = vector_fromArray(&values[1], 2);
+    VectorCollection vectorCollection = vectorCollection_fromArray((Vector[]){rowVec1, rowVec2}, 2, List);
+    Matrix matrix2 = matrix_fromRowVectors(vectorCollection);
+
+    ck_assert(matrix_isEqual(matrix1, matrix2));
+} END_TEST
+
+START_TEST(matrixIsEqualNegativeTest) {
+
+    Complex values[] = {
+        (Complex) {1.0, 3.0}, (Complex) {9.0, 0.0001},
+        (Complex) {0.0, 0.0}, (Complex) {4.0, 2.0}
+    };
+    Matrix matrix1 = matrix_fromRowArray(values, 2, 2);
+    Matrix matrix2 = matrix_identity(2);
+
+    ck_assert(!matrix_isEqual(matrix1, matrix2));
+} END_TEST
+
+START_TEST(matrixIsZeroPositiveTest) {
+
+    size_t numRows = 5;
+    size_t numCols = 6;
+    Matrix zeroMatrix = matrix_zeros(numRows, numCols);
+
+    ck_assert(matrix_isZero(zeroMatrix));
+
+} END_TEST
+
+START_TEST(matrixIsZeroNegativeTest) {
+
+    size_t numRows = 4;
+    size_t numCols = 8;
+
+    Matrix matrix = matrix_zeros(numRows, numCols);
+    matrix_setElement(matrix, 3, 7, (Complex) {0.0, 0.01});
+
+    ck_assert(!matrix_isZero(matrix));
+
+} END_TEST
+
 
 
 
@@ -510,7 +709,23 @@ Suite *matrixArithmeticSuite(void) {
     TCase *testcase10 = tcase_create("matrixNotDiagonalizableTest");
     TCase *testcase11 = tcase_create("matrixKroneckerTest");
     TCase *testcase12 = tcase_create("matrixDeterminantTest");
-
+    TCase *testcase13 = tcase_create("matrixTraceTest");
+    TCase *testcase14 = tcase_create("matrixIsUpperTriangularPositiveTest");
+    TCase *testcase15 = tcase_create("matrixIsUpperTriangularNegativeTest");
+    TCase *testcase16 = tcase_create("matrixIsDiagonalPositiveTest");
+    TCase *testcase17 = tcase_create("matrixIsDiagonalNegativeTest");
+    TCase *testcase18 = tcase_create("matrixIsSquarePositiveTest");
+    TCase *testcase19 = tcase_create("matrixIsSquareNegativeTest");
+    TCase *testcase20 = tcase_create("matrixIsNormalPositiveTest");
+    TCase *testcase21 = tcase_create("matrixIsNormalNegativeTest");
+    TCase *testcase22 = tcase_create("matrixIsHermitianPositiveTest");
+    TCase *testcase23 = tcase_create("matrixIsHermitianNegativeTest");
+    TCase *testcase24 = tcase_create("matrixIsUnitaryPositiveTest");
+    TCase *testcase25 = tcase_create("matrixIsUnitaryNegativeTest");
+    TCase *testcase26 = tcase_create("matrixIsEqualPositiveTest");
+    TCase *testcase27 = tcase_create("matrixIsEqualNegativeTest");
+    TCase *testcase28 = tcase_create("matrixIsZeroPositiveTest");
+    TCase *testcase29 = tcase_create("matrixIsZeroNegativeTest");
 
     tcase_add_test(testcase1, matrixAdditionTest);
     tcase_add_test(testcase2, matrixSubtractionTest);
@@ -524,6 +739,23 @@ Suite *matrixArithmeticSuite(void) {
     tcase_add_test(testcase10, matrixNotDiagonalizeableTest);
     tcase_add_test(testcase11, matrixKronTest);
     tcase_add_test(testcase12, matrixDeterminantTest);
+    tcase_add_test(testcase13, matrixTraceTest);
+    tcase_add_test(testcase14, matrixIsUpperTriangularPositiveTest);
+    tcase_add_test(testcase15, matrixIsUpperTriangularNegativeTest);
+    tcase_add_test(testcase16, matrixIsDiagonalPositiveTest);
+    tcase_add_test(testcase17, matrixIsDiagonalNegativeTest);
+    tcase_add_test(testcase18, matrixIsSquarePositiveTest);
+    tcase_add_test(testcase19, matrixIsSquareNegativeTest);
+    tcase_add_test(testcase20, matrixIsNormalPositiveTest);
+    tcase_add_test(testcase21, matrixIsNormalNegativeTest);
+    tcase_add_test(testcase22, matrixIsHermitianPositiveTest);
+    tcase_add_test(testcase23, matrixIsHermitianNegativeTest);
+    tcase_add_test(testcase24, matrixIsUnitaryPositiveTest);
+    tcase_add_test(testcase25, matrixIsUnitaryNegativeTest);
+    tcase_add_test(testcase26, matrixIsEqualPositiveTest);
+    tcase_add_test(testcase27, matrixIsEqualNegativeTest);
+    tcase_add_test(testcase28, matrixIsZeroPositiveTest);
+    tcase_add_test(testcase29, matrixIsZeroNegativeTest);
 
     suite_add_tcase(suite, testcase1);
     suite_add_tcase(suite, testcase2);
@@ -537,6 +769,24 @@ Suite *matrixArithmeticSuite(void) {
     suite_add_tcase(suite, testcase10);
     suite_add_tcase(suite, testcase11);
     suite_add_tcase(suite, testcase12);
+    suite_add_tcase(suite, testcase13);
+    suite_add_tcase(suite, testcase14);
+    suite_add_tcase(suite, testcase15);
+    suite_add_tcase(suite, testcase16);
+    suite_add_tcase(suite, testcase17);
+    suite_add_tcase(suite, testcase18);
+    suite_add_tcase(suite, testcase19);
+    suite_add_tcase(suite, testcase20);
+    suite_add_tcase(suite, testcase21);
+    suite_add_tcase(suite, testcase22);
+    suite_add_tcase(suite, testcase23);
+    suite_add_tcase(suite, testcase24);
+    suite_add_tcase(suite, testcase25);
+    suite_add_tcase(suite, testcase26);
+    suite_add_tcase(suite, testcase27);
+    suite_add_tcase(suite, testcase28);
+    suite_add_tcase(suite, testcase29);
+
 
     return suite;
 }
