@@ -60,6 +60,69 @@ START_TEST(matrixOnesTest) {
 
 } END_TEST
 
+
+START_TEST(matrixFromRowArrayTest) {
+
+    size_t numRows = 3;
+    size_t numColumns = 2;
+
+    Complex values[] = {
+        (Complex) { 9.0, 2.0}, (Complex) { 2.0, 2.0},
+        (Complex) { 0.0, 0.0}, (Complex) {1.0, 1.0},
+        (Complex) {-2.0, -4.333}, (Complex) {3.0, 3.0}
+    };
+
+    Matrix matrix = matrix_fromRowArray(values, numRows, numColumns);
+
+    for (size_t rowIndex = 0; rowIndex < numRows; rowIndex++) {
+         for (size_t colIndex = 0; colIndex < numColumns; colIndex++) {
+             Complex actualElement = matrix_getElement(matrix, rowIndex, colIndex);
+             Complex expectedElement = values[colIndex + rowIndex * numColumns];
+             ck_assert_complex_eq(expectedElement, actualElement);
+         }
+    }
+
+} END_TEST
+
+
+START_TEST(matrixFromColumnVectorsTest) {
+
+    // length of vectors is equivalent to numRows
+    size_t numRows = 4;
+    size_t numColumns = 3;
+
+    Vector col1 = vector_fromArray(
+        (Complex[]) {(Complex) { 1.0, 1.0}, (Complex) {4.0, 5.0}, (Complex) {-2.3, 1.1111}, (Complex) {1.1, 2.2}},
+        numRows);
+
+    Vector col2 = vector_fromArray(
+        (Complex[]) {(Complex) {9.0, 4.0}, (Complex) {-3.0, -8.4}, (Complex) {-2.3, 1.1111}, (Complex) {9.2, 12.4}},
+        numRows);
+
+    Vector col3 = vector_fromArray(
+        (Complex[]) {(Complex) {2.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {8.99, 2.31}, (Complex) {9.2, 12.4}},
+        numRows);
+
+    Vector vecArray[] = {col1, col2, col3};
+
+    VectorCollection vecCollection = vectorCollection_fromArray(vecArray, sizeof(vecArray) / sizeof(vecArray[0]), List);
+    Matrix matrix = matrix_fromColumnVectors(vecCollection);
+
+    ck_assert_int_eq(matrix.numRows, numRows);
+    ck_assert_int_eq(matrix.numColumns, numColumns);
+
+    for (size_t rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
+        for (size_t columnIndex = 0; columnIndx < matrix.numColumns; columnIndex++) {
+            Complex actualElement = matrix_getElement(matrix, rowIndex, columnIndex);
+            Complex expectedElement = vector_getElement(vecArray[columnIndex], rowIndex);
+            ck_assert_complex_eq(expectedElement, actualElement);
+        }
+    }
+
+} END_TEST
+
+
+
 START_TEST(matrixIdentityTest) {
 
     size_t dimension = 4;
@@ -91,14 +154,20 @@ Suite *matrixCreationSuite(void) {
     TCase *testcase1 = tcase_create("testMatrixZeroCreation");
     TCase *testcase2 = tcase_create("testMatrixOneCreation");
     TCase *testcase3 = tcase_create("testMatrixIdCreation");
+    TCase *testcase4 = tcase_create("testMatrixFromRowArrayCreation");
+    TCase *testcase5 = tcase_create("testMatrixFromColumnVectors");
 
     tcase_add_test(testcase1, matrixZeroTest);
     tcase_add_test(testcase2, matrixOnesTest);
     tcase_add_test(testcase3, matrixIdentityTest);
+    tcase_add_test(testcase4, matrixFromRowArrayTest);
+    tcase_add_test(testcase5, matrixFromColumnVectorsTest);
 
     suite_add_tcase(suite, testcase1);
     suite_add_tcase(suite, testcase2);
     suite_add_tcase(suite, testcase3);
+    suite_add_tcase(suite, testcase4);
+    suite_add_tcase(suite, testcase5);
 
     return suite;
 }
@@ -304,6 +373,125 @@ START_TEST(matrixRowPermutationTest) {
 
 } END_TEST
 
+START_TEST(matrixDiagonalizeTest) {
+
+    /**
+     * Use a diagonalizeable matrix defined by:
+     * | 1 1 0 0 |
+     * | 0 1 0 0 |
+     * | 0 0 2 1 |
+     * | 0 0 0 2 |
+     *
+     */
+
+
+    size_t dimension = 4;
+    Matrix matrix = matrix_identity(dimension);
+
+    matrix_setElement(matrix, 0, 1, (Complex) {1.0});
+    matrix_setElement(matrix, 2, 2, (Complex) {2.0});
+    matrix_setElement(matrix, 2, 3, (Complex) {1.0});
+    matrix_setElement(matrix, 3, 3, (Complex) {2.0});
+
+    ck_assert(!matrix_isDiagonal(matrix));
+
+    Matrix diagonalMat = matrix_diagonalize(matrix);
+
+    ck_assert(matrix_isDiagonal(matrix));
+} END_TEST
+
+
+START_TEST(matrixAlreadyDiagonalTest) {
+
+    size_t dimension = 4;
+    Matrix matrix = matrix_identity(dimension);
+
+    ck_assert(matrix_isDiagonal(matrix));
+
+    Matrix diagonalMatrix = matrix_diagonalize(matrix);
+
+    ck_assert(matrix_isDiagonal(diagonalMatrix));
+    ck_assert_matrix_eq(matrix, diagonalMatrix);
+} END_TEST
+
+START_TEST(matrixNotDiagonalizeableTest) {
+
+    /**
+     * Use nondiagonalizable 2x2 matrix
+     * | 0 1 |
+     * | 0 0 |
+     * as example:
+     */
+
+    size_t dimension = 2;
+    Matrix matrix = matrix_identity(dimension);
+
+    matrix_setElement(matrix, 2, 2, (Complex) {0.0, 0.0});
+
+    ck_assert(!matrix_isDiagonal(matrix));
+
+    Matrix diagMatrix = matrix_diagonalize(matrix);
+
+    // TODO: How to actually verify this ... use OptMatrix?
+
+    ck_assert(true);
+
+} END_TEST
+
+START_TEST(matrixKronTest) {
+
+    /**
+     * Calculate the kronecker Product of the
+     * pauli gates Y and Z, i.e. kron(Y,Z)
+     *
+     */
+
+    Complex pauliYArr[] = {
+        (Complex) {0.0, 0.0}, (Complex) {0.0, -1.0},
+        (Complex) {0.0, 1.0}, (Complex) {0.0, 0.0}
+    };
+    Matrix pauliY = matrix_fromRowArray(pauliYArr, 2, 2);
+
+    Complex pauliZArr[] = {
+        (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0}, (Complex) {-1.0, 0.0}
+    };
+    Matrix pauliZ = matrix_fromRowArray(pauliZArr, 2, 2);
+
+    Complex expectedValues[] = {
+        (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, -1.0}, (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 1.0},
+        (Complex) {0.0, 1.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0}, (Complex) {0.0, -1.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
+    };
+    Matrix expectedMatrix = matrix_fromRowArray(expectedValues, 4, 4);
+
+    Matrix actualMatrix = matrix_kron(pauliY, pauliZ);
+
+    ck_assert_int_eq(actualMatrix.numRows, 4);
+    ck_assert_int_eq(actualMatrix.numColumns, 4);
+
+    ck_assert_matrix_eq(expectedMatrix, actualMatrix);
+
+} END_TEST
+
+// TODO: test kronecker product of non-symmetric matrices
+
+START_TEST(matrixDeterminantTest) {
+
+    Complex pauliZArr[] = {
+        (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0}, (Complex) {-1.0, 0.0}
+    };
+    Matrix pauliZ = matrix_fromRowArray(pauliZArr, 2, 2);
+
+    Complex determinant = matrix_determinant(pauliZ);
+    ck_assert_complex_eq(((Complex) {-1.0, 0.0}), determinant);
+
+} END_TEST
+
+//TODO: Test return value of determinant for non-symmetric matrices
+
 
 
 Suite *matrixArithmeticSuite(void) {
@@ -317,6 +505,12 @@ Suite *matrixArithmeticSuite(void) {
     TCase *testcase5 = tcase_create("matrixFromColumnSetEmptyTest");
     TCase *testcase6 = tcase_create("matrixTransposeTest");
     TCase *testcase7 = tcase_create("matrixRowPermutationTest");
+    TCase *testcase8 = tcase_create("matrixDiagonalizationTest");
+    TCase *testcase9 = tcase_create("matrixAlreadyDiagonalTest");
+    TCase *testcase10 = tcase_create("matrixNotDiagonalizableTest");
+    TCase *testcase11 = tcase_create("matrixKroneckerTest");
+    TCase *testcase12 = tcase_create("matrixDeterminantTest");
+
 
     tcase_add_test(testcase1, matrixAdditionTest);
     tcase_add_test(testcase2, matrixSubtractionTest);
@@ -325,6 +519,11 @@ Suite *matrixArithmeticSuite(void) {
     tcase_add_test(testcase5, matrixFromColumnSetEmptyTest);
     tcase_add_test(testcase6, matrixTransposeTest);
     tcase_add_test(testcase7, matrixRowPermutationTest);
+    tcase_add_test(testcase8, matrixDiagonalizeTest);
+    tcase_add_test(testcase9, matrixAlreadyDiagonalTest);
+    tcase_add_test(testcase10, matrixNotDiagonalizeableTest);
+    tcase_add_test(testcase11, matrixKronTest);
+    tcase_add_test(testcase12, matrixDeterminantTest);
 
     suite_add_tcase(suite, testcase1);
     suite_add_tcase(suite, testcase2);
@@ -333,6 +532,11 @@ Suite *matrixArithmeticSuite(void) {
     suite_add_tcase(suite, testcase5);
     suite_add_tcase(suite, testcase6);
     suite_add_tcase(suite, testcase7);
+    suite_add_tcase(suite, testcase8);
+    suite_add_tcase(suite, testcase9);
+    suite_add_tcase(suite, testcase10);
+    suite_add_tcase(suite, testcase11);
+    suite_add_tcase(suite, testcase12);
 
     return suite;
 }

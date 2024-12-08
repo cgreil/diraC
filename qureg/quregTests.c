@@ -10,6 +10,23 @@
 #include "utils/dataArena.h"
 
 
+
+
+START_TEST(quregTest) {
+
+} END_TEST
+
+
+Suite *quregSuite(void) {
+
+
+
+
+
+
+}
+
+
 Arena* arena;
 
 

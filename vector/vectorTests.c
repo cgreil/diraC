@@ -9,6 +9,7 @@
 
 Arena *arena;
 
+
 START_TEST(testVectorZeros) {
 
     size_t vecSize = 8;
