@@ -107,7 +107,6 @@ Matrix matrix_fromRowArray(Complex *values, size_t numRows, size_t numColumns) {
 
 Matrix matrix_fromColumnVectors(VectorCollection vectorCollection) {
 
-    // TODO: has to become VectorList
     if (vectorCollection.vectors == NULL || vectorCollection_size(vectorCollection) == 0) {
         return (Matrix) { 0 };
     }
@@ -141,9 +140,26 @@ Matrix matrix_fromColumnVectors(VectorCollection vectorCollection) {
 
 Matrix matrix_fromRowVectors(VectorCollection vectorCollection) {
 
-    //TODO: Implement
+    if (vectorCollection_size(vectorCollection) == 0) {
+        return (Matrix) { 0 };
+    }
+    // unroll row collection into big array and utilize
+    // matrix_fromRowArray
+    size_t numRows = vectorCollection_size(vectorCollection);
+    // retrive number of columns from the size of the first row vector
+    Vector firstVector = vectorCollection_getVectorAtIndex(vectorCollection, 0).data;
+    size_t numColumns = firstVector.size;
 
-    return (Matrix) { 0 };
+    size_t arraySize = numRows * numColumns;
+    // create VLA for all complex values
+    Complex array[arraySize];
+    // add all values into VLA
+    for (size_t vectorIdx = 0; vectorIdx < numRows; vectorIdx++) {
+        Vector row = vectorCollection_getVectorAtIndex(vectorCollection, vectorIdx).data;
+        memcpy(array+(vectorIdx * numColumns), row.dataArray.values, numColumns * sizeof(Complex));
+    }
+    Matrix matrix = matrix_fromRowArray(array, numRows, numColumns);
+    return matrix;
 }
 
 
@@ -236,11 +252,11 @@ bool matrix_setColumnAtIndex(const Matrix matrix, const size_t columnIndex, cons
     size_t valueEndIndex = NDArray_index(matrix.ndArray.numRows, (matrix.ndArray.numRows - 1), columnIndex);
 
     assert(valueStartIndex <= valueEndIndex);
-    size_t indexDiff = valueEndIndex - valueStartIndex;
-
+    // incement by 1 since the number of elements is one more than the actual difference of indices
+    size_t indexDiff = valueEndIndex - valueStartIndex + 1;
     assert(vector.size == indexDiff);
 
-    void *cpyRet = memcpy((matrix.ndArray.values) + valueStartIndex, vector.dataArray.values, indexDiff);
+    void *cpyRet = memcpy((matrix.ndArray.values) + valueStartIndex, vector.dataArray.values, indexDiff * sizeof(Complex));
 
     return (cpyRet == NULL);
 
@@ -441,7 +457,7 @@ Complex matrix_trace(Matrix matrix) {
     }
     Complex sum = (Complex) {0.0, 0.0};
     for (size_t i = 0; i < matrix.numRows; i++) {
-        complex_addition(sum, matrix_getElement(matrix, i, i));
+        sum = complex_addition(sum, matrix_getElement(matrix, i, i));
     }
     return sum;
 }
@@ -455,9 +471,14 @@ bool matrix_isDiagonal(Matrix matrix) {
         return true;
     }
 
-    // Iterate check all off-diagonal elements
+    // Iteratively check all off-diagonal elements
     for (int rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
-        for (size_t colIndex = 0; colIndex < rowIndex - 1; colIndex++) {
+        for (int colIndex = 0; colIndex < rowIndex; colIndex++) {
+
+            if (rowIndex == colIndex) {
+                continue;
+            }
+
             Complex lowerTriangValue = matrix_getElement(matrix, rowIndex, colIndex);
             Complex upperTriangValue = matrix_getElement(matrix, colIndex, rowIndex);
             if (!complex_nearlyEqual(lowerTriangValue, (Complex) { 0.0, 0.0}) ||
@@ -483,7 +504,7 @@ bool matrix_isUpperTriangular(Matrix matrix) {
     }
 
     for (int rowIndex = 0; rowIndex < matrix.numRows; rowIndex++) {
-        for (int colIndex = 0; colIndex < rowIndex - 1; colIndex++) {
+        for (int colIndex = 0; colIndex < rowIndex; colIndex++) {
             Complex lowerTriangValue = matrix_getElement(matrix, rowIndex, colIndex);
             if (!complex_nearlyEqual(lowerTriangValue, (Complex) { 0.0, 0.0})){
                 return false;
