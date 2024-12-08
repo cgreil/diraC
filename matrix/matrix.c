@@ -416,7 +416,34 @@ Matrix matrix_diagonalize(Matrix matrix) {
 }
 
 Complex matrix_determinant(Matrix matrix) {
-    return (Complex) { 0.0, 0.0 };
+
+    // Determinant is only defined for square matrices:
+    if (matrix.numRows != matrix.numColumns) {
+        return (Complex) {0.0, 0.0};
+    }
+
+    // in LU-decomposed form A = LU, the determinant can be
+    // easily calculated det(A) = det(L) * det(U)
+    // and both det(L) and det(U) are simply the product
+    // of the diagonal entries
+
+    LUResult luResult = matrix_LUDecomposition(matrix);
+
+    // check that both L and U components have the same dimensions
+    assert(luResult.matrix1.numRows == luResult.matrix2.numRows);
+    assert(luResult.matrix1.numColumns == luResult.matrix2.numColumns);
+
+    size_t numElements = luResult.matrix1.numRows;
+
+    Complex prod = (Complex) { 1.0, 0.0 };
+    for (size_t i = 0; i < numElements; i++) {
+        Complex lFactor = matrix_getElement(luResult.matrix1, i, i);
+        Complex uFactor = matrix_getElement(luResult.matrix2, i, i);
+        Complex factor = complex_multiplication(lFactor, uFactor);
+        prod = complex_multiplication(prod, factor);
+    }
+
+    return prod;
 }
 
 Matrix matrix_kron(Matrix matrix1, Matrix matrix2) {
@@ -624,7 +651,6 @@ void matrix_inverseINP(Matrix matrix) {
 
 QRResult matrix_QRDecomposition(Matrix matrix) {
 
-
     if (matrix.numRows == 0 || matrix.numColumns == 0) {
         return (MatrixTuple) { 0 };
     }
@@ -684,14 +710,12 @@ LUResult matrix_LUDecomposition(Matrix matrix) {
     Matrix lMatrix = matrix_identity(matrix.numRows);
     Matrix uMatrix = matrix_zeros(matrix.numRows, matrix.numColumns);
 
-
-
-    for (size_t i = 0; i < matrix.numRows; i++) {
+    for (int i = 0; i < matrix.numRows; i++) {
 
         // Calculating U Matrix entries
-        for (size_t j = i; j < matrix.numColumns; j++) {
+        for (int j = i; j < matrix.numColumns; j++) {
             Complex sum = (Complex) {0.0, 0.0};
-            for (size_t k = 0; k < i - 1; k++) {
+            for (int k = 0; k < i - 1; k++) {
                 Complex lComponent = matrix_getElement(lMatrix, i, k);
                 Complex uComponent = matrix_getElement(uMatrix, k, j);
                 sum = complex_addition(sum, complex_multiplication(lComponent, uComponent));
@@ -700,10 +724,10 @@ LUResult matrix_LUDecomposition(Matrix matrix) {
             matrix_setElement(uMatrix, i, j, newElement);
         }
 
-        // Calculating L amtrix entries
-        for (size_t j = i + 1; j < matrix.numColumns; j++) {
+        // Calculating L matrix entries
+        for (int j = i + 1; j < matrix.numColumns; j++) {
             Complex sum = (Complex) {0.0, 0.0};
-            for (size_t k = 0; k < i - 1; k++) {
+            for (int k = 0; k < i - 1; k++) {
                 Complex lComponent = matrix_getElement(lMatrix, j, k);
                 Complex uComponent = matrix_getElement(uMatrix, k, i);
                 sum = complex_addition(sum, complex_multiplication(lComponent, uComponent));
