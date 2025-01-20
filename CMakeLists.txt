@@ -13,6 +13,7 @@ set(
         COMPLEX_SOURCE_FILES
         utils/dataArena.c
         complex/complex.c
+        complex/tuple.c
         common/string.c
         vector/vector.c
         vector/vectorCollection.c
@@ -25,6 +26,7 @@ set(
 set(
         VECTOR_SOURCE_FILES
         complex/complex.c
+        complex/tuple.c
         common/string.c
         vector/vector.c
         vector/vectorCollection.c
@@ -40,6 +42,7 @@ set (
         NDARRAY_SOURCE_FILES
         common/string.c
         complex/complex.c
+        complex/tuple.c
         ndarray/ndarray.c
         vector/vector.c
         vector/vectorCollection.c
@@ -54,6 +57,7 @@ set (
         matrix/matrix.c
         common/doubleLinkedList.c
         complex/complex.c
+        complex/tuple.c
         vector/vectorCollection.c
         utils/dataArena.c
         vector/vectorCollectionTests.c

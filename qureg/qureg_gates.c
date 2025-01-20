@@ -164,7 +164,7 @@ bool qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, Matrix gateD
      * - Use gate identities to rely on efficient Clifford gates as much as possible
      */
 
-    Matrix transformationMatrix = matrix_zeros(2, 2);
+    Matrix transformationMatrix = matrix_identity(2);
     Matrix idMatrix = matrix_identity(2);
 
     for (size_t qubitIndex = 0; qubitIndex < target - 1; qubitIndex++) {

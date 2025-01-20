@@ -8,7 +8,7 @@
 #include "dataArena.h"
 
 // By default, allocate 100 MB for the arena
-#define ARENA_DEFAULT_SIZE (1024 * 1024 * 100)
+#define ARENA_DEFAULT_SIZE (1024 * 1024 * 500)
 
 
 Arena* arena_init(void) {

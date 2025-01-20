@@ -3,6 +3,7 @@
 #include <memory.h>
 
 #include "matrix/matrix.h"
+#include "complex/tuple.h"
 #include "vector/vector.h"
 #include "vector/vectorCollection.h"
 

@@ -21,7 +21,7 @@ typedef struct {
  *
  *
  */
-QuantumRegister qureq_new(size_t numQubits);
+QuantumRegister qureg_new(size_t numQubits);
 
 bool qureg_applyPauliX(QuantumRegister qureg, size_t target);
 

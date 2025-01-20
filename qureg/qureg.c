@@ -1,6 +1,5 @@
 #include "qureg.h"
 
-
 QuantumRegister qureg_new(size_t numQubits) {
 
     if (numQubits == 0) {
