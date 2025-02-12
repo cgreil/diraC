@@ -4,15 +4,41 @@
 #include <assert.h>
 
 #include "utils/dataArena.h"
+#include "qureg/qureg.h"
 
 Arena *arena;
+
+
+
+
 
 int main(void) {
 
     // Initialize arena
     arena = arena_init();
 
-    // identity matrix
+    size_t numQubits = 4;
+    QuantumRegister quantumRegister = qureg_new(numQubits);
+
+    qureg_applyPauliX(quantumRegister, 0);
+    qureg_applyPauliY(quantumRegister, 1);
+    qureg_applyPauliZ(quantumRegister, 2);
+    qureg_applyHadamard(quantumRegister, 3);
+    qureg_applyCNOT(quantumRegister, 1, 2);
+
+    StringBuilder *stringBuilder = stringBuilder_create();
+
+    stringBuilder_appendCharArray(stringBuilder, "Statevector: \n", 20);
+    stringBuilder_appendVector(stringBuilder, quantumRegister.stateVector);
+
+
+    String string = stringBuilder_build(stringBuilder);
+    // Use fwrite over fprintf to print beyond zero (null terminator) bytes
+    fwrite(string.data, sizeof(char), string.length, stdout);
+
+
+    // Testing stuff
+    /* // identity matrix
     Matrix sigma_0 = matrix_fromRowArray(
         (Complex[]) {
             (Complex) {1.0, 0.0},
@@ -70,10 +96,8 @@ int main(void) {
     stringBuilder_appendMatrix(stringBuilder, sigma_1);
     stringBuilder_appendCharArray(stringBuilder, "\n", 1);
 
-
     stringBuilder_appendMatrix(stringBuilder, sigma_2);
     stringBuilder_appendCharArray(stringBuilder, "\n", 1);
-
 
     stringBuilder_appendMatrix(stringBuilder, sigma_3);
     stringBuilder_appendCharArray(stringBuilder, "\n", 1);
@@ -84,7 +108,10 @@ int main(void) {
 
 
     // clean up
-    stringBuilder_destroy(stringBuilder);
+    stringBuilder_destroy(stringBuilder); */
+
+
+
     arena_destroy(arena);
 
     return EXIT_SUCCESS;

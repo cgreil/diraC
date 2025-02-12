@@ -163,18 +163,29 @@ bool qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, Matrix gateD
      * - Use Gate identities to create gates that can be optimized
      * - Use gate identities to rely on efficient Clifford gates as much as possible
      */
-
-    Matrix transformationMatrix = matrix_identity(2);
-    Matrix idMatrix = matrix_identity(2);
-
-    for (size_t qubitIndex = 0; qubitIndex < target - 1; qubitIndex++) {
-        transformationMatrix = matrix_kron(transformationMatrix, idMatrix);
+    Matrix transformationMatrix;
+    if (target == 0){
+        // If the target is in the first qubit, start with the gateDefiniation
+        // as first element in the Pauli String
+        transformationMatrix = gateDefinition;
+    } 
+    else {
+        transformationMatrix = matrix_identity(2);
     }
+     
+    size_t qubitCounter = 1;
+    while (qubitCounter < qureg.numQubits) {
+        Matrix matrix;
+        if (qubitCounter == target) {
+            matrix = gateDefinition;
+        }
+        else {
+            matrix = matrix_identity(2);
+        }
+        transformationMatrix = matrix_kron(transformationMatrix, matrix); 
+        qubitCounter++;
+    }  
 
-    transformationMatrix = matrix_kron(transformationMatrix, gateDefinition);
-    for (size_t qubitIndex = target + 1; qubitIndex < qureg.numQubits; qubitIndex++) {
-        transformationMatrix = matrix_kron(transformationMatrix, idMatrix);
-    }
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
 
     return true;
@@ -188,18 +199,16 @@ bool qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t targ
      * target qubits are supported
      */
 
-    if (qureg.numQubits < 2) {
+    if (qureg.numQubits < 2 || control > qureg.numQubits || target > qureg.numQubits) {
+        fprintf(stderr, "The supplied quantum register of size %zu cannot fit a gate"
+            "with control index %zu and target index %zu \n", qureg.numQubits, control, target);
         return false;
     }
 
-    if (control - target > 1 || target - control > 1) {
-        fprintf(stdout, "Nonadjacent multiqubit gates are not yet supported");
+    if (abs((int) control - (int) target) > 1) {
+        fprintf(stderr, "Nonadjacent multiqubit gates are not yet supported \n");
         return false;
     }
-
-    Matrix transformationMatrix = matrix_zeros(2, 2);
-    Matrix idMatrix = matrix_identity(2);
-
 
     /*
      * gateDefinition will be supplied as a 2qubit gate
@@ -207,26 +216,36 @@ bool qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t targ
      * second qubit is target; If this is not the case,
      * a permutation matrix has to be multiplied to
      * the gate definition
-     */
-    size_t firstIndex = control;
-    size_t secondIndex = firstIndex + 1;
+     */ 
     if (target < control) {
         // TODO: implement permutation of the matrix
-        fprintf(stdout, "Multi-qubit gates with targetIndex < controlIndex are not yet supported");
+        fprintf(stderr, "Multi-qubit gates with targetIndex < controlIndex are not yet supported \n");
         return false;
-        //firstIndex = target;
-        //Matrix permutationMatrix = matrix_permutation(4, 1, 0);
     }
 
-    for (size_t qubitIndex = 0; qubitIndex < firstIndex - 1; qubitIndex++) {
-        transformationMatrix = matrix_kron(transformationMatrix, idMatrix);
+    Matrix transformationMatrix;
+    size_t qubitCounter = 0;
+    // If target index corresponds to the first qubit, immediately use 
+    // the gate definition
+    if (target == 0) {
+        transformationMatrix = gateDefinition;
+        qubitCounter += 2;
+    } else {
+        transformationMatrix = matrix_identity(2);
+        qubitCounter++;
     }
 
-    transformationMatrix = matrix_kron(transformationMatrix, gateDefinition);
-
-    for (size_t qubitIndex = secondIndex + 1; qubitIndex < qureg.numQubits; secondIndex++) {
-        transformationMatrix = matrix_kron(transformationMatrix, idMatrix);
-    }
+    Matrix idMatrix = matrix_identity(2);
+    while(qubitCounter < qureg.numQubits) {
+        if (target == qubitCounter) {
+            transformationMatrix = matrix_kron(transformationMatrix, gateDefinition);
+            qubitCounter += 2;
+        } 
+        else {
+            transformationMatrix = matrix_kron(transformationMatrix, idMatrix);
+            qubitCounter++;
+        }
+    }    
 
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
 

@@ -455,7 +455,7 @@ Matrix matrix_kron(Matrix matrix1, Matrix matrix2) {
     }
 
     size_t rowDim = matrix1.numRows * matrix2.numRows;
-    size_t colDim = matrix2.numColumns * matrix2.numColumns;
+    size_t colDim = matrix1.numColumns * matrix2.numColumns;
 
     // prepare VLA to store rows
     Complex values[rowDim * colDim];
