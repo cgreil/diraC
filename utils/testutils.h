@@ -48,4 +48,10 @@
         ck_assert_vectorValues_eq(expVector, actVector)                                                                 \
     }
 
+
+#define ck_assert_qureg_eq(expectedQureg, actualQureg)                                                                  \
+    ck_assert_uint_eq(expectedQureg.numQubits, actualQureg.numQubits);                                                  \
+    ck_assert_vectorValues_eq((expectedQureg).stateVector, (actualQureg).stateVector);                                  \
+
+
 #endif

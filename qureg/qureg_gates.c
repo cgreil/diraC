@@ -154,6 +154,11 @@ QuantumRegister qureg_applyRZ(QuantumRegister qureg, size_t target, double phi) 
 
 QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, Matrix gateDefinition) {
 
+    if (target >= qureg.numQubits) {
+        fprintf(stderr, "Supplied Qubit operation has a target qubit outside of the supplied register \n");
+        return (QuantumRegister) { 0 };
+    }
+
     /**
      * This will lead to the most inefficient computation i have ever cause
      * -> Maybe optimize later :(
@@ -199,7 +204,7 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
      * target qubits are supported
      */
 
-    if (qureg.numQubits < 2 || control > qureg.numQubits || target > qureg.numQubits) {
+    if (qureg.numQubits < 2 || control >= qureg.numQubits || target >= qureg.numQubits) {
         fprintf(stderr, "The supplied quantum register of size %zu cannot fit a gate"
             "with control index %zu and target index %zu \n", qureg.numQubits, control, target);
         return (QuantumRegister) { 0 };

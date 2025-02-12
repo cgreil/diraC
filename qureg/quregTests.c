@@ -32,6 +32,47 @@ START_TEST(quregHadamardSingleQubitTest) {
 
 } END_TEST
 
+
+START_TEST(qureg1QubitGateOutOfCircuitTest) {
+
+    size_t numQubits = 2;
+    QuantumRegister qureg = qureg_new(numQubits);
+
+    qureg = qureg_applyPauliZ(qureg, 2);
+    
+    QuantumRegister emptyQureg = (QuantumRegister) { 0 };
+    
+    ck_assert_qureg_eq(emptyQureg, qureg);
+
+} END_TEST
+
+
+START_TEST(qureg2QubitTargetOutOfCircuitTest) {
+
+    size_t numQubits = 5;
+    QuantumRegister qureg = qureg_new(numQubits);
+
+    qureg = qureg_applyCNOT(qureg, 4, 5);
+
+    QuantumRegister emptyQureg = (QuantumRegister) { 0 };
+
+    ck_assert_qureg_eq(emptyQureg, qureg);
+} END_TEST
+
+
+START_TEST(qureg2QubitControlOutOfCircuitTest) {
+
+    size_t numQubits = 4;
+    QuantumRegister qureg = qureg_new(numQubits);
+
+    qureg = qureg_applyCNOT(qureg, 4, 5);
+
+    QuantumRegister emptyQureg = (QuantumRegister) { 0 };
+
+    ck_assert_qureg_eq(emptyQureg, qureg);
+} END_TEST
+
+
 START_TEST(quregBellCircuitTest) {
 
     // small test circuit consisting of two qubits, 
@@ -65,16 +106,24 @@ Suite* quantumRegisterBasicSuite(void) {
 
     TCase* testcase1 = tcase_create("quregHadamardSingleQubitTest");
     TCase* testcase2 = tcase_create("quregBellCircuitTest");
+    TCase* testcase3 = tcase_create("qureg1QubitGateOutOfCircuitTest");
+    TCase* testcase4 = tcase_create("qureg2QubitTargetOutOfCircuitTest");
+    TCase* testcase5 = tcase_create("qureg2QubitControlOutOfCircuitTest");
 
     tcase_add_test(testcase1, quregHadamardSingleQubitTest);
     tcase_add_test(testcase2, quregBellCircuitTest);
+    tcase_add_test(testcase3, qureg1QubitGateOutOfCircuitTest);
+    tcase_add_test(testcase4, qureg2QubitTargetOutOfCircuitTest);
+    tcase_add_test(testcase5, qureg2QubitControlOutOfCircuitTest);
 
     suite_add_tcase(suite, testcase1);
     suite_add_tcase(suite, testcase2);
+    suite_add_tcase(suite, testcase3);
+    suite_add_tcase(suite, testcase4);
+    suite_add_tcase(suite, testcase5);
 
     return suite;
 }
-
 
 
 
