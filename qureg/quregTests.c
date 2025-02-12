@@ -32,15 +32,45 @@ START_TEST(quregHadamardSingleQubitTest) {
 
 } END_TEST
 
+START_TEST(quregBellCircuitTest) {
+
+    // small test circuit consisting of two qubits, 
+    // which will be transformed from 
+    // the |00> state to the bell state |++>
+
+    size_t numQubits = 2;
+    QuantumRegister qureg = qureg_new(numQubits);
+
+    qureg = qureg_applyHadamard(qureg, 0);
+    qureg = qureg_applyCNOT(qureg, 0, 1);
+
+    Complex expectedValues[] = {
+        (Complex) {0.7071067811865475, 0.0},
+        (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0},
+        (Complex) {0.7071067811865475, 0.0},
+    };
+    Vector expectedVector = vector_fromArray(expectedValues, 4);
+
+    Vector actualVector = qureg.stateVector;
+
+    ck_assert_vectorValues_eq(expectedVector, actualVector);
+} END_TEST
+
+
+
 Suite* quantumRegisterBasicSuite(void) {
 
     Suite *suite = suite_create("quantumRegisterBasicSuite");
 
     TCase* testcase1 = tcase_create("quregHadamardSingleQubitTest");
+    TCase* testcase2 = tcase_create("quregBellCircuitTest");
 
     tcase_add_test(testcase1, quregHadamardSingleQubitTest);
+    tcase_add_test(testcase2, quregBellCircuitTest);
 
     suite_add_tcase(suite, testcase1);
+    suite_add_tcase(suite, testcase2);
 
     return suite;
 }

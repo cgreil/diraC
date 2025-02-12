@@ -227,7 +227,7 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
     size_t qubitCounter = 0;
     // If target index corresponds to the first qubit, immediately use 
     // the gate definition
-    if (target == 0) {
+    if (target == 1) {
         transformationMatrix = gateDefinition;
         qubitCounter += 2;
     } else {
