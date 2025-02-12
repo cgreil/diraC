@@ -2,7 +2,7 @@
 #include "qureg.h"
 
 
-bool qureg_applyPauliX(QuantumRegister qureg, size_t target) {
+QuantumRegister qureg_applyPauliX(QuantumRegister qureg, size_t target) {
 
     Complex pauliXArr[] = {
         (Complex) {0.0, 0.0}, (Complex) {1.0, 0.0},
@@ -13,7 +13,7 @@ bool qureg_applyPauliX(QuantumRegister qureg, size_t target) {
     return qureg_apply1QubitUnitary(qureg, target, pauliX);
 }
 
-bool qureg_applyPauliY(QuantumRegister qureg, size_t target) {
+QuantumRegister qureg_applyPauliY(QuantumRegister qureg, size_t target) {
 
     Complex pauliYArr[] = {
         (Complex) {0.0, 0.0}, (Complex) {0.0, -1.0},
@@ -24,7 +24,7 @@ bool qureg_applyPauliY(QuantumRegister qureg, size_t target) {
     return qureg_apply1QubitUnitary(qureg, target, pauliY);
 }
 
-bool qureg_applyPauliZ(QuantumRegister qureg, size_t target) {
+QuantumRegister qureg_applyPauliZ(QuantumRegister qureg, size_t target) {
 
     Complex pauliZArr[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
@@ -35,7 +35,7 @@ bool qureg_applyPauliZ(QuantumRegister qureg, size_t target) {
     return qureg_apply1QubitUnitary(qureg, target, pauliZ);
 }
 
-bool qureg_applyHadamard(QuantumRegister qureg, size_t target) {
+QuantumRegister qureg_applyHadamard(QuantumRegister qureg, size_t target) {
 
     Complex hadamardArray[] = {
         (Complex) {(1.0)/(sqrt(2.0)), 0.0}, (Complex) {(1.0)/sqrt(2.0)},
@@ -46,7 +46,7 @@ bool qureg_applyHadamard(QuantumRegister qureg, size_t target) {
     return qureg_apply1QubitUnitary(qureg, target, hadamard);
 }
 
-bool qureg_applyT(QuantumRegister qureg, size_t target) {
+QuantumRegister qureg_applyT(QuantumRegister qureg, size_t target) {
 
     double imagComponent = 1 / sin(M_PI_4);
     double realComponent = 1 / cos(M_PI_4);
@@ -60,7 +60,7 @@ bool qureg_applyT(QuantumRegister qureg, size_t target) {
     return qureg_apply1QubitUnitary(qureg, target, tGate);
 }
 
-bool qureg_applyS(QuantumRegister qureg, size_t target) {
+QuantumRegister qureg_applyS(QuantumRegister qureg, size_t target) {
 
     Complex sGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
@@ -71,7 +71,7 @@ bool qureg_applyS(QuantumRegister qureg, size_t target) {
     return qureg_apply1QubitUnitary(qureg, target, sGate);
 }
 
-bool qureg_applySWAP(QuantumRegister qureg, size_t target1, size_t target2) {
+QuantumRegister qureg_applySWAP(QuantumRegister qureg, size_t target1, size_t target2) {
 
     Complex cnotGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
@@ -84,7 +84,7 @@ bool qureg_applySWAP(QuantumRegister qureg, size_t target1, size_t target2) {
     return qureg_apply2QubitUnitary(qureg, target1, target2, cnotGate);
 }
 
-bool qureg_applyCNOT(QuantumRegister qureg, size_t control, size_t target) {
+QuantumRegister qureg_applyCNOT(QuantumRegister qureg, size_t control, size_t target) {
 
     Complex cnotGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
@@ -97,7 +97,7 @@ bool qureg_applyCNOT(QuantumRegister qureg, size_t control, size_t target) {
     return qureg_apply2QubitUnitary(qureg, control, target, cnotGate);
 }
 
-bool qureg_applyCZ(QuantumRegister qureg, size_t control, size_t target) {
+QuantumRegister qureg_applyCZ(QuantumRegister qureg, size_t control, size_t target) {
 
     Complex czGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
@@ -110,7 +110,7 @@ bool qureg_applyCZ(QuantumRegister qureg, size_t control, size_t target) {
     return qureg_apply2QubitUnitary(qureg, control, target, czGate);
 }
 
-bool qureg_applyRX(QuantumRegister qureg, size_t target, double phi) {
+QuantumRegister qureg_applyRX(QuantumRegister qureg, size_t target, double phi) {
 
     const double sinTheta = sin(phi / 2);
     const double cosTheta = cos(phi / 2);
@@ -124,7 +124,7 @@ bool qureg_applyRX(QuantumRegister qureg, size_t target, double phi) {
    return qureg_apply1QubitUnitary(qureg, target, rxGate);
 }
 
-bool qureg_applyRY(QuantumRegister qureg, size_t target, double phi) {
+QuantumRegister qureg_applyRY(QuantumRegister qureg, size_t target, double phi) {
 
     const double sinTheta = phi / 2;
     const double cosTheta = phi / 2;
@@ -138,7 +138,7 @@ bool qureg_applyRY(QuantumRegister qureg, size_t target, double phi) {
     return qureg_apply1QubitUnitary(qureg, target, ryGate);
 }
 
-bool qureg_applyRZ(QuantumRegister qureg, size_t target, double phi) {
+QuantumRegister qureg_applyRZ(QuantumRegister qureg, size_t target, double phi) {
 
     const double sinTheta = phi / 2;
     const double cosTheta = phi / 2;
@@ -152,7 +152,7 @@ bool qureg_applyRZ(QuantumRegister qureg, size_t target, double phi) {
     return qureg_apply1QubitUnitary(qureg, target, rzGate);
 }
 
-bool qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, Matrix gateDefinition) {
+QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, Matrix gateDefinition) {
 
     /**
      * This will lead to the most inefficient computation i have ever cause
@@ -188,10 +188,10 @@ bool qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, Matrix gateD
 
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
 
-    return true;
+    return qureg;
 }
 
-bool qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t target, Matrix gateDefinition) {
+QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t target, Matrix gateDefinition) {
 
     /**
      * As with the 1qubit case, this is also embarrisngly inefficient.
@@ -202,12 +202,12 @@ bool qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t targ
     if (qureg.numQubits < 2 || control > qureg.numQubits || target > qureg.numQubits) {
         fprintf(stderr, "The supplied quantum register of size %zu cannot fit a gate"
             "with control index %zu and target index %zu \n", qureg.numQubits, control, target);
-        return false;
+        return (QuantumRegister) { 0 };
     }
 
     if (abs((int) control - (int) target) > 1) {
         fprintf(stderr, "Nonadjacent multiqubit gates are not yet supported \n");
-        return false;
+        return (QuantumRegister) { 0 };
     }
 
     /*
@@ -220,7 +220,7 @@ bool qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t targ
     if (target < control) {
         // TODO: implement permutation of the matrix
         fprintf(stderr, "Multi-qubit gates with targetIndex < controlIndex are not yet supported \n");
-        return false;
+        return (QuantumRegister) { 0 };
     }
 
     Matrix transformationMatrix;
@@ -249,7 +249,7 @@ bool qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t targ
 
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
 
-    return true;
+    return qureg;
 }
 
 
