@@ -490,6 +490,13 @@ Complex matrix_trace(Matrix matrix) {
     return sum;
 }
 
+Complex matrix_braket_product(Matrix matrix, Vector bra, Vector ket) {
+    
+    Vector vector = vector_matrixMultiplication(ket, matrix);
+    
+    return vector_innerProduct(bra, vector).value;
+}
+
 bool matrix_isDiagonal(Matrix matrix) {
 
     if (matrix.numRows != matrix.numColumns) {
@@ -622,8 +629,15 @@ void matrix_powerINP(Matrix matrix, unsigned int exponent) {
 
 }
 
-void matrix_scaleINP(Matrix matrix, Complex factor) {
-
+Matrix matrix_scaleINP(Matrix matrix, Complex factor) {
+    
+    size_t numElements = matrix.numRows * matrix.numColumns;
+    for (size_t elementIndex = 0; elementIndex < numElements; elementIndex++) {
+        Complex previousElement = matrix.ndArray.values[elementIndex];
+        Complex newElement = complex_multiplication(previousElement, factor);
+        matrix.ndArray.values[elementIndex] = newElement;
+    }
+    return matrix;
 }
 
 void matrix_sqrt(Matrix matrix) {

@@ -86,6 +86,8 @@ Complex matrix_determinant(Matrix matrix);
 
 Complex matrix_trace(Matrix matrix);
 
+Complex matrix_braket_product(Matrix matrix, Vector bra, Vector ket);
+
 bool matrix_isUpperTriangular(Matrix matrix);
 
 bool matrix_isDiagonalizeable(Matrix matrix);
@@ -110,7 +112,7 @@ ComplexTuple matrix_eigvalsQR(Matrix matrix);
 
 void matrix_powerINP(Matrix matrix, unsigned int exponent);
 
-void matrix_scaleINP(Matrix matrix, Complex factor);
+Matrix matrix_scaleINP(Matrix matrix, Complex factor);
 
 void matrix_sqrt(Matrix matrix);
 

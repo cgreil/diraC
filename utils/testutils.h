@@ -50,8 +50,12 @@
 
 
 #define ck_assert_qureg_eq(expectedQureg, actualQureg)                                                                  \
-    ck_assert_uint_eq(expectedQureg.numQubits, actualQureg.numQubits);                                                  \
+    ck_assert_uint_eq((expectedQureg).numQubits, (actualQureg).numQubits);                                              \
     ck_assert_vectorValues_eq((expectedQureg).stateVector, (actualQureg).stateVector);                                  \
+
+// checks whether two statevectors are the same up to a global phase
+#define ck_assert_statevectors_eq(expectedStateVec, actualStateVec)                                                     \
+    ck_assert_double_eq(complex_modulus((vector_innerProduct((expectedStateVec), (actualStateVec)).value)), 1.0)                    
 
 
 #endif

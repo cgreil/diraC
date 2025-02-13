@@ -1,6 +1,44 @@
 #include <stdio.h>
+#include <assert.h>
+
 #include "qureg.h"
 
+
+static Matrix expandMatrixToQuregSize(QuantumRegister qureg, Matrix initialMatrix, size_t initialMatrixSize, size_t initialMatrixTarget) {
+
+    // TODO: expand for usage when initialMatrixSize != 1
+    if (initialMatrixSize != 1) {
+        fprintf(stderr, "InitialMatrixSize not equal to 1 is not yet supported in expandMatrixToQuregSize \n");
+        return (Matrix) { 0 };
+    };
+
+
+    Matrix resultMatrix;
+    if (initialMatrixTarget == 0){
+        // If the target is in the first qubit, start with the gateDefiniation
+        // as first element in the Pauli String
+        resultMatrix = initialMatrix;
+    } 
+    else {
+        resultMatrix = matrix_identity(2);
+    }
+     
+    size_t qubitCounter = 1;
+    while (qubitCounter < qureg.numQubits) {
+        Matrix matrix;
+        if (qubitCounter == initialMatrixTarget) {
+            matrix = initialMatrix;
+        }
+        else {
+            matrix = matrix_identity(2);
+        }
+        resultMatrix = matrix_kron(resultMatrix, matrix); 
+        qubitCounter++;
+    }  
+
+    return resultMatrix;
+
+}
 
 QuantumRegister qureg_applyPauliX(QuantumRegister qureg, size_t target) {
 
@@ -168,29 +206,9 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
      * - Use Gate identities to create gates that can be optimized
      * - Use gate identities to rely on efficient Clifford gates as much as possible
      */
-    Matrix transformationMatrix;
-    if (target == 0){
-        // If the target is in the first qubit, start with the gateDefiniation
-        // as first element in the Pauli String
-        transformationMatrix = gateDefinition;
-    } 
-    else {
-        transformationMatrix = matrix_identity(2);
-    }
-     
-    size_t qubitCounter = 1;
-    while (qubitCounter < qureg.numQubits) {
-        Matrix matrix;
-        if (qubitCounter == target) {
-            matrix = gateDefinition;
-        }
-        else {
-            matrix = matrix_identity(2);
-        }
-        transformationMatrix = matrix_kron(transformationMatrix, matrix); 
-        qubitCounter++;
-    }  
 
+     
+    Matrix transformationMatrix = expandMatrixToQuregSize(qureg, gateDefinition, 1, target);
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
 
     return qureg;
@@ -257,6 +275,50 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
     return qureg;
 }
 
+QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target) {
+
+    // Apply a projective Measurement for the Z basis onto the qubit at qubit index <target>.
+    // This involves calculating the full probability vector,
+    // randomly picking a measurement outcome according to it and change the state according
+    // to the measurement theorem 
+    // p(m) = <psi|P_m|psi>
+    // |psi'> = (P_m |psi>) / sqrt(p(m))
+    
+    //calculate P_0 and P_1 matrices
+    Vector zeroVector = vector_fromArray((Complex[]) {(Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}}, 2);
+    Vector oneVector = vector_fromArray((Complex[]) {(Complex) {0.0, 0.0}, (Complex) {1.0, 0.0}}, 2);
+
+    Matrix zeroProjector = vector_outerProduct(zeroVector, zeroVector);
+    Matrix oneProjector = vector_outerProduct(oneVector, oneVector);
+
+    Matrix zeroProjectorExpanded = expandMatrixToQuregSize(qureg, zeroProjector, 1, target);
+    Matrix oneProjectorExpanded = expandMatrixToQuregSize(qureg, oneProjector, 1, target);
+
+    double zeroProbability = matrix_braket_product(zeroProjectorExpanded, qureg.stateVector, qureg.stateVector).re;
+    double oneProbability = matrix_braket_product(oneProjectorExpanded, qureg.stateVector, qureg.stateVector).re;
+
+    assert(fabs(zeroProbability + oneProbability - 1.0) < 0.0001);
+    
+    // randomly choose whether the state will collapse into |0> or |1> state according to the 
+    // calculated probability distribution
+
+    Matrix measurementMatrix;
+    double probability;
+    // create a random number in the range [0, 1]
+    double randomNumber = (double) rand() / (double) RAND_MAX;
+    if (randomNumber <= zeroProbability) {
+        // random experiment decides that qubit state will collapse into |0> state
+        measurementMatrix = zeroProjector;
+        probability = zeroProbability;
+    } else {
+        // collapse into |1> state
+        measurementMatrix = oneProjector;
+        probability = oneProbability;
+    }
+    measurementMatrix = matrix_scaleINP(measurementMatrix, (Complex) {1/sqrt(probability), 0.0});
+
+    return qureg_apply1QubitUnitary(qureg, target, measurementMatrix);
+}
 
 
 

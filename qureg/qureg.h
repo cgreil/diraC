@@ -51,6 +51,8 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
 
 QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t target, Matrix gateDefinition);
 
+QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target);
+
 
 
 

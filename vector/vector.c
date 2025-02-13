@@ -243,6 +243,23 @@ OptComplex vector_innerProduct(Vector vec1, Vector vec2) {
     };
 }
 
+Matrix vector_outerProduct(Vector columnVector, Vector rowVector){
+
+    Matrix resultMatrix = matrix_zeros(columnVector.size, rowVector.size);
+
+    for (size_t rowIndex = 0; rowIndex < columnVector.size; rowIndex++) {
+        for (size_t colIndex = 0; colIndex < rowVector.size; colIndex++) {
+            Complex columnElement = vector_getElement(rowVector, colIndex).value;
+            Complex rowElement = vector_getElement(columnVector, rowIndex).value;
+
+            Complex result = complex_multiplication(complex_conjugate(rowElement), columnElement);
+            matrix_setElement(resultMatrix, rowIndex, colIndex, result);
+        }
+    }
+
+    return resultMatrix;
+}
+
 Complex vector_norm(Vector vec) {
 
     /**

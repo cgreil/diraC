@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "vector/vector.h"
+#include "matrix/matrix.h"
 #include "ndarray/ndarray.h"
 #include "utils/testutils.h"
 
@@ -178,6 +179,27 @@ START_TEST(vectorInnerProductTest) {
     Complex actualValue = vector_innerProduct(vector1, vector2).value;
 
     ck_assert_complex_eq(expectedValue, actualValue)
+} END_TEST
+
+START_TEST(vectorOuterProductTest) {
+
+    size_t vecSize = 2;
+
+    Complex values[] = {
+        (Complex) {1.0, 0.0},
+        (Complex) {0.0, 0.0}
+    };
+    Vector zeroVector = vector_fromArray(values, vecSize);
+
+    Matrix zeroProjector = vector_outerProduct(zeroVector, zeroVector);
+
+    Complex expectedValues[] = {
+        (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}
+    };
+    Matrix expectedMatrix = matrix_fromRowArray(expectedValues, 2, 2);
+
+    ck_assert_matrix_eq(expectedMatrix, zeroProjector);
 } END_TEST
 
 START_TEST(vectorConjugateTest) {
@@ -408,6 +430,7 @@ Suite *vectorArithmeticSuite(void) {
     TCase *testcase12 = tcase_create("vectorEqualPositiveTest");
     TCase *testcase13 = tcase_create("vectorEqualNegativeTest");
     TCase *testcase14 = tcase_create("vectorEqualSizeTest");
+    TCase *testcase15 = tcase_create("vectorOuterProductTest");
 
     tcase_add_test(testcase1, vectorAdditionTest);
     tcase_add_test(testcase2, vectorAdditionInvalidDimsTest);
@@ -423,6 +446,7 @@ Suite *vectorArithmeticSuite(void) {
     tcase_add_test(testcase12, vectorEqualPositiveTest);
     tcase_add_test(testcase13, vectorEqualNegativeTest);
     tcase_add_test(testcase14, vectorEqualSizeDiffTest);
+    tcase_add_test(testcase15, vectorOuterProductTest);
 
     suite_add_tcase(suite, testcase1);
     suite_add_tcase(suite, testcase2);
@@ -439,6 +463,7 @@ Suite *vectorArithmeticSuite(void) {
     suite_add_tcase(suite, testcase12);
     suite_add_tcase(suite, testcase13);
     suite_add_tcase(suite, testcase14);
+    suite_add_tcase(suite, testcase15);
 
     return suite;
 }

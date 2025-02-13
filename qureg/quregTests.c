@@ -3,8 +3,8 @@
 //
 #include <stdio.h>
 #include <time.h>
+#include <check.h>
 
-#include "check.h"
 #include "utils/testutils.h"
 #include "utils/dataArena.h"
 
@@ -125,6 +125,103 @@ Suite* quantumRegisterBasicSuite(void) {
     return suite;
 }
 
+// -----------------------------------------------
+// END OF BASIC TESTS
+// -----------------------------------------------
+
+
+START_TEST(quantumMeasurementTrivialZeroTest) {
+
+    // Trivial testcase for measurement
+    // regardless of the number of executions, a 
+    // state prepared in the |0> state 
+    // has to collapse into the |0> state again 
+
+    size_t numQubits = 1;
+    QuantumRegister qureg = qureg_new(numQubits);
+
+    qureg_applyZMeasurement(qureg, 0);
+
+    Complex expectedValues[] = {
+        (Complex) {1.0, 0.0},
+        (Complex) {0.0, 0.0}
+    };
+    Vector expectedVector = vector_fromArray(expectedValues, 2);
+
+    ck_assert_vectorValues_eq(expectedVector, qureg.stateVector);
+
+} END_TEST
+
+START_TEST(quantumMeasurementTrivialOneTest) {
+
+
+    size_t numQubits = 1;
+    QuantumRegister qureg = qureg_new(numQubits);
+
+    qureg = qureg_applyPauliX(qureg, 0);
+
+    qureg = qureg_applyZMeasurement(qureg, 0);
+
+    Complex expectedValues[] = {
+        (Complex) {0.0, 0.0},
+        (Complex) {1.0, 0.0}
+    };
+    Vector expectedVector = vector_fromArray(expectedValues, 2);
+
+    ck_assert_vectorValues_eq(expectedVector, qureg.stateVector);
+
+} END_TEST
+
+START_TEST(quantumMeasurementParallelizationTest) {
+
+    size_t numQubits = 2;
+    QuantumRegister qureg = qureg_new(numQubits);
+
+    qureg = qureg_applyHadamard(qureg, 0);
+    qureg = qureg_applyHadamard(qureg, 1);
+
+    // Perform measurement only on the first qubit, leaving the super-
+    // position of the second one intact
+    qureg = qureg_applyZMeasurement(qureg, 0);
+
+    // TODO: expected (calculated with YAO.jl) and actual do differ
+    // outside of the global phase. Find out what is the issue here
+    // Maybe measurement is not correctly implemented?
+
+    Complex expectedValues[] = {
+        (Complex) {0.7071067811865476, 0.0},
+        (Complex) {0.0, 0.0},
+        (Complex) {0.7071067811865476, 0.0},
+        (Complex) {0.0, 0.0}
+    };
+    Vector expectedVec = vector_fromArray(expectedValues, 4);
+
+    ck_assert_statevectors_eq(expectedVec, qureg.stateVector);
+
+} END_TEST
+
+
+
+Suite* quantumRegisterMeasurementSuite(void) {
+
+    Suite* suite = suite_create("quantumRegisterMeasurementSuite");
+
+
+    TCase* testcase1 = tcase_create("quantumMeasurementTrivialZeroTest");
+    TCase* testcase2 = tcase_create("quantumMeasurementTrivialOneTest");
+    TCase* testcase3 = tcase_create("quantumMeasurementParallelizationTest");
+
+    tcase_add_test(testcase1, quantumMeasurementTrivialZeroTest);
+    tcase_add_test(testcase2, quantumMeasurementTrivialOneTest);
+    tcase_add_test(testcase3, quantumMeasurementParallelizationTest);
+
+    suite_add_tcase(suite, testcase1);
+    suite_add_tcase(suite, testcase2);
+    suite_add_tcase(suite, testcase3);
+
+    return suite;
+}
+
 
 
 int main(void) {
@@ -132,7 +229,8 @@ int main(void) {
     arena = arena_init();
 
     Suite* testSuites[] = {
-        quantumRegisterBasicSuite()
+        quantumRegisterBasicSuite(),
+        quantumRegisterMeasurementSuite()
     };
 
     size_t numSuites = sizeof(testSuites) / sizeof(Suite*);
