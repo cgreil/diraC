@@ -3,7 +3,6 @@
 
 #include "qureg.h"
 
-
 static Matrix expandMatrixToQuregSize(QuantumRegister qureg, Matrix initialMatrix, size_t initialMatrixSize, size_t initialMatrixTarget) {
 
     // TODO: expand for usage when initialMatrixSize != 1
@@ -275,7 +274,7 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
     return qureg;
 }
 
-QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target) {
+QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, MeasurementResult* measurementResult) {
 
     // Apply a projective Measurement for the Z basis onto the qubit at qubit index <target>.
     // This involves calculating the full probability vector,
@@ -302,6 +301,8 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target) {
     // randomly choose whether the state will collapse into |0> or |1> state according to the 
     // calculated probability distribution
 
+    measurementResult->measuredQubitIndex = target;
+
     Matrix measurementMatrix;
     double probability;
     // create a random number in the range [0, 1]
@@ -310,10 +311,12 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target) {
         // random experiment decides that qubit state will collapse into |0> state
         measurementMatrix = zeroProjector;
         probability = zeroProbability;
+        measurementResult->measuredValue = 0.0;
     } else {
         // collapse into |1> state
         measurementMatrix = oneProjector;
         probability = oneProbability;
+        measurementResult->measuredValue = 1.0;
     }
     measurementMatrix = matrix_scaleINP(measurementMatrix, (Complex) {1/sqrt(probability), 0.0});
 

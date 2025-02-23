@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(LEIBNITZ LANGUAGES C VERSION 0.0.1)
+project(DIRAC LANGUAGES C VERSION 0.0.1)
 
 #set(CMAKE_C_STANDARD 10)
 set(CMAKE_BUILD_TYPE Debug)
@@ -97,7 +97,7 @@ set (
 )
 
 
-add_executable(LEIBNITZ main.c
+add_executable(DIRAC main.c
         complex/complex.c
         float/float.c
         ndarray/ndarray.c

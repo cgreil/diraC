@@ -14,6 +14,15 @@ typedef struct {
     Matrix gateMatrix;
 }Gate;
 
+
+// a struct to encapsulate the result of the measurement
+// after the collapse of the wavefunction
+typedef struct {
+    double measuredValue;
+    size_t measuredQubitIndex;
+} MeasurementResult;
+
+
 /**
  * Creates a QuantumRegister, i.e. a statvector representing n qubits using 2^n
  * complex amplitudes. As the statevector representation is used, only pure states
@@ -51,7 +60,7 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
 
 QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t target, Matrix gateDefinition);
 
-QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target);
+QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, MeasurementResult* measurementResult);
 
 
 

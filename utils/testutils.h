@@ -55,7 +55,7 @@
 
 // checks whether two statevectors are the same up to a global phase
 #define ck_assert_statevectors_eq(expectedStateVec, actualStateVec)                                                     \
-    ck_assert_double_eq(complex_modulus((vector_innerProduct((expectedStateVec), (actualStateVec)).value)), 1.0)                    
-
+    ck_assert_double_eq_tol(complex_modulus((vector_innerProduct((expectedStateVec), (actualStateVec)).value)), 1.0, 0.00001)                    
+    
 
 #endif

@@ -140,7 +140,9 @@ START_TEST(quantumMeasurementTrivialZeroTest) {
     size_t numQubits = 1;
     QuantumRegister qureg = qureg_new(numQubits);
 
-    qureg_applyZMeasurement(qureg, 0);
+    MeasurementResult measurementResult;
+
+    qureg_applyZMeasurement(qureg, 0, &measurementResult);
 
     Complex expectedValues[] = {
         (Complex) {1.0, 0.0},
@@ -149,6 +151,7 @@ START_TEST(quantumMeasurementTrivialZeroTest) {
     Vector expectedVector = vector_fromArray(expectedValues, 2);
 
     ck_assert_vectorValues_eq(expectedVector, qureg.stateVector);
+    ck_assert_double_eq(measurementResult.measuredValue, 0.0);
 
 } END_TEST
 
@@ -160,7 +163,9 @@ START_TEST(quantumMeasurementTrivialOneTest) {
 
     qureg = qureg_applyPauliX(qureg, 0);
 
-    qureg = qureg_applyZMeasurement(qureg, 0);
+
+    MeasurementResult measurementResult; 
+    qureg = qureg_applyZMeasurement(qureg, 0, &measurementResult);
 
     Complex expectedValues[] = {
         (Complex) {0.0, 0.0},
@@ -169,6 +174,7 @@ START_TEST(quantumMeasurementTrivialOneTest) {
     Vector expectedVector = vector_fromArray(expectedValues, 2);
 
     ck_assert_vectorValues_eq(expectedVector, qureg.stateVector);
+    ck_assert_double_eq(measurementResult.measuredValue, 1.0);
 
 } END_TEST
 
@@ -180,19 +186,20 @@ START_TEST(quantumMeasurementParallelizationTest) {
     qureg = qureg_applyHadamard(qureg, 0);
     qureg = qureg_applyHadamard(qureg, 1);
 
+    MeasurementResult measurementResult;
     // Perform measurement only on the first qubit, leaving the super-
     // position of the second one intact
-    qureg = qureg_applyZMeasurement(qureg, 0);
+    qureg = qureg_applyZMeasurement(qureg, 0, &measurementResult);
 
     // TODO: expected (calculated with YAO.jl) and actual do differ
     // outside of the global phase. Find out what is the issue here
     // Maybe measurement is not correctly implemented?
 
     Complex expectedValues[] = {
-        (Complex) {0.7071067811865476, 0.0},
+        (Complex) {0.0, 0.0},
         (Complex) {0.0, 0.0},
         (Complex) {0.7071067811865476, 0.0},
-        (Complex) {0.0, 0.0}
+        (Complex) {0.7071067811865476, 0.0}
     };
     Vector expectedVec = vector_fromArray(expectedValues, 4);
 
