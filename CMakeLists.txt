@@ -96,7 +96,6 @@ set (
         qureg/quregTests.c
 )
 
-
 add_executable(DIRAC main.c
         complex/complex.c
         float/float.c
@@ -105,6 +104,25 @@ add_executable(DIRAC main.c
         common/doubleLinkedList.c
         vector/vectorCollection.c
         utils/dataArena.c
+        common/string.c
+        matrix/matrix.c
+        complex/tuple.c
+        logging/Logger.h
+        logging/Logger.c
+        qureg/qureg.c
+        qureg/qureg_gates.c
+)
+
+
+add_executable(TELEPORTATION 
+        examples/teleportation.c
+        complex/complex.c
+        float/float.c
+        utils/dataArena.c
+        ndarray/ndarray.c
+        vector/vector.c
+        common/doubleLinkedList.c
+        vector/vectorCollection.c
         common/string.c
         matrix/matrix.c
         complex/tuple.c
@@ -150,3 +168,5 @@ target_link_libraries(${QUREG_TESTS} m check)
 
 # Include math file for main
 target_link_libraries(${PROJECT_NAME} m)
+
+target_link_libraries(TELEPORTATION m)

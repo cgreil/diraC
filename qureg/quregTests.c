@@ -208,6 +208,26 @@ START_TEST(quantumMeasurementParallelizationTest) {
 } END_TEST
 
 
+START_TEST(quantumMeasurementBellTest) {
+
+    size_t numQubits = 2;
+    QuantumRegister qureg = qureg_new(numQubits);
+
+    qureg = qureg_applyHadamard(qureg, 0);
+    qureg = qureg_applyCNOT(qureg, 0, 1);
+
+    Complex expectedValues[] = {
+        (Complex) {0.7071067811865475, 0.0},
+        (Complex) {0.0, 0.0},
+        (Complex) {0.0, 0.0},
+        (Complex) {0.7071067811865475, 0.0} 
+    };
+    Vector expectedVec = vector_fromArray(expectedValues, 4);
+
+    ck_assert_statevectors_eq(expectedVec, qureg.stateVector);
+
+} END_TEST
+
 
 Suite* quantumRegisterMeasurementSuite(void) {
 
@@ -217,14 +237,17 @@ Suite* quantumRegisterMeasurementSuite(void) {
     TCase* testcase1 = tcase_create("quantumMeasurementTrivialZeroTest");
     TCase* testcase2 = tcase_create("quantumMeasurementTrivialOneTest");
     TCase* testcase3 = tcase_create("quantumMeasurementParallelizationTest");
+    TCase* testcase4 = tcase_create("quantumMeasurementBellTest");
 
     tcase_add_test(testcase1, quantumMeasurementTrivialZeroTest);
     tcase_add_test(testcase2, quantumMeasurementTrivialOneTest);
     tcase_add_test(testcase3, quantumMeasurementParallelizationTest);
+    tcase_add_test(testcase4, quantumMeasurementBellTest);
 
     suite_add_tcase(suite, testcase1);
     suite_add_tcase(suite, testcase2);
     suite_add_tcase(suite, testcase3);
+    suite_add_tcase(suite, testcase4);
 
     return suite;
 }

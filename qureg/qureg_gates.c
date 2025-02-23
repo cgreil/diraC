@@ -14,7 +14,7 @@ static Matrix expandMatrixToQuregSize(QuantumRegister qureg, Matrix initialMatri
 
     Matrix resultMatrix;
     if (initialMatrixTarget == 0){
-        // If the target is in the first qubit, start with the gateDefiniation
+        // If the target is in the first qubit, start with the gateDefinition
         // as first element in the Pauli String
         resultMatrix = initialMatrix;
     } 
@@ -163,8 +163,8 @@ QuantumRegister qureg_applyRX(QuantumRegister qureg, size_t target, double phi) 
 
 QuantumRegister qureg_applyRY(QuantumRegister qureg, size_t target, double phi) {
 
-    const double sinTheta = phi / 2;
-    const double cosTheta = phi / 2;
+    const double sinTheta = sin(phi / 2);
+    const double cosTheta = cos(phi / 2);
 
     Complex ryGateArray[] = {
         (Complex) {cosTheta, 0.0}, (Complex) {0.0, - sinTheta},
@@ -177,8 +177,8 @@ QuantumRegister qureg_applyRY(QuantumRegister qureg, size_t target, double phi) 
 
 QuantumRegister qureg_applyRZ(QuantumRegister qureg, size_t target, double phi) {
 
-    const double sinTheta = phi / 2;
-    const double cosTheta = phi / 2;
+    const double sinTheta = sin(phi / 2);
+    const double cosTheta = cos(phi / 2);
 
     Complex rzGateArray[] = {
         (Complex) {cosTheta, -sinTheta}, (Complex) {0.0, 0.0},
@@ -249,7 +249,7 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
     size_t qubitCounter = 0;
     // If target index corresponds to the first qubit, immediately use 
     // the gate definition
-    if (target == 1) {
+    if (control == 0) {
         transformationMatrix = gateDefinition;
         qubitCounter += 2;
     } else {
@@ -259,7 +259,7 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
 
     Matrix idMatrix = matrix_identity(2);
     while(qubitCounter < qureg.numQubits) {
-        if (target == qubitCounter) {
+        if (control == qubitCounter) {
             transformationMatrix = matrix_kron(transformationMatrix, gateDefinition);
             qubitCounter += 2;
         } 
