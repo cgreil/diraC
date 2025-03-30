@@ -4,9 +4,14 @@
 #include "utils/dataArena.h"
 #include "qureg/qureg.h"
 
+
 Arena* arena;
 
 int main() {
+
+#ifdef DEBUG_BUILD
+    fprintf(stdout, "Starting debug build \n");
+#endif
 
     arena = arena_init();
 

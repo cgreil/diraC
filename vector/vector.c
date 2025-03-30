@@ -437,3 +437,13 @@ bool vector_setElement(Vector vec, size_t index, Complex newElement) {
     return true;
 }
 
+bool vector_isNormalized(Vector vec) {
+
+    Complex innerProd = vector_innerProduct(vec, vec).value;
+
+    if (fabs(complex_modulus(innerProd) - 1.0) < 0.00001) {
+        return true;
+    } 
+    return false;
+}
+

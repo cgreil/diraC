@@ -167,7 +167,7 @@ QuantumRegister qureg_applyRY(QuantumRegister qureg, size_t target, double phi) 
     const double cosTheta = cos(phi / 2);
 
     Complex ryGateArray[] = {
-        (Complex) {cosTheta, 0.0}, (Complex) {0.0, - sinTheta},
+        (Complex) {cosTheta, 0.0}, (Complex) {-sinTheta, 0.0},
         (Complex) {sinTheta, 0.0}, (Complex) {cosTheta, 0.0}
     };
     Matrix ryGate = matrix_fromRowArray(ryGateArray, 2, 2);
@@ -195,9 +195,11 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
         fprintf(stderr, "Supplied Qubit operation has a target qubit outside of the supplied register \n");
         return (QuantumRegister) { 0 };
     }
-
+#ifdef DEBUG_BUILD
+    assert(("Precondition error: vector is not normalized" && vector_isNormalized(qureg.stateVector)));
+#endif
     /**
-     * This will lead to the most inefficient computation i have ever cause
+     * This will lead to the most inefficient computation i have ever caused
      * -> Maybe optimize later :(
      * Ideas to look into:
      * - Directly work on amplitudes where possible
@@ -208,8 +210,13 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
 
      
     Matrix transformationMatrix = expandMatrixToQuregSize(qureg, gateDefinition, 1, target);
+#ifdef DEBUG_BUILD
+    assert("Precondition error: transformation Matrix is not unitary" && matrix_isUnitary(transformationMatrix));
+#endif
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
-
+#ifdef DEBUG_BUILD
+    assert("Postcondition error: stateVector not normalized" && vector_isNormalized(qureg.stateVector));
+#endif
     return qureg;
 }
 
@@ -268,8 +275,15 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
             qubitCounter++;
         }
     }    
-
+#ifdef DEBUG_BUILD
+    assert("Precondition error: statevector is not normalized" && vector_isNormalized(qureg.stateVector));
+    assert("Precondition error: transformationMatrix is not unitary" && matrix_isUnitary(transformationMatrix));
+#endif
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
+#ifdef DEBUG_BUILD
+    assert("Postcondition error: statevector is not normalized" && vector_isNormalized(qureg.stateVector));
+#endif
+
 
     return qureg;
 }
@@ -296,8 +310,9 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
     double zeroProbability = matrix_braket_product(zeroProjectorExpanded, qureg.stateVector, qureg.stateVector).re;
     double oneProbability = matrix_braket_product(oneProjectorExpanded, qureg.stateVector, qureg.stateVector).re;
 
-    assert(fabs(zeroProbability + oneProbability - 1.0) < 0.0001);
-    
+#ifdef DEBUG_BUILD
+    assert("Measurements do not sum to 1" && fabs(zeroProbability + oneProbability - 1.0) < 0.0001);
+#endif
     // randomly choose whether the state will collapse into |0> or |1> state according to the 
     // calculated probability distribution
 

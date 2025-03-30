@@ -4,7 +4,7 @@ project(DIRAC LANGUAGES C VERSION 0.0.1)
 #set(CMAKE_C_STANDARD 10)
 set(CMAKE_BUILD_TYPE Debug)
 
-set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic")
+set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic -Debug")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb3")
 
 set(SRC_DIR ${CMAKE_SOURCE_DIR})
@@ -115,10 +115,10 @@ add_executable(DIRAC main.c
 
 
 add_executable(TELEPORTATION 
+        utils/dataArena.c
         examples/teleportation.c
         complex/complex.c
         float/float.c
-        utils/dataArena.c
         ndarray/ndarray.c
         vector/vector.c
         common/doubleLinkedList.c
@@ -170,3 +170,6 @@ target_link_libraries(${QUREG_TESTS} m check)
 target_link_libraries(${PROJECT_NAME} m)
 
 target_link_libraries(TELEPORTATION m)
+
+#add_compile_options(-DDEBUG)
+add_definitions(-DDEBUG_BUILD)

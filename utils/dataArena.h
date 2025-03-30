@@ -2,8 +2,8 @@
 // Created by christoph on 17.08.24.
 //
 
-#ifndef LEIBNITZ_DATAARENA_H
-#define LEIBNITZ_DATAARENA_H
+#ifndef DATAARENA_H
+#define DATAARENA_H
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -27,4 +27,4 @@ void *arena_alloc(Arena *arena, size_t size);
 
 
 
-#endif //LEIBNITZ_DATAARENA_H
+#endif //ATAARENA_H

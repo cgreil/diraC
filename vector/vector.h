@@ -63,6 +63,8 @@ bool vector_isZeroVector(Vector vec);
 
 bool vector_isColumn(Vector vec);
 
+bool vector_isNormalized(Vector vec);
+
 
 
 #endif
