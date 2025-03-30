@@ -106,6 +106,8 @@ bool matrix_isEqual(Matrix matrix1, Matrix matrix2);
 
 bool matrix_isZero(Matrix matrix);
 
+bool matrix_isProjector(Matrix matrix);
+
 // TODO: Eigenvectors, eigenvalues
 
 ComplexTuple matrix_eigvalsQR(Matrix matrix);

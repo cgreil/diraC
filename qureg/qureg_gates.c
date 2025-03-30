@@ -210,9 +210,11 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
 
      
     Matrix transformationMatrix = expandMatrixToQuregSize(qureg, gateDefinition, 1, target);
-#ifdef DEBUG_BUILD
-    assert("Precondition error: transformation Matrix is not unitary" && matrix_isUnitary(transformationMatrix));
-#endif
+    // #ifdef DEBUG_BUILD
+    // Assertion will also fail for measurements, which are not unitary. //TODO: find a cheap way 
+    // way to distinguish
+    //assert("Precondition error: transformation Matrix is not unitary" && matrix_isUnitary(transformationMatrix));
+    // #endif
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
 #ifdef DEBUG_BUILD
     assert("Postcondition error: stateVector not normalized" && vector_isNormalized(qureg.stateVector));
@@ -306,6 +308,15 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
 
     Matrix zeroProjectorExpanded = expandMatrixToQuregSize(qureg, zeroProjector, 1, target);
     Matrix oneProjectorExpanded = expandMatrixToQuregSize(qureg, oneProjector, 1, target);
+
+#ifdef DEBUG_BUILD
+    fprintf(stdout, "test \n");
+    assert("Measurement matrix is not hermitian" && matrix_isHermitian(zeroProjectorExpanded));
+    assert("Measurement matrix is not hermitian" && matrix_isHermitian(oneProjectorExpanded));
+    assert("Measurement matrix is not projector" && matrix_isProjector(zeroProjectorExpanded));
+    assert("Measurement matrix is not projector" && matrix_isProjector(oneProjectorExpanded));
+#endif
+
 
     double zeroProbability = matrix_braket_product(zeroProjectorExpanded, qureg.stateVector, qureg.stateVector).re;
     double oneProbability = matrix_braket_product(oneProjectorExpanded, qureg.stateVector, qureg.stateVector).re;

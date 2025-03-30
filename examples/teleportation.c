@@ -72,10 +72,9 @@ int main() {
 
     fprintf(stdout, "The amplitudes of the recovered qubit are: "
         "(%f + %fi)|0> + (%f + %fi) |1> \n",
-        qureg.stateVector.dataArray.values[0].re, qureg.stateVector.dataArray.values[0].im,
-        qureg.stateVector.dataArray.values[1].re, qureg.stateVector.dataArray.values[1].im
+        qureg.stateVector.dataArray.values[6].re, qureg.stateVector.dataArray.values[6].im,
+        qureg.stateVector.dataArray.values[7].re, qureg.stateVector.dataArray.values[7].im
     );
-
 
     arena_destroy(arena);
 

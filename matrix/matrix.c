@@ -494,7 +494,9 @@ Complex matrix_braket_product(Matrix matrix, Vector bra, Vector ket) {
     
     Vector vector = vector_matrixMultiplication(ket, matrix);
     
-    return vector_innerProduct(bra, vector).value;
+    Vector conjugatedBra = vector_conjugateINP(bra);
+
+    return vector_innerProduct(conjugatedBra, vector).value;
 }
 
 bool matrix_isDiagonal(Matrix matrix) {
@@ -599,6 +601,13 @@ bool matrix_isZero(Matrix matrix) {
     Matrix zeroMatrix = matrix_zeros(matrix.numRows, matrix.numColumns);
 
     return matrix_isEqual(matrix, zeroMatrix);
+}
+
+bool matrix_isProjector(Matrix matrix) {
+
+    Matrix squaredMatrix = matrix_multiplication(matrix, matrix);
+
+    return matrix_isEqual(matrix, squaredMatrix);
 }
 
 
