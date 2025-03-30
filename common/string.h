@@ -2,8 +2,8 @@
 // Created by christoph on 23.08.24.
 //
 
-#ifndef LEIBNITZ_STRING_H
-#define LEIBNITZ_STRING_H
+#ifndef STRING_H
+#define STRING_H
 
 
 #include <stddef.h>
@@ -12,6 +12,7 @@
 #include "utils/dataArena.h"
 #include "complex/complex.h"
 #include "vector/vector.h"
+#include "vector/vectorCollection.h"
 #include "matrix/matrix.h"
 
 typedef struct {

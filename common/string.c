@@ -8,7 +8,6 @@
 #include <errno.h>
 
 #include "common/string.h"
-#include "vector/vectorCollection.h"
 
 // 16 chars for digits, 1 for sign, 1 for complex i
 #define COMPLEX_NUM_STRING_BUFSIZE 18
@@ -205,7 +204,6 @@ size_t stringBuilder_appendVector(StringBuilder* stringBuilder, const Vector vec
 
     return numWritten;
 }
-
 
 size_t stringBuilder_appendMatrix(StringBuilder* stringBuilder, const Matrix matrix) {
 

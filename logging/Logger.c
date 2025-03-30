@@ -3,7 +3,23 @@
 //
 
 #include <fcntl.h>
+#include <time.h>
+#include <unistd.h>
+
 #include "Logger.h"
+
+
+#define stringBuilder_appendObject(_stringBuilder, T)       \
+    _Generic((T),                                           \
+    Vector: stringBuilder_appendVector,                     \
+    Matrix: stringBuilder_appendMatrix,                     \
+    Complex: stringBuilder_appendComplex,                   \
+    VectorCollection: stringBuilder_appendVectorSet,        \
+    String: stringBuilder_appendString                      \
+    )                                                       \
+    ( (_stringBuilder), (T) )
+
+
 
 Logger* logger_create(LOGOUTPUT output) {
 
@@ -44,6 +60,42 @@ Logger* logger_create(LOGOUTPUT output) {
 
     return logger;
 }
+
+
+void logger_log(Logger* logger, LOGLEVEL loglevel, char* msg) {
+
+    size_t message_length = strlen(msg);
+    String messageStringSTR = string_create(msg, message_length);
+
+    //get time and convert to string
+    time_t currentTime;
+    currentTime = time(NULL);
+    struct tm* currentTimeTM;
+    currentTimeTM = localtime(&currentTime);
+
+    char* timeString;
+    timeString = asctime(currentTimeTM);
+    String timeStringSTR = string_create(timeString, strlen(timeString));
+
+    // get string for Loglevel
+    char* levelString = loglevel == DEBUG ? "DEBUG" : "INFO";
+    String levelStringSTR = string_create(levelString, strlen(levelString));
+
+    StringBuilder* stringBuilder = stringBuilder_create();
+    stringBuilder_appendObject(stringBuilder, timeStringSTR);
+    stringBuilder_appendCharArray(stringBuilder, ":\t", 2);
+    stringBuilder_appendObject(stringBuilder, levelStringSTR);
+    stringBuilder_appendCharArray(stringBuilder, ":\t", 2);
+    stringBuilder_appendObject(stringBuilder, messageStringSTR);
+    stringBuilder_appendCharArray(stringBuilder, "\n", 1);
+
+    String outputString = stringBuilder_build(stringBuilder);
+
+    write(logger->fd, outputString.data, outputString.length);
+}
+
+
+
 
 void logger_destroy(Logger* logger) {
 

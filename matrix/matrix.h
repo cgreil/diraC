@@ -6,8 +6,10 @@
 #include "complex/tuple.h"
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
+#include "common/string.h"
 
 
+// forward declarations of vector types, to prevent cyclic dependencies
 typedef struct Vector Vector;
 typedef struct OptVector OptVector;
 typedef struct VectorCollection VectorCollection;
@@ -131,7 +133,6 @@ void matrix_inverseINP(Matrix matrix);
 QRResult matrix_QRDecomposition(Matrix matrix);
 
 LUResult matrix_LUDecomposition(Matrix matrix);
-
 
 
 #endif

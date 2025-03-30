@@ -7,7 +7,9 @@
 
 #include <stdio.h>
 #include <stddef.h>
-#include <common/string.h>
+#include <string.h>
+
+#include "common/string.h"
 
 typedef enum LOGLEVEL {
     DEBUG,
@@ -36,6 +38,10 @@ size_t logger_appendCharArray(Logger* log, char* logstring, size_t length);
 bool logger_attachStringBuilder(Logger* log, StringBuilder* stringBuilder);
 
 bool logger_setLoglevel(Logger* log, LOGLEVEL newLevel);
+
+void logger_log(Logger* log, LOGLEVEL loglevel, char* msg);
+
+void logger_destroy(Logger* logger);
 
 
 #endif //LEIBNITZ_LOGGER_H
