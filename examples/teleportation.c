@@ -3,7 +3,11 @@
 
 #include "utils/dataArena.h"
 #include "qureg/qureg.h"
+#include "logging/Logger.h"
 
+#define LOG_OUTPUT STDOUT 
+
+#define UNUSED(x) (void) (x)
 
 Arena* arena;
 
@@ -14,6 +18,7 @@ int main() {
 #endif
 
     arena = arena_init();
+    Logger *logger = logger_create(LOG_OUTPUT);
 
     // --- START OF PREPERATION ---
 
@@ -38,7 +43,11 @@ int main() {
     // This is a copy of the first qubit for comparison purposes. 
     // Not that this is not possible in the actual teleporation protocol
     // due to no-cloning theorem
+
     Vector preparedState = qureg.stateVector;
+    
+    // silence compiler warning
+    UNUSED(preparedState);
 
 
     // --- START OF PROTOCOL ---
@@ -64,7 +73,7 @@ int main() {
     }
 
     // check that the final state is equal to the prepared state 
-    fprintf(stdout, "The amplitudes of the randomly prepared qubit were: "
+    /*fprintf(stdout, "The amplitudes of the randomly prepared qubit were: "
         "(%f + %fi) |0> + (%f + %fi) |1> \n",
         preparedState.dataArray.values[0].re, preparedState.dataArray.values[0].im,
         preparedState.dataArray.values[1].re, preparedState.dataArray.values[1].im
@@ -75,7 +84,16 @@ int main() {
         qureg.stateVector.dataArray.values[6].re, qureg.stateVector.dataArray.values[6].im,
         qureg.stateVector.dataArray.values[7].re, qureg.stateVector.dataArray.values[7].im
     );
+    */
+    
+    //logger_appendString(logger, string_fromCString("The amplitudes of the initial qubit were: \n"));
+    //logger_appendString(logger, string_fromCString("The amplitudes of the recovered qubits are: \n"));
 
+    logger_log(logger, INFO, "The amplitudes of the initial qubit were: \n");
+    logger_log(logger, INFO, "The amplitudes of the recovered qubits are: \n");
+
+
+    logger_destroy(logger);
     arena_destroy(arena);
 
     return 0; 

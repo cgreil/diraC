@@ -23,21 +23,11 @@ typedef enum LOGOUTPUT {
 }LOGOUTPUT;
 
 typedef struct Logger {
-    FILE* logstream;
     int fd;
-    char* loggerName;
-    size_t nameSize;
+    LOGLEVEL loglevel;
 }Logger;
 
 Logger* logger_create(LOGOUTPUT output);
-
-size_t logger_appendString(Logger* log, String logstring);
-
-size_t logger_appendCharArray(Logger* log, char* logstring, size_t length);
-
-bool logger_attachStringBuilder(Logger* log, StringBuilder* stringBuilder);
-
-bool logger_setLoglevel(Logger* log, LOGLEVEL newLevel);
 
 void logger_log(Logger* log, LOGLEVEL loglevel, char* msg);
 

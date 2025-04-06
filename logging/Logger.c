@@ -28,24 +28,15 @@ Logger* logger_create(LOGOUTPUT output) {
     switch (output) {
 
         case STDERR: {
-            char name[] = "Console Error Logger";
-            logger->loggerName = name;
-            logger->nameSize = sizeof(name);
             logger->fd = STDERR;
             break;
         }
         case STDOUT: {
-            char name[] = "Console Info Logger";
-            logger->loggerName = name;
-            logger->nameSize = sizeof(name);
             logger->fd = STDOUT;
             break;
         }
         case LOGFILE: {
                 // TODO: use malloc here instead
-                char name[] = "File Logger";
-                logger->loggerName = name;
-                logger->nameSize = sizeof(name);
                 // initialize file
                 char filePath[] = "/logs/logs.txt";
                 int flags = O_CREAT | O_APPEND;
@@ -93,8 +84,6 @@ void logger_log(Logger* logger, LOGLEVEL loglevel, char* msg) {
 
     write(logger->fd, outputString.data, outputString.length);
 }
-
-
 
 
 void logger_destroy(Logger* logger) {

@@ -14,6 +14,7 @@
 #include "vector/vector.h"
 #include "vector/vectorCollection.h"
 #include "matrix/matrix.h"
+#include "qureg/qureg.h"
 
 typedef struct {
     char *data;
@@ -33,6 +34,8 @@ String string_clone(String string);
 String string_create(char *data, size_t length);
 
 String string_fromStream(FILE* stream, size_t length);
+
+String string_fromCString(char* data);
 
 size_t string_getLength(String string);
 

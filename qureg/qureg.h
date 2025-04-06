@@ -10,10 +10,6 @@ typedef struct {
     size_t numQubits;
 }QuantumRegister;
 
-typedef struct {
-    Matrix gateMatrix;
-}Gate;
-
 
 // a struct to encapsulate the result of the measurement
 // after the collapse of the wavefunction
