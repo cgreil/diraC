@@ -48,8 +48,6 @@ typedef struct {
 } LogObject;
 
 
-
-
 static String getLoggingTimeString() {
 
     //get time and convert to string
@@ -103,26 +101,6 @@ Logger* logger_create(LOGOUTPUT output) {
 }
 
 
-/*void logger_log(Logger* logger, LOGLEVEL loglevel, char* msg) {
-
-    size_t message_length = strlen(msg);
-    String messageStringSTR = string_create(msg, message_length);
-
-    StringBuilder* stringBuilder = stringBuilder_create();
-    stringBuilder_appendObject(stringBuilder, getLoggingTimeString());
-    stringBuilder_appendCharArray(stringBuilder, ":\t", 2);
-    stringBuilder_appendObject(stringBuilder, getLoglevelString(loglevel));
-    stringBuilder_appendCharArray(stringBuilder, ":\t", 2);
-    stringBuilder_appendObject(stringBuilder, messageStringSTR);
-    stringBuilder_appendCharArray(stringBuilder, "\n", 1);
-
-    String outputString = stringBuilder_build(stringBuilder);
-
-    write(logger->fd, outputString.data, outputString.length);
-}
-    */
-
-
 void logger_log(Logger* logger, LOGLEVEL loglevel, size_t numArgs, ...) {
 
     StringBuilder* stringBuilder = stringBuilder_create();
@@ -134,9 +112,7 @@ void logger_log(Logger* logger, LOGLEVEL loglevel, size_t numArgs, ...) {
     for (size_t argIndex = 0; argIndex < numArgs; argIndex++) {
         
         // retrieve next logObject and parse the internal union type
-        LogObject logObj = va_arg(logObjects, sizeof(LogObject));
-
-
+        LogObject logObj = va_arg(logObjects, LogObject);
 
         switch (logObj.type) {
             case STRING: 
@@ -186,8 +162,7 @@ void logger_log(Logger* logger, LOGLEVEL loglevel, size_t numArgs, ...) {
             case QUREG:
                 QuantumRegister qureg;
                 memcpy(&qureg, &logObj.object, sizeof(QuantumRegister));
-                // TODO: implement
-                //stringBuilder_appendQuantumRegister();
+                stringBuilder_appendQuantumRegister(stringBuilder, qureg);
                 break;           
             
             default: 
@@ -198,6 +173,9 @@ void logger_log(Logger* logger, LOGLEVEL loglevel, size_t numArgs, ...) {
     }
     va_end(logObjects);
 
+    // finally create the String and write to output 
+    String outputString = stringBuilder_build(stringBuilder);
+    write(logger->fd, outputString.data, outputString.length);
 }
 
 

@@ -62,6 +62,8 @@ size_t stringBuilder_appendComplex(StringBuilder* stringBuilder, Complex complex
 
 size_t stringBuilder_appendVectorSet(StringBuilder* stringBuilder, VectorCollection vectorSet);
 
+size_t stringBuilder_appendQuantumRegister(StringBuilder* stringBuilder, QuantumRegister qureg);
+
 void stringBuilder_setFloatPrecision(StringBuilder* stringBuilder, size_t floatAccuracy);
 
 
