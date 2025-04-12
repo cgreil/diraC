@@ -10,6 +10,7 @@
 #define UNUSED(x) (void) (x)
 
 Arena* arena;
+Logger* logger;
 
 int main() {
 
@@ -18,7 +19,7 @@ int main() {
 #endif
 
     arena = arena_init();
-    Logger *logger = logger_create(LOG_OUTPUT);
+    logger = logger_init(LOG_OUTPUT);
 
     // --- START OF PREPERATION ---
 
@@ -88,9 +89,6 @@ int main() {
     
     //logger_appendString(logger, string_fromCString("The amplitudes of the initial qubit were: \n"));
     //logger_appendString(logger, string_fromCString("The amplitudes of the recovered qubits are: \n"));
-
-    logger_log(logger, INFO, "The amplitudes of the initial qubit were: \n");
-    logger_log(logger, INFO, "The amplitudes of the recovered qubits are: \n");
 
 
     logger_destroy(logger);

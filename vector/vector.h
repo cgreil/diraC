@@ -8,6 +8,7 @@
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
 
+// Forward declaration for matrix
 typedef struct Matrix Matrix;
 
 typedef struct Vector {

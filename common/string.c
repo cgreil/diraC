@@ -290,7 +290,7 @@ size_t stringBuilder_appendVectorSet(StringBuilder* stringBuilder, const VectorC
 }
 
 
-size_t stringBuilder_appendQureg(StringBuilder* stringBuilder, const QuantumRegister qureg) {
+size_t stringBuilder_appendQuantumRegister(StringBuilder* stringBuilder, const QuantumRegister qureg) {
 
     size_t numWritten = 0;
     const char vertLine[1] = "|";

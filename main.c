@@ -1,18 +1,21 @@
 #include <stdlib.h>
-#include <matrix/matrix.h>
-#include <common/string.h>
 #include <assert.h>
 
 #include "utils/dataArena.h"
 #include "qureg/qureg.h"
+#include "common/string.h"
+#include "logging/Logger.h"
 
-Arena *arena;
+Arena* arena;
+Logger* logger;
 
+#define LOGOUTPUT STDOUT
 
 int main(void) {
 
     // Initialize arena
     arena = arena_init();
+    logger = logger_init(LOGOUTPUT);
 
     size_t numQubits = 4;
     QuantumRegister quantumRegister = qureg_new(numQubits);

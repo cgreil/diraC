@@ -8,7 +8,7 @@
 typedef struct {
     Vector stateVector;
     size_t numQubits;
-}QuantumRegister;
+} QuantumRegister;
 
 
 // a struct to encapsulate the result of the measurement

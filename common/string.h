@@ -14,8 +14,8 @@
 #include "vector/vector.h"
 #include "vector/vectorCollection.h"
 #include "matrix/matrix.h"
-#include "qureg/qureg.h"
 #include "ndarray/ndarray.h"
+#include "qureg/qureg.h"
 
 #define STR(x) string_create((x), strlen((x)))
 

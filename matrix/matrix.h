@@ -6,7 +6,6 @@
 #include "complex/tuple.h"
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
-#include "common/string.h"
 
 
 // forward declarations of vector types, to prevent cyclic dependencies

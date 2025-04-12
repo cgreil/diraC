@@ -5,7 +5,6 @@
 #include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
-#include <stdarg.h>
 
 #include "Logger.h"
 
@@ -19,33 +18,6 @@
     String: stringBuilder_appendString                      \
     )                                                       \
     ( (_stringBuilder), (T) )
-
-
-typedef enum {
-    STRING = 1,
-    CHARS = 2,
-    COMPLEX = 3,
-    VECTOR = 4,
-    VECTOR_COLLECTION = 5,
-    MATRIX = 6,
-    QUREG = 7,
-    NDARRAY = 8, 
-    NOT_IMPLEMENTED = 9
-} LOGGABLE;
-
-typedef struct {
-    LOGGABLE type;
-    union {
-        String str;
-        Complex complex;
-        Vector vector;
-        VectorCollection vectorCollection;
-        Matrix matrix;
-        QuantumRegister qureg;
-        NDArray ndarray;
-        char* chars;
-    } object;
-} LogObject;
 
 
 static String getLoggingTimeString() {
@@ -62,6 +34,7 @@ static String getLoggingTimeString() {
     return string_create(timeString, strlen(timeString));
 }
 
+
 static String getLoglevelString(LOGLEVEL loglevel) {
     // get string for Loglevel
     char* levelString = loglevel == DEBUG ? "DEBUG" : "INFO";
@@ -69,9 +42,10 @@ static String getLoglevelString(LOGLEVEL loglevel) {
 }
 
 
-Logger* logger_create(LOGOUTPUT output) {
 
-    Logger* logger = malloc(sizeof(Logger));
+Logger* logger_init(LOGOUTPUT output) {
+
+    logger = malloc(sizeof(Logger));
 
     switch (output) {
 
@@ -100,8 +74,7 @@ Logger* logger_create(LOGOUTPUT output) {
     return logger;
 }
 
-
-void logger_log(Logger* logger, LOGLEVEL loglevel, size_t numArgs, ...) {
+void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
 
     StringBuilder* stringBuilder = stringBuilder_create();
 
@@ -109,67 +82,77 @@ void logger_log(Logger* logger, LOGLEVEL loglevel, size_t numArgs, ...) {
     va_list logObjects;
     va_start(logObjects, numArgs);
 
-    for (size_t argIndex = 0; argIndex < numArgs; argIndex++) {
-        
-        // retrieve next logObject and parse the internal union type
-        LogObject logObj = va_arg(logObjects, LogObject);
+    // retrieve next logObject and parse the internal union type
+    LogObject logObj = va_arg(logObjects, LogObject);
 
+    stringBuilder_appendString(stringBuilder, getLoggingTimeString());
+    stringBuilder_appendString(stringBuilder, getLoglevelString(loglevel));
+
+    for (size_t argIndex = 0; argIndex < numArgs; argIndex++) {
         switch (logObj.type) {
-            case STRING: 
+            case STRING: {
                 // use memcpy to get around typecasting rules for union members
                 String str;
                 memcpy(&str, &logObj.object, sizeof(String));
                 stringBuilder_appendString(stringBuilder, str);
-                break;
-
-            case CHARS: 
+                break;                
+            }
+ 
+            case CHARS: {
                 // use string type also for the case of null-terminated char array
-                String str = string_create(&logObj.object, strlen(&logObj.object));
+                String str = string_create((char *) &(logObj.object), strlen((char *) &(logObj.object)));
                 stringBuilder_appendString(stringBuilder, str);
                 break;
+            }
 
-            case COMPLEX: 
+            case COMPLEX: {
                 Complex compl;
                 memcpy(&compl, &logObj.object, sizeof(Complex));
                 stringBuilder_appendComplex(stringBuilder, compl);
                 break; 
+            }
 
-            case VECTOR: 
+            case VECTOR: {
                 Vector vec;
                 memcpy(&vec, &logObj.object, sizeof(Vector));
                 stringBuilder_appendVector(stringBuilder, vec);
                 break;
+            }
 
-            case MATRIX:
+            case MATRIX: {
                 Matrix mat;
                 memcpy(&mat, &logObj.object, sizeof(Matrix));
                 stringBuilder_appendMatrix(stringBuilder, mat);
                 break;
+            }
 
-            case VECTOR_COLLECTION:
+            case VECTOR_COLLECTION: {
                 VectorCollection vc;
-                mempcy(&vc, &logObj.object, sizeof(VectorCollection));
+                memcpy(&vc, &logObj.object, sizeof(VectorCollection));
                 stringBuilder_appendVectorSet(stringBuilder, vc);
                 break;
-            
-            case NDARRAY:
+            }
+        
+            case NDARRAY: {
                 NDArray ndarray;
                 memcpy(&ndarray, &logObj.object, sizeof(ndarray));
                 // todo: implement stringBuilder_appendNDarray
                 //stringBuilder_append
-                break;
+                break; 
+            }
 
-            case QUREG:
+            case QUREG: {
                 QuantumRegister qureg;
                 memcpy(&qureg, &logObj.object, sizeof(QuantumRegister));
                 stringBuilder_appendQuantumRegister(stringBuilder, qureg);
-                break;           
-            
-            default: 
+                break;    
+            }       
+        
+            default: {
                 stringBuilder_appendString(stringBuilder, STR("Encountered type not yet implemented in stringBuilder"));
                 break;
-        }
-
+            }
+        }              
     }
     va_end(logObjects);
 
