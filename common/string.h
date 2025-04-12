@@ -15,6 +15,9 @@
 #include "vector/vectorCollection.h"
 #include "matrix/matrix.h"
 #include "qureg/qureg.h"
+#include "ndarray/ndarray.h"
+
+#define STR(x) string_create((x), strlen((x)))
 
 typedef struct {
     char *data;
