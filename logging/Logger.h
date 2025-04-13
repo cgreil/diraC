@@ -57,27 +57,36 @@ typedef struct {
     } object;
 } LogObject;
 
-#define LOGGABLE_TYPE(T)                    \
-    _Generic((T)),                          \
-    String: STRING                          \
-    char*: CHARS                            \
-    Complex: COMPLEX                        \
-    Vector: VECTOR                          \
-    VectorCollection: VECTOR_COLLECTION     \
-    Matrix: MATRIX                          \
-    QuantumRegister: QUREG                  \
-    NDArray: NDARRAY                        \
-    default: NOT_IMPLEMENTED                \
+#define LOGGABLE_TYPE(T)                     \
+    _Generic((T),                            \
+    String: STRING,                          \
+    char *: CHARS,                           \
+    Complex: COMPLEX,                        \
+    Vector: VECTOR,                          \
+    VectorCollection: VECTOR_COLLECTION,     \
+    Matrix: MATRIX,                          \
+    QuantumRegister: QUREG,                  \
+    NDArray: NDARRAY,                        \
+    default: NOT_IMPLEMENTED                 \
+)
 
 
-#define LOGOBJ(obj) (LogObject) {.type = LOGGABLE_TYPE((obj)), .object = (obj)}
+#define LOGOBJ(obj) (                       \
+    (LogObject) {                           \
+    .type = LOGGABLE_TYPE((obj)),           \
+    .LOGGABLE_FIELD((obj)) = (obj)           \
+})
 
 #define __VA_NUM_LOGOBJS__(...)  (sizeof((LogObject[]){(__VA_ARGS__)})/sizeof(LogObject))
 
-#define LOG_DEBUG(...) logger_logAll(logger, DEBUG, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
-#define LOG_INFO(...) logger_logAll(logger, INFO, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
+//#define LOG_DEBUG(...) logger_logAll(logger, DEBUG, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
+#define LOG_DEBUG(...) logger_logAll(DEBUG, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
+#define LOG_INFO(...) logger_logAll(INFO, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
 
 extern Logger* logger;
+
+// TODO: implement
+static LogObject logObject_create(LOGGABLE loggableType, void *object);
 
 Logger* logger_init(LOGOUTPUT output);
 

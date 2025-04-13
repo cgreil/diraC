@@ -9,6 +9,7 @@
 
 #define UNUSED(x) (void) (x)
 
+// declare globally scoped structs
 Arena* arena;
 Logger* logger;
 
@@ -50,7 +51,12 @@ int main() {
     // silence compiler warning
     UNUSED(preparedState);
 
-
+    // LOG_DEBUG(LOGOBJ(preparedState));
+    LogObject test = LOGOBJ(preparedState);
+    LogObject test2 = ( (LogObject) { .type = _Generic(((preparedState)), String: STRING, char *: CHARS, Complex: COMPLEX, Vector: VECTOR, VectorCollection: VECTOR_COLLECTION, Matrix: MATRIX, QuantumRegister: QUREG, NDArray: NDARRAY, default: NOT_IMPLEMENTED ), ._Generic(((preparedState)), String: object.str, Complex: object.complex, Vector: object.vector, VectorCollection: object.vectorCollection, Matrix: object.matrix, QuantumRegister: object.qureg, NDArray: object.ndarray, char*: object.chars ) = (preparedState) })
+    
+    
+    
     // --- START OF PROTOCOL ---
 
     qureg = qureg_applyCNOT(qureg, 0, 1);
@@ -73,24 +79,7 @@ int main() {
         qureg = qureg_applyPauliZ(qureg, 2);
     }
 
-    // check that the final state is equal to the prepared state 
-    /*fprintf(stdout, "The amplitudes of the randomly prepared qubit were: "
-        "(%f + %fi) |0> + (%f + %fi) |1> \n",
-        preparedState.dataArray.values[0].re, preparedState.dataArray.values[0].im,
-        preparedState.dataArray.values[1].re, preparedState.dataArray.values[1].im
-    );
-
-    fprintf(stdout, "The amplitudes of the recovered qubit are: "
-        "(%f + %fi)|0> + (%f + %fi) |1> \n",
-        qureg.stateVector.dataArray.values[6].re, qureg.stateVector.dataArray.values[6].im,
-        qureg.stateVector.dataArray.values[7].re, qureg.stateVector.dataArray.values[7].im
-    );
-    */
     
-    //logger_appendString(logger, string_fromCString("The amplitudes of the initial qubit were: \n"));
-    //logger_appendString(logger, string_fromCString("The amplitudes of the recovered qubits are: \n"));
-
-
     logger_destroy(logger);
     arena_destroy(arena);
 
