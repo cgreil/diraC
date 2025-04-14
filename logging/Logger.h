@@ -70,12 +70,55 @@ typedef struct {
     default: NOT_IMPLEMENTED                 \
 )
 
+// declare with attribute unusded to prevent error
+__attribute__((unused)) 
+static LogObject logObject_create(LOGGABLE loggableType, void *element) {
+    
+    LogObject obj = {.type = loggableType};
 
-#define LOGOBJ(obj) (                       \
-    (LogObject) {                           \
-    .type = LOGGABLE_TYPE((obj)),           \
-    .LOGGABLE_FIELD((obj)) = (obj)           \
-})
+
+    switch (loggableType)
+    {
+        case STRING:
+            memcpy(&obj.object, element, sizeof(String));
+            break;
+
+        case COMPLEX:
+            memcpy(&obj.object, element, sizeof(Complex));
+            break;
+
+        case VECTOR:
+            memcpy(&obj.object, element, sizeof(Vector));
+            break;
+
+        case VECTOR_COLLECTION:
+            memcpy(&obj.object, element, sizeof(VectorCollection));
+            break;
+
+        case MATRIX: 
+            memcpy(&obj.object, element, sizeof(Matrix));
+            break;
+
+        case QUREG:
+            memcpy(&obj.object, element, sizeof(QuantumRegister));
+            break;
+
+        case NDARRAY:
+            memcpy(&obj.object, element, sizeof(NDARRAY));
+            break;
+
+        case CHARS:
+            memcpy(&obj.object, element, sizeof(char *));
+            break;
+
+        default:
+            return (LogObject) { 0 };
+            break;
+    }
+    return obj;
+}
+
+#define LOGOBJ(obj) logObject_create(LOGGABLE_TYPE((obj)), &(obj)) 
 
 #define __VA_NUM_LOGOBJS__(...)  (sizeof((LogObject[]){(__VA_ARGS__)})/sizeof(LogObject))
 
@@ -84,9 +127,6 @@ typedef struct {
 #define LOG_INFO(...) logger_logAll(INFO, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
 
 extern Logger* logger;
-
-// TODO: implement
-static LogObject logObject_create(LOGGABLE loggableType, void *object);
 
 Logger* logger_init(LOGOUTPUT output);
 

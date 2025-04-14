@@ -310,7 +310,6 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
     Matrix oneProjectorExpanded = expandMatrixToQuregSize(qureg, oneProjector, 1, target);
 
 #ifdef DEBUG_BUILD
-    fprintf(stdout, "test \n");
     assert("Measurement matrix is not hermitian" && matrix_isHermitian(zeroProjectorExpanded));
     assert("Measurement matrix is not hermitian" && matrix_isHermitian(oneProjectorExpanded));
     assert("Measurement matrix is not projector" && matrix_isProjector(zeroProjectorExpanded));

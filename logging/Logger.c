@@ -34,13 +34,11 @@ static String getLoggingTimeString() {
     return string_create(timeString, strlen(timeString));
 }
 
-
 static String getLoglevelString(LOGLEVEL loglevel) {
     // get string for Loglevel
     char* levelString = loglevel == DEBUG ? "DEBUG" : "INFO";
     return string_create(levelString, strlen(levelString));
 }
-
 
 
 Logger* logger_init(LOGOUTPUT output) {
@@ -160,7 +158,6 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
     String outputString = stringBuilder_build(stringBuilder);
     write(logger->fd, outputString.data, outputString.length);
 }
-
 
 void logger_destroy(Logger* logger) {
 

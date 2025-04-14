@@ -66,10 +66,6 @@ int main() {
 
     int a = 1;
 
-    //LOG_DEBUG(LOGOBJ("test"));
-
-    LOGOBJ("test");
-
     return 0;
 
 }

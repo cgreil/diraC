@@ -51,11 +51,7 @@ int main() {
     // silence compiler warning
     UNUSED(preparedState);
 
-    // LOG_DEBUG(LOGOBJ(preparedState));
-    LogObject test = LOGOBJ(preparedState);
-    LogObject test2 = ( (LogObject) { .type = _Generic(((preparedState)), String: STRING, char *: CHARS, Complex: COMPLEX, Vector: VECTOR, VectorCollection: VECTOR_COLLECTION, Matrix: MATRIX, QuantumRegister: QUREG, NDArray: NDARRAY, default: NOT_IMPLEMENTED ), ._Generic(((preparedState)), String: object.str, Complex: object.complex, Vector: object.vector, VectorCollection: object.vectorCollection, Matrix: object.matrix, QuantumRegister: object.qureg, NDArray: object.ndarray, char*: object.chars ) = (preparedState) })
-    
-    
+    LOG_DEBUG(LOGOBJ(preparedState));   
     
     // --- START OF PROTOCOL ---
 
