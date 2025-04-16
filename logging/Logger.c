@@ -8,6 +8,15 @@
 
 #include "Logger.h"
 
+// ANSI escape codes for colors
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
 
 #define stringBuilder_appendObject(_stringBuilder, T)       \
     _Generic((T),                                           \
@@ -28,16 +37,27 @@ static String getLoggingTimeString() {
     struct tm* currentTimeTM;
     currentTimeTM = localtime(&currentTime);
 
-    char* timeString;
-    timeString = asctime(currentTimeTM);
+    // allocate large enough char array for time string
+    char timeString[30];
+    size_t formatSize = sizeof(timeString) / sizeof(char);
+    //timeString = asctime(currentTimeTM);
+    strftime(timeString, formatSize, "%a, %d-%m-%y: %H:%M:%S \t", currentTimeTM);
+
     
     return string_create(timeString, strlen(timeString));
 }
 
 static String getLoglevelString(LOGLEVEL loglevel) {
-    // get string for Loglevel
-    char* levelString = loglevel == DEBUG ? "DEBUG" : "INFO";
-    return string_create(levelString, strlen(levelString));
+
+    char* str;    
+    if (loglevel == DEBUG) {
+        str = "[DEBUG]: ";
+    } else if (loglevel == INFO) {
+        str = "[INFO]: ";
+    } else {
+        str = "[ERROR]: ";
+    }
+    return string_create(str, strlen(str));
 }
 
 
@@ -74,6 +94,13 @@ Logger* logger_init(LOGOUTPUT output) {
 
 void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
 
+#ifdef DEBUG_BUILD
+    if (loglevel != DEBUG) {
+        return;
+    }
+#endif
+
+
     StringBuilder* stringBuilder = stringBuilder_create();
 
     // start parsing vargs
@@ -83,8 +110,19 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
     // retrieve next logObject and parse the internal union type
     LogObject logObj = va_arg(logObjects, LogObject);
 
-    stringBuilder_appendString(stringBuilder, getLoggingTimeString());
+    // select color based on loglevel
+    if (loglevel == DEBUG) {
+        stringBuilder_appendCharArray(stringBuilder, ANSI_COLOR_YELLOW, strlen(ANSI_COLOR_YELLOW));
+    } else if (loglevel == INFO) {
+        stringBuilder_appendCharArray(stringBuilder, ANSI_COLOR_CYAN, strlen(ANSI_COLOR_CYAN));
+    } else if (loglevel == ERROR) {
+        stringBuilder_appendCharArray(stringBuilder, ANSI_COLOR_RED, strlen(ANSI_COLOR_RED));
+    }
+
     stringBuilder_appendString(stringBuilder, getLoglevelString(loglevel));
+    stringBuilder_appendCharArray(stringBuilder, ANSI_COLOR_RESET, strlen(ANSI_COLOR_RESET));
+    stringBuilder_appendString(stringBuilder, getLoggingTimeString());
+
 
     for (size_t argIndex = 0; argIndex < numArgs; argIndex++) {
         switch (logObj.type) {

@@ -51,7 +51,7 @@ int main() {
     // silence compiler warning
     UNUSED(preparedState);
 
-    LOG_DEBUG(LOGOBJ(preparedState));   
+    LOG_DEBUG(LOGOBJ(preparedState));
     
     // --- START OF PROTOCOL ---
 

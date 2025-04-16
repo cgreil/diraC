@@ -17,7 +17,8 @@
 // invokes logger_log 
 typedef enum LOGLEVEL {
     DEBUG,
-    INFO
+    INFO, 
+    ERROR
 }LOGLEVEL;
 
 typedef enum LOGOUTPUT {
