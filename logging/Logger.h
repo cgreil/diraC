@@ -105,12 +105,15 @@ static LogObject logObject_create(LOGGABLE loggableType, void *element) {
             break;
 
         case NDARRAY:
-            memcpy(&obj.object, element, sizeof(NDARRAY));
             break;
 
-        case CHARS:
-            memcpy(&obj.object, element, sizeof(char *));
+        case CHARS: {
+            // Convert to own string 
+            String str = string_fromCString(element);
+            obj.type = STRING;
+            memcpy(&obj.object, &str, sizeof(String));
             break;
+        }
 
         default:
             return (LogObject) { 0 };
@@ -126,6 +129,7 @@ static LogObject logObject_create(LOGGABLE loggableType, void *element) {
 //#define LOG_DEBUG(...) logger_logAll(logger, DEBUG, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
 #define LOG_DEBUG(...) logger_logAll(DEBUG, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
 #define LOG_INFO(...) logger_logAll(INFO, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
+#define LOG_ERROR(...) logger_logAll(ERROR, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
 
 extern Logger* logger;
 

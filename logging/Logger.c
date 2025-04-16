@@ -94,13 +94,7 @@ Logger* logger_init(LOGOUTPUT output) {
 
 void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
 
-#ifdef DEBUG_BUILD
-    if (loglevel != DEBUG) {
-        return;
-    }
-#endif
-
-
+    
     StringBuilder* stringBuilder = stringBuilder_create();
 
     // start parsing vargs
@@ -192,6 +186,7 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
     }
     va_end(logObjects);
 
+    stringBuilder_appendCharArray(stringBuilder, "\n", 1);
     // finally create the String and write to output 
     String outputString = stringBuilder_build(stringBuilder);
     write(logger->fd, outputString.data, outputString.length);

@@ -15,9 +15,6 @@ Logger* logger;
 
 int main() {
 
-#ifdef DEBUG_BUILD
-    fprintf(stdout, "Starting debug build \n");
-#endif
 
     arena = arena_init();
     logger = logger_init(LOG_OUTPUT);
@@ -51,7 +48,8 @@ int main() {
     // silence compiler warning
     UNUSED(preparedState);
 
-    LOG_DEBUG(LOGOBJ(preparedState));
+    LOG_INFO(LOGOBJ("Initial prepared state: \n"));
+    LOG_INFO(LOGOBJ(preparedState));
     
     // --- START OF PROTOCOL ---
 
