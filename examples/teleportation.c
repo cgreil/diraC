@@ -13,7 +13,6 @@ Logger* logger;
 
 int main() {
 
-
     arena = arena_init();
     logger = logger_init(LOG_OUTPUT);
 
@@ -43,8 +42,13 @@ int main() {
 
     Vector preparedState = qureg.stateVector;
     
-    LOG_INFO(LOGOBJ("Initial prepared state: \n"));
-    LOG_INFO(LOGOBJ(preparedState));
+    LOG_INFO(
+        LOGOBJ("Initial prepared state:\n"),
+        LOGOBJ(preparedState),
+        LOGOBJ("\n")
+    );
+    
+
     
     // --- START OF PROTOCOL ---
 

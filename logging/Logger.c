@@ -115,14 +115,12 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
     } else if (loglevel == ERROR) {
         stringBuilder_appendCharArray(stringBuilder, ANSI_COLOR_RED, strlen(ANSI_COLOR_RED));
     }
-
     stringBuilder_appendString(stringBuilder, getLoglevelString(loglevel));
     stringBuilder_appendCharArray(stringBuilder, ANSI_COLOR_RESET, strlen(ANSI_COLOR_RESET));
     stringBuilder_appendString(stringBuilder, getLoggingTimeString());
 
-
-    for (size_t argIndex = 0; argIndex < numArgs; argIndex++) {
-
+    for (size_t argIndex = 0; argIndex < numArgs; argIndex++) { 
+        
         // retrieve next logObject and parse the internal union type
         LogObject logObj = va_arg(logObjects, LogObject);
 
@@ -193,8 +191,7 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
     }
     va_end(logObjects);
 
-    stringBuilder_appendCharArray(stringBuilder, "\n", 1);
-    // finally create the String and write to output 
+    // finally build the String and write to output 
     String outputString = stringBuilder_build(stringBuilder);
     write(logger->fd, outputString.data, outputString.length);
 }

@@ -198,7 +198,7 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
     }
 
     if (!vector_isNormalized(qureg.stateVector)) {
-        LOG_ERROR(LOGOBJ("[qureg_apply1QubitUnitary] Precondition Error: Vector not normalized"));
+        LOG_ERROR(LOGOBJ("[qureg_apply1QubitUnitary] Precondition Error: Vector not normalized \n"));
     }
     /**
      * This will lead to the most inefficient computation i have ever caused
@@ -213,22 +213,25 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
      
     Matrix transformationMatrix = expandMatrixToQuregSize(qureg, gateDefinition, 1, target);
     
-    LOG_INFO(
+    LOG_DEBUG(
         LOGOBJ("[qureg_apply1QubitUnitary] Vector before matrix application:"),
         LOGOBJ(qureg.stateVector),
+        LOGOBJ("\n"),
         LOGOBJ("[qureg_apply1QubitUnitary] Matrix to apply: "),
-        LOGOBJ(transformationMatrix)
+        LOGOBJ(transformationMatrix),
+        LOGOBJ("\n")
     );
 
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
 
-    LOG_INFO(
+    LOG_DEBUG(
         LOGOBJ("[qureg_apply1QubitUnitary] Vector after matrix application:"),
-        LOGOBJ(qureg.stateVector)
+        LOGOBJ(qureg.stateVector),
+        LOGOBJ("\n")
     );
 
     if (!vector_isNormalized(qureg.stateVector)) {
-        LOG_ERROR(LOGOBJ("[qureg_apply1QubitUnitary] Postcondition error: Vector not normalized"));
+        LOG_ERROR(LOGOBJ("[qureg_apply1QubitUnitary] Postcondition error: Vector not normalized \n"));
     }
 
    return qureg;
@@ -262,7 +265,7 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
      */ 
     if (target < control) {
         // TODO: implement permutation of the matrix
-        fprintf(stderr, "Multi-qubit gates with targetIndex < controlIndex are not yet supported \n");
+        LOG_ERROR(LOGOBJ("Multi-qubit gates with targetIndex < controlIndex are not yet supported \n"));
         return (QuantumRegister) { 0 };
     }
 
@@ -291,25 +294,28 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
     }
 
     if (!vector_isNormalized(qureg.stateVector)) {
-        LOG_ERROR(LOGOBJ("[qureg_apply2QubitUnitary] Postcondition error: Vector not normalized"));
+        LOG_ERROR(LOGOBJ("[qureg_apply2QubitUnitary] Postcondition error: Vector not normalized \n"));
     }
 
-    LOG_INFO(
+    LOG_DEBUG(
         LOGOBJ("[qureg_apply2QubitUnitary] Vector before matrix application:"),
         LOGOBJ(qureg.stateVector),
+        LOGOBJ("\n"),
         LOGOBJ("[qureg_apply2QubitUnitary] Matrix to apply: "),
-        LOGOBJ(transformationMatrix)
+        LOGOBJ(transformationMatrix),
+        LOGOBJ("\n")
     );
 
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
 
-    LOG_INFO(
+    LOG_DEBUG(
         LOGOBJ("[qureg_apply2QubitUnitary] Vector after matrix application:"),
-        LOGOBJ(qureg.stateVector)
+        LOGOBJ(qureg.stateVector),
+        LOGOBJ("\n")
     );
 
     if (!vector_isNormalized(qureg.stateVector)) {
-        LOG_ERROR(LOGOBJ("[qureg_apply2QubitUnitary] Postcondition error: Vector not normalized"));
+        LOG_ERROR(LOGOBJ("[qureg_apply2QubitUnitary] Postcondition error: Vector not normalized \n"));
     }
 
     return qureg;
@@ -336,10 +342,10 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
 
 
     if (!matrix_isHermitian(zeroProjectorExpanded) || !matrix_isProjector(zeroProjectorExpanded)) {
-        LOG_ERROR(LOGOBJ("Zero Projector is not a hermitian projector \n"));
+        LOG_ERROR(LOGOBJ("Zero Projector is not a hermitian projector\n"));
     } 
     if (!matrix_isHermitian(oneProjectorExpanded) || !matrix_isProjector(oneProjectorExpanded)) {
-        LOG_ERROR(LOGOBJ("One Proejector is not a hermitian projector \n"));
+        LOG_ERROR(LOGOBJ("One Proejector is not a hermitian projector\n"));
     }
 
     double zeroProbability = matrix_braket_product(zeroProjectorExpanded, qureg.stateVector, qureg.stateVector).re;
@@ -353,7 +359,7 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
     );
 
     if (fabs(zeroProbability + oneProbability - 1.0) > 0.0001) {
-        LOG_ERROR(LOGOBJ("[qureg_applyZMeasurement] Sum of measurement probabilities does not equal 1.0 \n"));
+        LOG_ERROR(LOGOBJ("[qureg_applyZMeasurement] Sum of measurement probabilities does not equal 1.0\n"));
     }
 
    // randomly choose whether the state will collapse into |0> or |1> state according to the 

@@ -191,11 +191,10 @@ size_t stringBuilder_appendComplex(StringBuilder* stringBuilder, const Complex c
 
     size_t bufferSize = COMPLEX_NUM_STRING_BUFSIZE;
     size_t numWritten = 0;
-    numWritten += stringBuilder_appendString(stringBuilder, string_fromCString("Matrix\t"));
     // for now, simply use a buffer and assume size is large enough
     char complexBuffer[bufferSize];
-    snprintf(complexBuffer, bufferSize, "%.4f + %.4fi",complex.re, complex.im);    
-    numWritten += stringBuilder_appendCharArray(stringBuilder, complexBuffer, numWritten);
+    int formatSize =  snprintf(complexBuffer, bufferSize, "%.3f + %.3fi",complex.re, complex.im);    
+    numWritten += stringBuilder_appendCharArray(stringBuilder, complexBuffer, formatSize);
 
     return numWritten;
 }
@@ -208,7 +207,7 @@ size_t stringBuilder_appendVector(StringBuilder* stringBuilder, const Vector vec
     const char bracketEnd[1] = "]";
     const char separator[2] = ", ";
 
-    numWritten += stringBuilder_appendString(stringBuilder, string_fromCString("Vector\t"));
+    numWritten += stringBuilder_appendString(stringBuilder, string_fromCString("Vector\n"));
     numWritten += stringBuilder_appendCharArray(stringBuilder, bracketStart, STRING_SIZE(bracketStart));
     for (size_t i = 0; i < vector.size; i++) {
         const Complex complex = vector_getElement(vector, i).value;
@@ -230,9 +229,10 @@ size_t stringBuilder_appendMatrix(StringBuilder* stringBuilder, const Matrix mat
     const char bracketStart[1] = "[";
     const char bracketEnd[1] = "]";
     const char separatorComma[1] = ",";
-    const char separatorSemicolon[1] = ";";
     const char separatorSpace[1] = " ";
+    const char separatorNewline[1] = "\n";
 
+    numWritten += stringBuilder_appendString(stringBuilder, string_fromCString("Matrix\n"));
     // Matrix are displayed in the form [[2 + 1i, 8 - 2i]; [9 + 2i, 1 + 3i]]
     // where each inner bracket corresponds to a row within the matrix
     numWritten += stringBuilder_appendCharArray(stringBuilder, bracketStart, STRING_SIZE(bracketStart));
@@ -252,11 +252,12 @@ size_t stringBuilder_appendMatrix(StringBuilder* stringBuilder, const Matrix mat
 
         // append end of row separator only if it is not yet the last row
         if (outerIndex < matrix.numRows - 1) {
-            numWritten += stringBuilder_appendCharArray(stringBuilder, separatorSemicolon, STRING_SIZE(separatorSemicolon));
             numWritten += stringBuilder_appendCharArray(stringBuilder, separatorSpace, STRING_SIZE(separatorSpace));
+            numWritten += stringBuilder_appendCharArray(stringBuilder, separatorNewline, STRING_SIZE(separatorNewline));
         }
     }
     numWritten += stringBuilder_appendCharArray(stringBuilder, bracketEnd, STRING_SIZE(bracketEnd));
+    numWritten += stringBuilder_appendCharArray(stringBuilder, separatorNewline, STRING_SIZE(separatorNewline));
 
     return numWritten;
 }
