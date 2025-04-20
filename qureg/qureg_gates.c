@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "qureg.h"
+#include "qureg/qureg.h"
+#include "logging/Logger.h"
+
 
 static Matrix expandMatrixToQuregSize(QuantumRegister qureg, Matrix initialMatrix, size_t initialMatrixSize, size_t initialMatrixTarget) {
 
@@ -195,9 +197,10 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
         fprintf(stderr, "Supplied Qubit operation has a target qubit outside of the supplied register \n");
         return (QuantumRegister) { 0 };
     }
-#ifdef DEBUG_BUILD
-    assert(("Precondition error: vector is not normalized" && vector_isNormalized(qureg.stateVector)));
-#endif
+
+    if (!vector_isNormalized(qureg.stateVector)) {
+        LOG_ERROR(LOGOBJ("[qureg_apply1QubitUnitary] Precondition Error: Vector not normalized"));
+    }
     /**
      * This will lead to the most inefficient computation i have ever caused
      * -> Maybe optimize later :(
@@ -210,16 +213,26 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
 
      
     Matrix transformationMatrix = expandMatrixToQuregSize(qureg, gateDefinition, 1, target);
-    // #ifdef DEBUG_BUILD
-    // Assertion will also fail for measurements, which are not unitary. //TODO: find a cheap way 
-    // way to distinguish
-    //assert("Precondition error: transformation Matrix is not unitary" && matrix_isUnitary(transformationMatrix));
-    // #endif
+    
+    LOG_INFO(
+        LOGOBJ("[qureg_apply1QubitUnitary] Vector before matrix application:"),
+        LOGOBJ(qureg.stateVector),
+        LOGOBJ("[qureg_apply1QubitUnitary] Matrix to apply: "),
+        LOGOBJ(transformationMatrix)
+    );
+
     qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
-#ifdef DEBUG_BUILD
-    assert("Postcondition error: stateVector not normalized" && vector_isNormalized(qureg.stateVector));
-#endif
-    return qureg;
+
+    LOG_INFO(
+        LOGOBJ("[qureg_apply1QubitUnitary] Vector after matrix application:"),
+        LOGOBJ(qureg.stateVector)
+    );
+
+    if (!vector_isNormalized(qureg.stateVector)) {
+        LOG_ERROR(LOGOBJ("[qureg_apply1QubitUnitary] Postcondition error: Vector not normalized"));
+    }
+
+   return qureg;
 }
 
 QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t target, Matrix gateDefinition) {
@@ -276,16 +289,29 @@ QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, 
             transformationMatrix = matrix_kron(transformationMatrix, idMatrix);
             qubitCounter++;
         }
-    }    
-#ifdef DEBUG_BUILD
-    assert("Precondition error: statevector is not normalized" && vector_isNormalized(qureg.stateVector));
-    assert("Precondition error: transformationMatrix is not unitary" && matrix_isUnitary(transformationMatrix));
-#endif
-    qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
-#ifdef DEBUG_BUILD
-    assert("Postcondition error: statevector is not normalized" && vector_isNormalized(qureg.stateVector));
-#endif
+    }
 
+    if (!vector_isNormalized(qureg.stateVector)) {
+        LOG_ERROR(LOGOBJ("[qureg_apply2QubitUnitary] Postcondition error: Vector not normalized"));
+    }
+
+    LOG_INFO(
+        LOGOBJ("[qureg_apply2QubitUnitary] Vector before matrix application:"),
+        LOGOBJ(qureg.stateVector),
+        LOGOBJ("[qureg_apply2QubitUnitary] Matrix to apply: "),
+        LOGOBJ(transformationMatrix)
+    );
+
+    qureg.stateVector = vector_matrixMultiplication(qureg.stateVector, transformationMatrix);
+
+    LOG_INFO(
+        LOGOBJ("[qureg_apply2QubitUnitary] Vector after matrix application:"),
+        LOGOBJ(qureg.stateVector)
+    );
+
+    if (!vector_isNormalized(qureg.stateVector)) {
+        LOG_ERROR(LOGOBJ("[qureg_apply2QubitUnitary] Postcondition error: Vector not normalized"));
+    }
 
     return qureg;
 }

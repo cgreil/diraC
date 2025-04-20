@@ -10,8 +10,10 @@
 
 #include "qureg/qureg.h"
 #include "utils/dataArena.h"
+#include "logging/Logger.h"
 
 Arena* arena;
+Logger* logger;
 
 START_TEST(quregHadamardSingleQubitTest) {
 
@@ -257,6 +259,7 @@ Suite* quantumRegisterMeasurementSuite(void) {
 int main(void) {
 
     arena = arena_init();
+    logger = logger_init(STDOUT);
 
     Suite* testSuites[] = {
         quantumRegisterBasicSuite(),

@@ -7,8 +7,6 @@
 
 #define LOG_OUTPUT STDOUT 
 
-#define UNUSED(x) (void) (x)
-
 // declare globally scoped structs
 Arena* arena;
 Logger* logger;
@@ -45,9 +43,6 @@ int main() {
 
     Vector preparedState = qureg.stateVector;
     
-    // silence compiler warning
-    UNUSED(preparedState);
-
     LOG_INFO(LOGOBJ("Initial prepared state: \n"));
     LOG_INFO(LOGOBJ(preparedState));
     

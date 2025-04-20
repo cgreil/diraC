@@ -94,15 +94,18 @@ Logger* logger_init(LOGOUTPUT output) {
 
 void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
 
-    
+// skip debug logs for non- dbeug builds
+#ifndef DEBUG_BUILD
+    if (loglevel == DEBUG) {
+        return;
+    } 
+#endif
+
     StringBuilder* stringBuilder = stringBuilder_create();
 
     // start parsing vargs
     va_list logObjects;
     va_start(logObjects, numArgs);
-
-    // retrieve next logObject and parse the internal union type
-    LogObject logObj = va_arg(logObjects, LogObject);
 
     // select color based on loglevel
     if (loglevel == DEBUG) {
@@ -119,6 +122,10 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
 
 
     for (size_t argIndex = 0; argIndex < numArgs; argIndex++) {
+
+        // retrieve next logObject and parse the internal union type
+        LogObject logObj = va_arg(logObjects, LogObject);
+
         switch (logObj.type) {
             case STRING: {
                 // use memcpy to get around typecasting rules for union members

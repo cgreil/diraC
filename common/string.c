@@ -188,16 +188,16 @@ size_t stringBuilder_appendString(StringBuilder* stringBuilder, const String str
 
 size_t stringBuilder_appendComplex(StringBuilder* stringBuilder, const Complex complex) {
 
+
     size_t bufferSize = COMPLEX_NUM_STRING_BUFSIZE;
+    size_t numWritten = 0;
+    numWritten += stringBuilder_appendString(stringBuilder, string_fromCString("Matrix\t"));
     // for now, simply use a buffer and assume size is large enough
     char complexBuffer[bufferSize];
-    size_t numWritten = snprintf(complexBuffer, bufferSize, "%.4f + %.4fi",complex.re, complex.im);
-    if (numWritten <= 0) {
-        fprintf(stderr, "Appending complex array to stringBuilder exceeded buffer size \n");
-        return numWritten;
-    }
+    snprintf(complexBuffer, bufferSize, "%.4f + %.4fi",complex.re, complex.im);    
+    numWritten += stringBuilder_appendCharArray(stringBuilder, complexBuffer, numWritten);
 
-    return stringBuilder_appendCharArray(stringBuilder, complexBuffer, numWritten);
+    return numWritten;
 }
 
 size_t stringBuilder_appendVector(StringBuilder* stringBuilder, const Vector vector) {
@@ -208,6 +208,7 @@ size_t stringBuilder_appendVector(StringBuilder* stringBuilder, const Vector vec
     const char bracketEnd[1] = "]";
     const char separator[2] = ", ";
 
+    numWritten += stringBuilder_appendString(stringBuilder, string_fromCString("Vector\t"));
     numWritten += stringBuilder_appendCharArray(stringBuilder, bracketStart, STRING_SIZE(bracketStart));
     for (size_t i = 0; i < vector.size; i++) {
         const Complex complex = vector_getElement(vector, i).value;
@@ -234,7 +235,6 @@ size_t stringBuilder_appendMatrix(StringBuilder* stringBuilder, const Matrix mat
 
     // Matrix are displayed in the form [[2 + 1i, 8 - 2i]; [9 + 2i, 1 + 3i]]
     // where each inner bracket corresponds to a row within the matrix
-
     numWritten += stringBuilder_appendCharArray(stringBuilder, bracketStart, STRING_SIZE(bracketStart));
     for (size_t outerIndex = 0; outerIndex < matrix.numRows; outerIndex++) {
         numWritten += stringBuilder_appendCharArray(stringBuilder, bracketStart, STRING_SIZE(bracketStart));
@@ -335,9 +335,7 @@ size_t stringBuilder_appendQuantumRegister(StringBuilder* stringBuilder, const Q
             numWritten += stringBuilder_appendCharArray(stringBuilder, plus, STRING_SIZE(plus));
         } 
     }
- 
     return numWritten;
-
 }
 
 

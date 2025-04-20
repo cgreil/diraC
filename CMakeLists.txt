@@ -82,6 +82,7 @@ set (
 
 set (
         QUREG_SOURCE_FILES
+        logging/Logger.c
         matrix/matrix.c
         common/doubleLinkedList.c
         vector/vectorCollection.c
@@ -116,6 +117,7 @@ add_executable(DIRAC main.c
 
 add_executable(TELEPORTATION 
         utils/dataArena.c
+        logging/Logger.c
         examples/teleportation.c
         complex/complex.c
         float/float.c
@@ -126,8 +128,6 @@ add_executable(TELEPORTATION
         common/string.c
         matrix/matrix.c
         complex/tuple.c
-        logging/Logger.h
-        logging/Logger.c
         qureg/qureg.c
         qureg/qureg_gates.c
 )

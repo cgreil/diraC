@@ -124,12 +124,13 @@ static LogObject logObject_create(LOGGABLE loggableType, void *element) {
 
 #define LOGOBJ(obj) logObject_create(LOGGABLE_TYPE((obj)), &(obj)) 
 
-#define __VA_NUM_LOGOBJS__(...)  (sizeof((LogObject[]){(__VA_ARGS__)})/sizeof(LogObject))
+#define __VA_NUM_LOGOBJS__(...)  (sizeof((LogObject[]){__VA_ARGS__})/sizeof(LogObject))
 
 //#define LOG_DEBUG(...) logger_logAll(logger, DEBUG, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
 #define LOG_DEBUG(...) logger_logAll(DEBUG, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
 #define LOG_INFO(...) logger_logAll(INFO, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
 #define LOG_ERROR(...) logger_logAll(ERROR, __VA_NUM_LOGOBJS__(__VA_ARGS__), __VA_ARGS__)
+
 
 extern Logger* logger;
 
