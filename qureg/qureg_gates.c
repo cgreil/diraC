@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <assert.h>
 
 #include "qureg/qureg.h"
 #include "logging/Logger.h"
@@ -335,21 +334,29 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
     Matrix zeroProjectorExpanded = expandMatrixToQuregSize(qureg, zeroProjector, 1, target);
     Matrix oneProjectorExpanded = expandMatrixToQuregSize(qureg, oneProjector, 1, target);
 
-#ifdef DEBUG_BUILD
-    assert("Measurement matrix is not hermitian" && matrix_isHermitian(zeroProjectorExpanded));
-    assert("Measurement matrix is not hermitian" && matrix_isHermitian(oneProjectorExpanded));
-    assert("Measurement matrix is not projector" && matrix_isProjector(zeroProjectorExpanded));
-    assert("Measurement matrix is not projector" && matrix_isProjector(oneProjectorExpanded));
-#endif
 
+    if (!matrix_isHermitian(zeroProjectorExpanded) || !matrix_isProjector(zeroProjectorExpanded)) {
+        LOG_ERROR(LOGOBJ("Zero Projector is not a hermitian projector \n"));
+    } 
+    if (!matrix_isHermitian(oneProjectorExpanded) || !matrix_isProjector(oneProjectorExpanded)) {
+        LOG_ERROR(LOGOBJ("One Proejector is not a hermitian projector \n"));
+    }
 
     double zeroProbability = matrix_braket_product(zeroProjectorExpanded, qureg.stateVector, qureg.stateVector).re;
     double oneProbability = matrix_braket_product(oneProjectorExpanded, qureg.stateVector, qureg.stateVector).re;
 
-#ifdef DEBUG_BUILD
-    assert("Measurements do not sum to 1" && fabs(zeroProbability + oneProbability - 1.0) < 0.0001);
-#endif
-    // randomly choose whether the state will collapse into |0> or |1> state according to the 
+
+    // TODO: Add possitibility to log primitives
+    LOG_DEBUG(
+        LOGOBJ("[qureg_applyZMeasurement] Applying Z measurement with likelyhood of |0> result: \n"),
+        LOGOBJ("[qureg_applyZMeasurement] Applying Z measurement with likelyhood of |1> result: \n")
+    );
+
+    if (fabs(zeroProbability + oneProbability - 1.0) > 0.0001) {
+        LOG_ERROR(LOGOBJ("[qureg_applyZMeasurement] Sum of measurement probabilities does not equal 1.0 \n"));
+    }
+
+   // randomly choose whether the state will collapse into |0> or |1> state according to the 
     // calculated probability distribution
 
     measurementResult->measuredQubitIndex = target;
