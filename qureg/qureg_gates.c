@@ -384,6 +384,7 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
     }
     measurementMatrix = matrix_scaleINP(measurementMatrix, (Complex) {1/sqrt(probability), 0.0});
 
+    // TODO: restructrue: measurementMatrix is not unitary
     return qureg_apply1QubitUnitary(qureg, target, measurementMatrix);
 }
 
