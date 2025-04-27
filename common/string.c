@@ -239,7 +239,7 @@ size_t stringBuilder_appendMatrix(StringBuilder* stringBuilder, const Matrix mat
     for (size_t outerIndex = 0; outerIndex < matrix.numRows; outerIndex++) {
         numWritten += stringBuilder_appendCharArray(stringBuilder, bracketStart, STRING_SIZE(bracketStart));
         for (size_t innerIndex = 0; innerIndex < matrix.numColumns; innerIndex++) {
-            const Complex complex = matrix_getElement(matrix, innerIndex, outerIndex);
+            const Complex complex = matrix_getElement(matrix, outerIndex, innerIndex);
             numWritten += stringBuilder_appendComplex(stringBuilder, complex);
 
             // append sperators only if it is not the last element in the row

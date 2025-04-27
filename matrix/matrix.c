@@ -210,8 +210,7 @@ Matrix matrix_clone(Matrix matrix) {
 }
 
 Complex matrix_getElement(Matrix matrix, size_t rowIndex, size_t columnIndex) {
-    size_t valueIndex = columnIndex * matrix.numRows + rowIndex;
-    return matrix.ndArray.values[valueIndex];
+    return NDArray_getElement(matrix.ndArray, rowIndex, columnIndex).value;
 }
 
 bool matrix_setElement(Matrix matrix, size_t rowIndex, size_t columnIndex, Complex newElement) {
@@ -279,8 +278,8 @@ OptVector matrix_getRowAtIndex(const Matrix matrix, const size_t rowIndex) {
     size_t columnIndices[numElements];
 
     for (size_t i = 0; i < numElements; i++) {
-        rowIndices[i] = i;
-        columnIndices[i] = rowIndex;
+        rowIndices[i] = rowIndex;
+        columnIndices[i] = i;
     }
 
     Slice columnSlice = NDArray_getSlice(matrix.ndArray, numElements, rowIndices, columnIndices);

@@ -20,8 +20,10 @@ int main() {
 
     size_t numQubits = 3;
     QuantumRegister qureg = qureg_new(numQubits); 
+    // Set random seed
+    srand(2000);
 
-    // Create initial Bell basis by entangling qubits 0 and 1
+    // Create initial Bell basis by entangling qubits 1 and 2
     qureg = qureg_applyHadamard(qureg, 1);
     qureg = qureg_applyCNOT(qureg, 1, 2);
 
@@ -32,9 +34,12 @@ int main() {
     double yPhase = ((double) rand() / (double) RAND_MAX) * 2 * M_PI;
     double zPhase = ((double) rand() / (double) RAND_MAX) * 2 * M_PI;
 
+    fprintf(stdout, "The phases are x: %f, y: %f, z: %f \n", xPhase, yPhase, zPhase);
+
     qureg = qureg_applyRX(qureg, 0, xPhase);
     qureg = qureg_applyRY(qureg, 0, yPhase);
     qureg = qureg_applyRZ(qureg, 0, zPhase);
+
 
     // This is a copy of the first qubit for comparison purposes. 
     // Not that this is not possible in the actual teleporation protocol
@@ -71,6 +76,12 @@ int main() {
     if (m2.measuredValue - 1.0 < 0.00001) {
         qureg = qureg_applyPauliZ(qureg, 2);
     }
+
+    LOG_INFO(
+        LOGOBJ("Recovered state after traversing protocol:\n"),
+        LOGOBJ(qureg.stateVector),
+        LOGOBJ("\n")
+    );
 
     
     logger_destroy(logger);

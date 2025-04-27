@@ -20,7 +20,6 @@ NDArray NDArray_create(size_t numRows, size_t numColumns, Complex *values) {
 
     /**
      * NDArray_create takes
-     * @param arena
      * @param numColumns
      * @param numRows
      * @param values
