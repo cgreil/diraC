@@ -306,7 +306,7 @@ size_t stringBuilder_appendQuantumRegister(StringBuilder* stringBuilder, const Q
     // (alpha_1 + beta_1 i) |00...0> + ... + (alpha_n + beta_n i) |11...1>
     // where n is number of amplitudes i.e. number of qubits and 
     // the words inside the kets correspond to the binary represnation 
-    // of each individual qubit (in big-endian representation) 
+    // of each individual qubit  
    
     
     int numBits = (int) log2((double) qureg.numQubits); 
