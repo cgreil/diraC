@@ -173,7 +173,7 @@ QuantumRegister qureg_applySWAP(QuantumRegister qureg, size_t target1, size_t ta
 QuantumRegister qureg_applyCNOT(QuantumRegister qureg, size_t control, size_t target) {
 
     LOG_INFO(
-        LOGOBJ("Applying CNOT gate with control"),
+        LOGOBJ("Applying CNOT gate with control "),
         LOGOBJ(control),
         LOGOBJ(" and target "),
         LOGOBJ(target),
@@ -443,7 +443,11 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
     // TODO: Add possitibility to log primitives
     LOG_DEBUG(
         LOGOBJ("[qureg_applyZMeasurement] Applying Z measurement with likelyhood of |0> result: \n"),
-        LOGOBJ("[qureg_applyZMeasurement] Applying Z measurement with likelyhood of |1> result: \n")
+        LOGOBJ(zeroProbability),
+        LOGOBJ("\n"),
+        LOGOBJ("[qureg_applyZMeasurement] Applying Z measurement with likelyhood of |1> result: \n"),
+        LOGOBJ(oneProbability),
+        LOGOBJ("\n")
     );
 
     if (fabs(zeroProbability + oneProbability - 1.0) > 0.0001) {
@@ -461,11 +465,19 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
     double randomNumber = (double) rand() / (double) RAND_MAX;
     if (randomNumber <= zeroProbability) {
         // random experiment decides that qubit state will collapse into |0> state
+        LOG_INFO(
+            LOGOBJ("Z measurement resulted in outcome |0> \n")
+        );
+
         measurementMatrix = zeroProjector;
         probability = zeroProbability;
         measurementResult->measuredValue = 0.0;
     } else {
         // collapse into |1> state
+        LOG_INFO(
+            LOGOBJ("Z measurement resulted in outcome |1> \n")
+        );
+
         measurementMatrix = oneProjector;
         probability = oneProbability;
         measurementResult->measuredValue = 1.0;
@@ -475,7 +487,3 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
     // TODO: restructrue: measurementMatrix is not unitary
     return qureg_apply1QubitUnitary(qureg, target, measurementMatrix);
 }
-
-
-
-
