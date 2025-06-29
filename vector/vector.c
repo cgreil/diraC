@@ -10,6 +10,7 @@
 #include "vector/vector.h"
 #include "ndarray/ndarray.h"
 #include "common/string.h"
+#include "logging/Logger.h"
 
 #include "matrix/matrix.h"
 
@@ -375,8 +376,21 @@ Vector vector_matrixMultiplication(Vector vector, Matrix matrix) {
     Complex values[matrix.numRows];
 
     for (size_t i = 0; i < matrix.numRows; i++) {
-        Vector rowSlice = matrix_getRowAtIndex(matrix, i).data;
-        values[i] = vector_innerProduct(rowSlice, vector).value;
+        
+        // intermediate result for a single mulitplication
+        Complex result = { 0 };
+
+        if (vector.size != matrix.numColumns) {
+            LOG_ERROR(LOGOBJ("[vector_matrixMultiplication] Called vector matrix multiplication with noncompliant dimensions \n"));
+        }
+
+        for (size_t j = 0; j < vector.size; j++) {
+            Complex lhs = matrix_getElement(matrix, i, j);
+            Complex rhs = vector_getElement(vector, j).value;
+
+            result = complex_addition(result, complex_multiplication(lhs, rhs));
+        }
+        values[i] = result;
     }
 
     Vector vec = vector_fromArray(values, matrix.numRows);

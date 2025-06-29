@@ -493,9 +493,9 @@ Complex matrix_braket_product(Matrix matrix, Vector bra, Vector ket) {
     
     Vector vector = vector_matrixMultiplication(ket, matrix);
     
-    Vector conjugatedBra = vector_conjugateINP(bra);
+    //Vector conjugatedBra = vector_conjugateINP(bra);
 
-    return vector_innerProduct(conjugatedBra, vector).value;
+    return vector_innerProduct(bra, vector).value;
 }
 
 bool matrix_isDiagonal(Matrix matrix) {
