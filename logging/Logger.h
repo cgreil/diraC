@@ -40,8 +40,12 @@ typedef enum {
     VECTOR_COLLECTION = 5,
     MATRIX = 6,
     QUREG = 7,
-    NDARRAY = 8, 
-    NOT_IMPLEMENTED = 9
+    NDARRAY = 8,
+    SIZE_T = 9,
+    INTEGER = 10,
+    FLOAT = 11,
+    DOUBLE = 12,
+    NOT_IMPLEMENTED = 13
 } LOGGABLE;
 
 typedef struct {
@@ -54,6 +58,10 @@ typedef struct {
         Matrix matrix;
         QuantumRegister qureg;
         NDArray ndarray;
+        size_t size;
+        int integer;
+        float floatingPoint;
+        double doublePrecisionFP;
         char* chars;
     } object;
 } LogObject;
@@ -68,6 +76,10 @@ typedef struct {
     Matrix: MATRIX,                          \
     QuantumRegister: QUREG,                  \
     NDArray: NDARRAY,                        \
+    size_t: SIZE_T,                          \
+    int: INTEGER,                            \
+    float: FLOAT,                            \
+    double: DOUBLE,                          \
     default: NOT_IMPLEMENTED                 \
 )
 
@@ -112,6 +124,26 @@ static LogObject logObject_create(LOGGABLE loggableType, void *element) {
             String str = string_fromCString(element);
             obj.type = STRING;
             memcpy(&obj.object, &str, sizeof(String));
+            break;
+        }
+
+        case SIZE_T: {
+            memcpy(&obj.object, element, sizeof(size_t));
+            break;
+        }
+
+        case INTEGER: {
+            memcpy(&obj.object, element, sizeof(int));
+            break;
+        }
+
+        case FLOAT: {
+            memcpy(&obj.object, element, sizeof(float));
+            break;
+        }
+
+        case DOUBLE: {
+            memcpy(&obj.object, element, sizeof(double));
             break;
         }
 

@@ -42,6 +42,13 @@ static Matrix expandMatrixToQuregSize(QuantumRegister qureg, Matrix initialMatri
 
 QuantumRegister qureg_applyPauliX(QuantumRegister qureg, size_t target) {
 
+
+    LOG_INFO(
+        LOGOBJ("Applying X gate to target "),
+        LOGOBJ(target),
+        LOGOBJ(":\n")
+    );
+
     Complex pauliXArr[] = {
         (Complex) {0.0, 0.0}, (Complex) {1.0, 0.0},
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}
@@ -52,6 +59,13 @@ QuantumRegister qureg_applyPauliX(QuantumRegister qureg, size_t target) {
 }
 
 QuantumRegister qureg_applyPauliY(QuantumRegister qureg, size_t target) {
+
+    LOG_INFO(
+        LOGOBJ("Applying Y gate to target "),
+        LOGOBJ(target),
+        LOGOBJ(":\n")
+    );
+
 
     Complex pauliYArr[] = {
         (Complex) {0.0, 0.0}, (Complex) {0.0, -1.0},
@@ -64,6 +78,12 @@ QuantumRegister qureg_applyPauliY(QuantumRegister qureg, size_t target) {
 
 QuantumRegister qureg_applyPauliZ(QuantumRegister qureg, size_t target) {
 
+    LOG_INFO(
+        LOGOBJ("Applying Z gate to target "),
+        LOGOBJ(target),
+        LOGOBJ(":\n")
+    );
+
     Complex pauliZArr[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
         (Complex) {0.0, 0.0}, (Complex) {-1.0, 0.0}
@@ -75,6 +95,12 @@ QuantumRegister qureg_applyPauliZ(QuantumRegister qureg, size_t target) {
 
 QuantumRegister qureg_applyHadamard(QuantumRegister qureg, size_t target) {
 
+    LOG_INFO(
+        LOGOBJ("Applying H gate to target "),
+        LOGOBJ(target),
+        LOGOBJ(":\n")
+    );
+
     Complex hadamardArray[] = {
         (Complex) {(1.0)/(sqrt(2.0)), 0.0}, (Complex) {(1.0)/sqrt(2.0)},
         (Complex) {(1.0)/(sqrt(2.0)), 0.0}, (Complex) {(-1.0)/sqrt(2.0)}
@@ -85,6 +111,12 @@ QuantumRegister qureg_applyHadamard(QuantumRegister qureg, size_t target) {
 }
 
 QuantumRegister qureg_applyT(QuantumRegister qureg, size_t target) {
+
+    LOG_INFO(
+        LOGOBJ("Applying T gate to target "),
+        LOGOBJ(target),
+        LOGOBJ(":\n")
+    );
 
     double imagComponent = 1 / sin(M_PI_4);
     double realComponent = 1 / cos(M_PI_4);
@@ -100,6 +132,13 @@ QuantumRegister qureg_applyT(QuantumRegister qureg, size_t target) {
 
 QuantumRegister qureg_applyS(QuantumRegister qureg, size_t target) {
 
+
+    LOG_INFO(
+        LOGOBJ("Applying S gate to target "),
+        LOGOBJ(target),
+        LOGOBJ(":\n")
+    );
+
     Complex sGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0},
         (Complex) {0.0, 0.0}, (Complex) {0.0, 1.0}
@@ -110,6 +149,15 @@ QuantumRegister qureg_applyS(QuantumRegister qureg, size_t target) {
 }
 
 QuantumRegister qureg_applySWAP(QuantumRegister qureg, size_t target1, size_t target2) {
+
+
+    LOG_INFO(
+        LOGOBJ("Applying SWAP gate to targets "),
+        LOGOBJ(target1),
+        LOGOBJ(", \t"), 
+        LOGOBJ(target2),
+        LOGOBJ(":\n")
+    );
 
     Complex cnotGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
@@ -124,6 +172,14 @@ QuantumRegister qureg_applySWAP(QuantumRegister qureg, size_t target1, size_t ta
 
 QuantumRegister qureg_applyCNOT(QuantumRegister qureg, size_t control, size_t target) {
 
+    LOG_INFO(
+        LOGOBJ("Applying CNOT gate with control"),
+        LOGOBJ(control),
+        LOGOBJ(" and target "),
+        LOGOBJ(target),
+        LOGOBJ(":\n")
+    );
+
     Complex cnotGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
         (Complex) {0.0, 0.0}, (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
@@ -137,6 +193,14 @@ QuantumRegister qureg_applyCNOT(QuantumRegister qureg, size_t control, size_t ta
 
 QuantumRegister qureg_applyCZ(QuantumRegister qureg, size_t control, size_t target) {
 
+    LOG_INFO(
+        LOGOBJ("Applying CZ gate with control"),
+        LOGOBJ(control),
+        LOGOBJ(" and target "),
+        LOGOBJ(target),
+        LOGOBJ(":\n")
+    );
+
     Complex czGateArray[] = {
         (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
         (Complex) {0.0, 0.0}, (Complex) {1.0, 0.0}, (Complex) {0.0, 0.0}, (Complex) {0.0, 0.0},
@@ -149,6 +213,14 @@ QuantumRegister qureg_applyCZ(QuantumRegister qureg, size_t control, size_t targ
 }
 
 QuantumRegister qureg_applyRX(QuantumRegister qureg, size_t target, double phi) {
+
+    LOG_INFO(
+        LOGOBJ("Applying RX gate with target "),
+        LOGOBJ(target),
+        LOGOBJ(" and phase "),
+        LOGOBJ(phi),
+        LOGOBJ(":\n")
+    );
 
     const double sinTheta = sin(phi / 2);
     const double cosTheta = cos(phi / 2);
@@ -164,6 +236,14 @@ QuantumRegister qureg_applyRX(QuantumRegister qureg, size_t target, double phi) 
 
 QuantumRegister qureg_applyRY(QuantumRegister qureg, size_t target, double phi) {
 
+    LOG_INFO(
+        LOGOBJ("Applying RY gate with target "),
+        LOGOBJ(target),
+        LOGOBJ(" and phase "),
+        LOGOBJ(phi),
+        LOGOBJ(":\n")
+    );
+
     const double sinTheta = sin(phi / 2);
     const double cosTheta = cos(phi / 2);
 
@@ -177,6 +257,14 @@ QuantumRegister qureg_applyRY(QuantumRegister qureg, size_t target, double phi) 
 }
 
 QuantumRegister qureg_applyRZ(QuantumRegister qureg, size_t target, double phi) {
+
+    LOG_INFO(
+        LOGOBJ("Applying RZ gate with target "),
+        LOGOBJ(target),
+        LOGOBJ(" and phase "),
+        LOGOBJ(phi),
+        LOGOBJ(":\n")
+    );
 
     const double sinTheta = sin(phi / 2);
     const double cosTheta = cos(phi / 2);

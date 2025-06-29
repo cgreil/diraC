@@ -125,6 +125,53 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
         LogObject logObj = va_arg(logObjects, LogObject);
 
         switch (logObj.type) {
+
+            case SIZE_T: {
+                size_t size = logObj.object.size;
+                int stringLength = (int)((ceil(log10(size)) + 1) * sizeof(char));
+
+                char buf[stringLength]; 
+                snprintf(buf, stringLength, "%zu", size);
+
+                stringBuilder_appendCharArray(stringBuilder, buf, stringLength);                
+                break;                
+            }
+
+            case INTEGER: {
+                int integer = logObj.object.integer;
+                int stringLength = (int) ((ceil(log10(integer)) + 1) * sizeof(char));
+
+                char buf[stringLength];
+                snprintf(buf, stringLength, "%d", integer);
+
+                stringBuilder_appendCharArray(stringBuilder, buf, stringLength);
+                break;
+            }
+
+            case FLOAT: {
+
+                float floatingPoint = logObj.object.floatingPoint;
+                int stringLength = (int) ((ceil(log10(floatingPoint)) + 1) * sizeof(char));
+
+                char buf[stringLength];
+                snprintf(buf, stringLength, "%f", floatingPoint);
+
+                stringBuilder_appendCharArray(stringBuilder, buf, stringLength);
+                break;
+            }   
+
+            case DOUBLE: {
+
+                double doublePrecisionFP = logObj.object.doublePrecisionFP;
+                int stringLength = (int) ((ceil(log10(doublePrecisionFP)) + 1) * sizeof(char));
+
+                char buf[stringLength];
+                snprintf(buf, stringLength, "%f", doublePrecisionFP);
+
+                stringBuilder_appendCharArray(stringBuilder, buf, stringLength);
+                break;
+            }  
+
             case STRING: {
                 // use memcpy to get around typecasting rules for union members
                 String str;
