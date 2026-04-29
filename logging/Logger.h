@@ -128,22 +128,22 @@ static LogObject logObject_create(LOGGABLE loggableType, void *element) {
         }
 
         case SIZE_T: {
-            memcpy(&obj.object, element, sizeof(size_t));
+            obj.object.size = *(size_t *) element;
             break;
         }
 
         case INTEGER: {
-            memcpy(&obj.object, element, sizeof(int));
+            obj.object.integer = *(int *)element;
             break;
         }
 
         case FLOAT: {
-            memcpy(&obj.object, element, sizeof(float));
+            obj.object.floatingPoint = *(float *)element;
             break;
         }
 
         case DOUBLE: {
-            memcpy(&obj.object, element, sizeof(double));
+            obj.object.doublePrecisionFP = *(double *)element;
             break;
         }
 

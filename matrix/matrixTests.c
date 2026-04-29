@@ -4,7 +4,7 @@
 
 #include "utils/testutils.h"
 #include "utils/dataArena.h"
-
+#include "logging/Logger.h"
 #include "vector/vector.h"
 #include "vector/vectorCollection.h"
 #include "ndarray/ndarray.h"
@@ -12,6 +12,7 @@
 
 
 Arena *arena;
+Logger* logger;
 
 START_TEST(matrixZeroTest) {
 
@@ -804,6 +805,7 @@ Suite *matrixArithmeticSuite(void) {
 int main(void) {
 
     arena = arena_init();
+    logger = logger_init(DEBUG);
 
     Suite *testSuites[] = {
         matrixCreationSuite(),
@@ -830,6 +832,7 @@ int main(void) {
     }
 
     arena_destroy(arena);
+    logger_destroy(logger);
 
     return 0;
 }

@@ -143,8 +143,8 @@ bool dll_removeElementAtIndex(DoubleLinkedList* dll, size_t index) {
 
     cleanupNode:
     free(nodeToDelete->element);
-    free(nodeToDelete);
     memset(nodeToDelete, 0, sizeof(Node));
+    free(nodeToDelete);
 
     return true;
 }

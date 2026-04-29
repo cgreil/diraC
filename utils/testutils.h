@@ -3,9 +3,6 @@
 
 #include <stdbool.h>
 
-#include "complex/complex.h"
-#include "ndarray/ndarray.h"
-
 /*
  * Test Utils
  */
@@ -59,3 +56,4 @@
     
 
 #endif
+

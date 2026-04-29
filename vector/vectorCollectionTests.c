@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "logging/Logger.h"
 #include "vector/vector.h"
 #include "vectorCollection.h"
 #include "utils/testutils.h"
@@ -13,6 +14,7 @@
 #include "ndarray/ndarray.h"
 
 Arena *arena;
+Logger* logger;
 
 START_TEST (createVectorSetTest) {
 
@@ -114,6 +116,7 @@ Suite *vectorSetSuite(void) {
 int main(void) {
 
     arena = arena_init();
+    logger = logger_init(STDOUT);
 
     Suite *testSuites[] = {
         vectorSetSuite()
@@ -140,4 +143,5 @@ int main(void) {
     }
 
     arena_destroy(arena);
+    logger_destroy(logger);
 }

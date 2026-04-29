@@ -8,7 +8,7 @@ static Matrix expandMatrixToQuregSize(QuantumRegister qureg, Matrix initialMatri
 
     // TODO: expand for usage when initialMatrixSize != 1
     if (initialMatrixSize != 1) {
-        fprintf(stderr, "InitialMatrixSize not equal to 1 is not yet supported in expandMatrixToQuregSize \n");
+        LOG_ERROR(LOGOBJ("InitialMatrixSize not equal to 1 is not yet supported in expandMatrixToQuregSize \n"));
         return (Matrix) { 0 };
     };
 
@@ -175,7 +175,7 @@ QuantumRegister qureg_applyCNOT(QuantumRegister qureg, size_t control, size_t ta
     LOG_INFO(
         LOGOBJ("Applying CNOT gate with control "),
         LOGOBJ(control),
-        LOGOBJ(" and target "),
+        LOGOBJ("and target "),
         LOGOBJ(target),
         LOGOBJ(":\n")
     );
@@ -281,7 +281,8 @@ QuantumRegister qureg_applyRZ(QuantumRegister qureg, size_t target, double phi) 
 QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, Matrix gateDefinition) {
 
     if (target >= qureg.numQubits) {
-        fprintf(stderr, "Supplied Qubit operation has a target qubit outside of the supplied register \n");
+        LOG_ERROR(LOGOBJ("[qureg_apply1QubitUnitary] Supplied Qubit operation has a target qubit"
+                         "outside of the supplied register \n"));
         return (QuantumRegister) { 0 };
     }
 
@@ -328,7 +329,6 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
 QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t target, Matrix gateDefinition) {
 
     /**
-     * As with the 1qubit case, this is also embarrisngly inefficient.
      * Also, for now, only 2-qubit gates with adjacent control and
      * target qubits are supported
      */

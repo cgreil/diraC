@@ -3,8 +3,9 @@
 #include <time.h>
 
 #include "complex.h"
+#include "logging/Logger.h"
 #include "utils/testutils.h"
-
+#include "utils/dataArena.h"
 /**
  * Testfile containing tests for complex number operations using
  * the check library
@@ -14,6 +15,7 @@
  */
 
 Arena* arena;
+Logger* logger;
 
 /*
  * START OF ADDITION TESTS
@@ -358,6 +360,7 @@ Suite *complexPowerSuite(void) {
 int main(void) {
 
     arena = arena_init();
+    logger = logger_init(DEBUG);
 
     // Array of suitePointers - filled by the respective functions
     Suite *testSuites[] = {
@@ -390,6 +393,7 @@ int main(void) {
 
 
     arena_destroy(arena);
+    logger_destroy(logger);
 
     return 0;
 }

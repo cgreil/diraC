@@ -29,7 +29,7 @@
     ( (_stringBuilder), (T) )
 
 
-static String getLoggingTimeString() {
+static String getLoggingTimeString(void) {
 
     //get time and convert to string
     time_t currentTime;
@@ -128,7 +128,14 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
 
             case SIZE_T: {
                 size_t size = logObj.object.size;
-                int stringLength = (int)((ceil(log10(size)) + 1) * sizeof(char));
+
+                int stringLength;
+                if (size == 0) {
+                    // handle 0 seperately, since log10(0) is undefined
+                    stringLength = 1;
+                } else {
+                    stringLength = (int)((ceil(log10(size)) + 1) * sizeof(char));
+                }
 
                 char buf[stringLength]; 
                 snprintf(buf, stringLength, "%zu", size);
@@ -139,7 +146,14 @@ void logger_logAll(LOGLEVEL loglevel, size_t numArgs, ...) {
 
             case INTEGER: {
                 int integer = logObj.object.integer;
-                int stringLength = (int) ((ceil(log10(integer)) + 1) * sizeof(char));
+
+                int stringLength;
+                if (integer == 0) {
+                    stringLength = 1;
+                } else {
+                    stringLength = (int) ((ceil(log10(integer)) + 1) * sizeof(char));
+                }
+    
 
                 char buf[stringLength];
                 snprintf(buf, stringLength, "%d", integer);

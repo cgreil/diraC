@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "logging/Logger.h"
 #include "complex/complex.h"
 #include "ndarray/ndarray.h"
 
@@ -10,6 +11,7 @@
 
 // Global variable for arena
 Arena *arena;
+Logger* logger;
 
 START_TEST(testNDArrayClone) {
 
@@ -114,6 +116,7 @@ int main(void) {
 
     // initialize arena variable
     arena = arena_init();
+    logger = logger_init(STDOUT);
 
     // Array of suitePointers - filled by the respective functions
     Suite *testSuites[] = {
@@ -143,6 +146,7 @@ int main(void) {
 
     // cleanup arena
     arena_destroy(arena);
+    logger_destroy(logger);
 
     return 0;
 }

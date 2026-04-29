@@ -11,7 +11,7 @@
 Arena* arena;
 Logger* logger;
 
-int main() {
+int main(void) {
 
     arena = arena_init();
     logger = logger_init(LOG_OUTPUT);
@@ -22,11 +22,6 @@ int main() {
     QuantumRegister qureg = qureg_new(numQubits); 
     // Set random seed
     srand(2000);
-
-    // Create initial Bell basis by entangling qubits 1 and 2
-    qureg = qureg_applyHadamard(qureg, 1);
-    qureg = qureg_applyCNOT(qureg, 1, 2);
-
     // create random normalized quantum state in register 1
     // This is done by applying Rx, Ry and Rz gates respectively 
     // with random phases [0, 2*PI]
@@ -43,7 +38,10 @@ int main() {
     qureg = qureg_applyRX(qureg, 0, xPhase);
     qureg = qureg_applyRY(qureg, 0, yPhase);
     qureg = qureg_applyRZ(qureg, 0, zPhase);
-    
+
+    // Create initial Bell basis by entangling qubits 1 and 2
+    qureg = qureg_applyHadamard(qureg, 1);
+    qureg = qureg_applyCNOT(qureg, 1, 2);
 
     // This is a copy of the first qubit for comparison purposes. 
     // Not that this is not possible in  a physical implemetation of the teleporation protocol

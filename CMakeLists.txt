@@ -3,7 +3,8 @@ project(DIRAC LANGUAGES C VERSION 0.0.1)
 
 #set(CMAKE_C_STANDARD 10)
 set(CMAKE_BUILD_TYPE Debug)
-
+# Create a compile_commands.json for lsp
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic -Debug")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb3")
 
@@ -11,6 +12,7 @@ set(SRC_DIR ${CMAKE_SOURCE_DIR})
 # Complex includes
 set(
         COMPLEX_SOURCE_FILES
+        logging/Logger.c
         utils/dataArena.c
         complex/complex.c
         complex/tuple.c
@@ -25,6 +27,7 @@ set(
 
 set(
         VECTOR_SOURCE_FILES
+        logging/Logger.c
         complex/complex.c
         complex/tuple.c
         common/string.c
@@ -40,6 +43,7 @@ set(
 
 set (
         NDARRAY_SOURCE_FILES
+        logging/Logger.c
         common/string.c
         complex/complex.c
         complex/tuple.c
@@ -54,6 +58,7 @@ set (
 
 set (
         VECTORCOLLECTION_SOURCE_FILES
+        logging/Logger.c
         matrix/matrix.c
         common/doubleLinkedList.c
         complex/complex.c
@@ -68,15 +73,16 @@ set (
 
 set (
         MATRIX_SOURCE_FILES
+        logging/Logger.c
         matrix/matrix.c
         common/doubleLinkedList.c
+        vector/vector.c
         vector/vectorCollection.c
         common/string.c
         utils/dataArena.c
         complex/complex.c
         complex/tuple.c
         ndarray/ndarray.c
-        vector/vector.c
         matrix/matrixTests.c
 )
 
@@ -85,13 +91,13 @@ set (
         logging/Logger.c
         matrix/matrix.c
         common/doubleLinkedList.c
+        vector/vector.c
         vector/vectorCollection.c
         common/string.c
         utils/dataArena.c
         complex/complex.c
         complex/tuple.c
         ndarray/ndarray.c
-        vector/vector.c
         qureg/qureg.c
         qureg/qureg_gates.c
         qureg/quregTests.c

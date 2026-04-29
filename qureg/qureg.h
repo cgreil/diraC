@@ -61,7 +61,4 @@ QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, Me
 
 
 
-
-
-
 #endif
