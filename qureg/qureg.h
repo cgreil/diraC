@@ -4,6 +4,7 @@
 
 #include "vector/vector.h"
 #include "matrix/matrix.h"
+#include <common/types.h>
 
 typedef struct {
     Vector stateVector;
@@ -57,6 +58,12 @@ QuantumRegister qureg_apply1QubitUnitary(QuantumRegister qureg, size_t target, M
 QuantumRegister qureg_apply2QubitUnitary(QuantumRegister qureg, size_t control, size_t target, Matrix gateDefinition);
 
 QuantumRegister qureg_applyZMeasurement(QuantumRegister qureg, size_t target, MeasurementResult* measurementResult);
+
+void qureg_printFullMeasurement(QuantumRegister qureg);
+
+double qureg_calculateFidelity(QuantumRegister qureg1, QuantumRegister qureg2);
+
+
 
 
 

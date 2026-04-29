@@ -112,6 +112,33 @@ String string_concat(String string1, String string2) {
     return string;
 }
 
+String string_binaryFromUInt(size_t number) {
+    /**
+     * Since we want Big endian notation (LSB first) 
+     * not necessary to reverse the bit order 
+     *
+     */
+
+    StringBuilder* builder = stringBuilder_create();
+    
+    while (number >= 0) {
+        if (number % 2 == 1) {
+            stringBuilder_appendCharArray(builder, "1", 1);
+        }
+        else {
+            stringBuilder_appendCharArray(builder, "0", 1);
+        }
+        number /= 2;    
+    }
+    String str = stringBuilder_build(builder);
+    stringBuilder_destroy(builder);
+
+    return str;
+}
+    
+
+
+
 StringBuilder* stringBuilder_create(void) {
 
     StringBuilder* stringBuilder = calloc(1, sizeof(StringBuilder));

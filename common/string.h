@@ -40,11 +40,13 @@ String string_fromStream(FILE* stream, size_t length);
 
 String string_fromCString(char* data);
 
+String string_binaryFromUInt(size_t number);
+
 size_t string_getLength(String string);
 
 String string_concat(String string1, String string2);
 
-StringBuilder* stringBuilder_create();
+StringBuilder* stringBuilder_create(void);
 
 void stringBuilder_destroy(StringBuilder *stringBuilder);
 
@@ -67,4 +69,4 @@ size_t stringBuilder_appendQuantumRegister(StringBuilder* stringBuilder, Quantum
 void stringBuilder_setFloatPrecision(StringBuilder* stringBuilder, size_t floatAccuracy);
 
 
-#endif //LEIBNITZ_STRING_H
+#endif

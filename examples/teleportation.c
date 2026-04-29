@@ -47,11 +47,11 @@ int main(void) {
     // Not that this is not possible in  a physical implemetation of the teleporation protocol
     // due to no-cloning theorem
 
-    Vector preparedState = qureg.stateVector;
+    QuantumRegister preparedState = qureg;
     
     LOG_INFO(
         LOGOBJ("Initial prepared state:\n"),
-        LOGOBJ(preparedState),
+        LOGOBJ(preparedState.stateVector),
         LOGOBJ("\n")
     );
     
